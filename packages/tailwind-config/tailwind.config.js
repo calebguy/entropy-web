@@ -1,19 +1,23 @@
-const colors = require("tailwindcss/colors");
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: [
     // app content
     // `**/*.{js,ts,jsx,tsx}`,
     // include packages if not transpiling
-    "../../packages/ui/**/*.{js,ts,jsx,tsx}",
+    "../../packages/**/*.{js,ts,jsx,tsx}",
     "../../apps/web/pages/**/*.{js,ts,jsx,tsx}",
-    "../../apps/docs/pages/**/*.{js,ts,jsx,tsx}",
+    "../../apps/web/components/**/*.{js,ts,jsx,tsx}",
+    "../../apps/docs/pages/*.{js,ts,jsx,tsx}",
+    "../../apps/docs/components/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        brandblue: colors.blue[500],
-        brandred: colors.red[500],
+        brand: "#0000FF",
+      },
+      fontFamily: {
+        sans: ["--font-helvetica-neue", ...fontFamily.sans],
       },
     },
   },

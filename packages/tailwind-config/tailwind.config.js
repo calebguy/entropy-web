@@ -15,6 +15,18 @@ module.exports = {
     extend: {
       colors: {
         brand: "#0000FF",
+        green: {
+          light: "#D0E92B",
+          dark: "#09B757",
+        },
+        pink: {
+          light: "#FFD2D7",
+          dark: "#E23957",
+        },
+        orange: {
+          light: "#FFD335",
+          dark: "#FF0000",
+        },
       },
       fontFamily: {
         sans: ["--font-helvetica-neue", ...fontFamily.sans],

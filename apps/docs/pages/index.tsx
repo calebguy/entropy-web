@@ -1,4 +1,4 @@
-import { Button, ButtonIntent, Text, TextSize } from "ui";
+import { Button, ButtonIntent, ButtonSize, Text, TextSize } from "ui";
 import Demo from "../components/Demo";
 import SubDemo from "../components/SubDemo";
 
@@ -24,6 +24,11 @@ export default function Docs() {
                   <Text>Primary</Text>
                 </Button>
               </SubDemo>
+              <SubDemo title={"Primary Lg"}>
+                <Button size={ButtonSize.Lg} round>
+                  <Text>Primary</Text>
+                </Button>
+              </SubDemo>
             </div>
             <div>
               <SubDemo title={"Secondary"}>
@@ -34,6 +39,32 @@ export default function Docs() {
               <SubDemo title={"Secondary (Round)"}>
                 <Button round intent={ButtonIntent.Secondary}>
                   <Text>Secondary</Text>
+                </Button>
+              </SubDemo>
+              <SubDemo title={"Secondary Lg"}>
+                <Button
+                  size={ButtonSize.Lg}
+                  round
+                  intent={ButtonIntent.Secondary}
+                >
+                  <Text>Secondary</Text>
+                </Button>
+              </SubDemo>
+            </div>
+            <div>
+              <SubDemo title={"Green"}>
+                <Button intent={ButtonIntent.Green}>
+                  <Text>Green</Text>
+                </Button>
+              </SubDemo>
+              <SubDemo title={"Green (Round)"}>
+                <Button round intent={ButtonIntent.Green}>
+                  <Text>Green</Text>
+                </Button>
+              </SubDemo>
+              <SubDemo title={"Green Lg"}>
+                <Button size={ButtonSize.Lg} round intent={ButtonIntent.Green}>
+                  <Text>Green</Text>
                 </Button>
               </SubDemo>
             </div>

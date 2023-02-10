@@ -2,6 +2,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
 
 export enum TextSize {
+  Xs = "xs",
   Sm = "sm",
   Md = "md",
   Lg = "lg",
@@ -11,6 +12,7 @@ const textStyles = cva("font-sans", {
   variants: {
     intent: {},
     size: {
+      [TextSize.Xs]: "text-sm",
       [TextSize.Sm]: "text-base",
       [TextSize.Md]: "text-lg",
       [TextSize.Lg]: "text-2xl",

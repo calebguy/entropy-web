@@ -1,5 +1,6 @@
-import { Button, Text, TextSize } from "ui";
+import { Button, ButtonIntent, Text, TextSize } from "ui";
 import Demo from "../components/Demo";
+import SubDemo from "../components/SubDemo";
 
 export default function Docs() {
   return (
@@ -11,9 +12,32 @@ export default function Docs() {
           </Text>
         </div>
         <Demo title={"Button"}>
-          <Button>
-            <Text>I love this place!</Text>
-          </Button>
+          <div className="grid grid-cols-4">
+            <div>
+              <SubDemo title={"Primary"}>
+                <Button>
+                  <Text>Primary</Text>
+                </Button>
+              </SubDemo>
+              <SubDemo title={"Primary (Round)"}>
+                <Button round>
+                  <Text>Primary</Text>
+                </Button>
+              </SubDemo>
+            </div>
+            <div>
+              <SubDemo title={"Secondary"}>
+                <Button intent={ButtonIntent.Secondary}>
+                  <Text>Secondary</Text>
+                </Button>
+              </SubDemo>
+              <SubDemo title={"Secondary (Round)"}>
+                <Button round intent={ButtonIntent.Secondary}>
+                  <Text>Secondary</Text>
+                </Button>
+              </SubDemo>
+            </div>
+          </div>
         </Demo>
         <Demo title={"Text"}>
           <Text>I love this bar!</Text>

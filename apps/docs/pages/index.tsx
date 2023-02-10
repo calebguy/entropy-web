@@ -1,6 +1,6 @@
-import { Button, ButtonIntent, ButtonSize, Text, TextSize } from "ui";
-import Demo from "../components/Demo";
-import SubDemo from "../components/SubDemo";
+import { Text, TextSize } from "ui";
+import ButtonDemo from "../components/ButtonDemo";
+import TextDemo from "../components/TextDemo";
 
 export default function Docs() {
   return (
@@ -11,68 +11,8 @@ export default function Docs() {
             DSL
           </Text>
         </div>
-        <Demo title={"Button"}>
-          <div className="grid grid-cols-4">
-            <div>
-              <SubDemo title={"Primary"}>
-                <Button>
-                  <Text>Primary</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Primary (Round)"}>
-                <Button round>
-                  <Text>Primary</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Primary Lg"}>
-                <Button size={ButtonSize.Lg} round>
-                  <Text>Primary</Text>
-                </Button>
-              </SubDemo>
-            </div>
-            <div>
-              <SubDemo title={"Secondary"}>
-                <Button intent={ButtonIntent.Secondary}>
-                  <Text>Secondary</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Secondary (Round)"}>
-                <Button round intent={ButtonIntent.Secondary}>
-                  <Text>Secondary</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Secondary Lg"}>
-                <Button
-                  size={ButtonSize.Lg}
-                  round
-                  intent={ButtonIntent.Secondary}
-                >
-                  <Text>Secondary</Text>
-                </Button>
-              </SubDemo>
-            </div>
-            <div>
-              <SubDemo title={"Green"}>
-                <Button intent={ButtonIntent.Green}>
-                  <Text>Green</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Green (Round)"}>
-                <Button round intent={ButtonIntent.Green}>
-                  <Text>Green</Text>
-                </Button>
-              </SubDemo>
-              <SubDemo title={"Green Lg"}>
-                <Button size={ButtonSize.Lg} round intent={ButtonIntent.Green}>
-                  <Text>Green</Text>
-                </Button>
-              </SubDemo>
-            </div>
-          </div>
-        </Demo>
-        <Demo title={"Text"}>
-          <Text>I love this bar!</Text>
-        </Demo>
+        <ButtonDemo />
+        <TextDemo />
       </div>
     </main>
   );

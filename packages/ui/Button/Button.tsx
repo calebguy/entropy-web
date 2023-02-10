@@ -1,5 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
+import { Text } from "../Text/Text";
 
 export enum ButtonIntent {
   Primary = "primary",
@@ -22,6 +23,10 @@ const buttonStyles = cva("", {
         "bg-white border-[1px] border-black border-solid",
       [ButtonIntent.Green]:
         "bg-green-light border-[1px] border-green-dark border-solid",
+      [ButtonIntent.Pink]:
+        "bg-pink-light border-[1px] border-pink-dark border-solid",
+      [ButtonIntent.Orange]:
+        "bg-orange-light border-[1px] border-orange-dark border-solid",
     },
     size: {
       [ButtonSize.Sm]: "px-3 py-0.5 rounded-[12px]",
@@ -38,10 +43,11 @@ const buttonStyles = cva("", {
   },
 });
 
-interface ButtonProps
+export interface ButtonProps
   extends PropsWithChildren,
     VariantProps<typeof buttonStyles> {
   onClick?: () => void;
+  children: string;
 }
 
 export const Button = ({
@@ -53,7 +59,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button onClick={onClick} className={buttonStyles({ intent, round, size })}>
-      {children}
+      <Text>{children}</Text>
     </button>
   );
 };

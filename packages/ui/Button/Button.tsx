@@ -27,7 +27,7 @@ const buttonStyles = cva(
         [ButtonIntent.DeepBlue]: "bg-white border-deep-blue text-deep-blue",
       },
       size: {
-        [ButtonSize.Sm]: "px-4 py-1 rounded-md",
+        [ButtonSize.Sm]: "px-3 py-1 rounded-md",
         [ButtonSize.Lg]: "px-6 py-1.5 rounded-lg",
       },
       round: {

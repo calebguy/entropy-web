@@ -2,12 +2,11 @@ import { Text, TextIntent, TextSize } from "ui";
 import { css } from "utils";
 import Demo from "./Demo";
 import SubDemo from "./SubDemo";
+
 const text = Object.values(TextIntent).map((intent) => ({
   intent,
   children: intent,
 }));
-
-const sizes = Object.values(TextSize).map;
 
 const TextDemo = () => {
   return (
@@ -24,7 +23,7 @@ const TextDemo = () => {
         {text.map((item, index) => (
           <div
             key={`text-demo-${item.intent}-${index}`}
-            className={css("rounded-md", "p-2", {
+            className={css("rounded-sm", "p-2", {
               "bg-black": item.intent === TextIntent.White,
             })}
           >

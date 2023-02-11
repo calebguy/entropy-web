@@ -29,7 +29,7 @@ export default function Docs() {
               round
               onClick={() => setShowProps(!showProps)}
             >
-              {showProps ? "-" : "+"}
+              {showProps ? "- props" : "+ props"}
             </Button>
           </div>
           <ButtonDemo />

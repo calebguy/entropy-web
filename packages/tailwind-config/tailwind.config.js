@@ -13,11 +13,11 @@ module.exports = {
   ],
   theme: {
     fontSize: {
-      xs: ["12px", "15px"],
-      sm: ["14px", "14px"],
-      base: ["16px", "18px"],
-      lg: ["24px", "38px"],
-      xl: ["48px", "52px"],
+      xs: ["10px", "15px"],
+      sm: ["12px", "14px"],
+      base: ["14px", "16px"],
+      lg: ["18px", "26px"],
+      xl: ["38px", "48px"],
     },
     borderRadius: {
       sm: "5px",

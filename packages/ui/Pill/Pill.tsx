@@ -12,7 +12,7 @@ export enum PillIntent {
 export enum PillSize {}
 
 const pillStyles = cva(
-  "rounded-full px-2 py-1 text-sm border-[1px] inline-block",
+  "rounded-full px-3 py-0.5 text-sm border-[1px] inline-block",
   {
     variants: {
       intent: {

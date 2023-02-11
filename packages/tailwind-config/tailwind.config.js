@@ -31,7 +31,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["--font-helvetica-neue", ...fontFamily.sans],
+        sans: ["var(--font-helvetica-neue)", ...fontFamily.sans],
       },
     },
   },

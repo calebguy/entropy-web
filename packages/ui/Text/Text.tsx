@@ -6,6 +6,7 @@ export enum TextSize {
   Sm = "sm",
   Md = "md",
   Lg = "lg",
+  Xl = "xl",
 }
 
 const textStyles = cva("font-sans", {
@@ -16,6 +17,7 @@ const textStyles = cva("font-sans", {
       [TextSize.Sm]: "text-sm",
       [TextSize.Md]: "text-lg",
       [TextSize.Lg]: "text-2xl",
+      [TextSize.Xl]: "text-4xl",
     },
     bold: {
       true: "font-bold",

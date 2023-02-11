@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* expose all type not covered by <Text> */
+html {
+    color: magenta;
+}

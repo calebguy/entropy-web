@@ -1,5 +1,10 @@
-import { Text } from "ui";
+import { Text, TextIntent } from "ui";
 import Demo from "./Demo";
+
+const textDemos = Object.values(TextIntent).map((intent) => ({
+  intent,
+  children: intent,
+}));
 
 const TextDemo = () => {
   return (

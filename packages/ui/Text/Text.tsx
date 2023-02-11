@@ -9,15 +9,27 @@ export enum TextSize {
   Xl = "xl",
 }
 
+export enum TextIntent {
+  Black = "black",
+  White = "white",
+  DeepBlue = "deep-blue",
+  Gray = "gray",
+}
+
 const textStyles = cva("font-sans", {
   variants: {
-    intent: {},
+    intent: {
+      [TextIntent.Black]: "text-black",
+      [TextIntent.White]: "text-white",
+      [TextIntent.DeepBlue]: "text-deep-blue",
+      [TextIntent.Gray]: "text-gray",
+    },
     size: {
       [TextSize.Xs]: "text-xs",
       [TextSize.Sm]: "text-sm",
-      [TextSize.Md]: "text-lg",
-      [TextSize.Lg]: "text-2xl",
-      [TextSize.Xl]: "text-4xl",
+      [TextSize.Md]: "text-base",
+      [TextSize.Lg]: "text-lg",
+      [TextSize.Xl]: "text-xl",
     },
     bold: {
       true: "font-bold",
@@ -25,7 +37,8 @@ const textStyles = cva("font-sans", {
     },
   },
   defaultVariants: {
-    size: TextSize.Sm,
+    intent: TextIntent.Black,
+    size: TextSize.Md,
     bold: false,
   },
 });

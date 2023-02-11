@@ -12,9 +12,17 @@ module.exports = {
     "../../apps/docs/components/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontSize: {
+      xs: ["12px", "15px"],
+      sm: ["14px", "14px"],
+      base: ["16px", "20px"],
+      lg: ["28px", "42px"],
+      xl: ["48px", "72px"],
+    },
     extend: {
       colors: {
         brand: "#0000FF",
+        ["deep-blue"]: "#042991",
         green: {
           light: "#D0E92B",
           dark: "#09B757",
@@ -29,6 +37,7 @@ module.exports = {
           dark: "#FF0000",
           neon: "#FCB964",
         },
+        gray: "#737577",
       },
       fontFamily: {
         sans: ["var(--font-helvetica-neue)", ...fontFamily.sans],

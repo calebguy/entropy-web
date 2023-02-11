@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
-import { Text, TextSize } from "../Text/Text";
+import { Text, TextIntent, TextSize } from "../Text/Text";
 
 export enum ButtonIntent {
   Primary = "primary",
@@ -10,6 +10,7 @@ export enum ButtonIntent {
   Orange = "orange",
   NeonOrange = "neon-orange",
   NeonGreen = "neon-green",
+  DeepBlue = "deep-blue",
 }
 
 export enum ButtonSize {
@@ -29,6 +30,7 @@ const buttonStyles = cva(
         [ButtonIntent.Orange]: "bg-orange-light border-orange-dark",
         [ButtonIntent.NeonOrange]: "bg-orange-neon border-black",
         [ButtonIntent.NeonGreen]: "bg-green-neon border-black",
+        [ButtonIntent.DeepBlue]: "bg-white border-deep-blue text-deep-blue",
       },
       size: {
         [ButtonSize.Sm]: "px-4 py-0.25 rounded-md",
@@ -54,8 +56,19 @@ export interface ButtonProps
 }
 
 const buttonSizeToTextSize = {
-  [ButtonSize.Sm]: TextSize.Sm,
+  [ButtonSize.Sm]: TextSize.Md,
   [ButtonSize.Lg]: TextSize.Lg,
+};
+
+const buttonIntentToTextIntent = {
+  [ButtonIntent.Primary]: TextIntent.White,
+  [ButtonIntent.Secondary]: TextIntent.Black,
+  [ButtonIntent.Green]: TextIntent.Black,
+  [ButtonIntent.Pink]: TextIntent.Black,
+  [ButtonIntent.Orange]: TextIntent.Black,
+  [ButtonIntent.NeonOrange]: TextIntent.Black,
+  [ButtonIntent.NeonGreen]: TextIntent.Black,
+  [ButtonIntent.DeepBlue]: TextIntent.DeepBlue,
 };
 
 export const Button = ({
@@ -67,7 +80,12 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button onClick={onClick} className={buttonStyles({ intent, round, size })}>
-      <Text size={buttonSizeToTextSize[size as ButtonSize]}>{children}</Text>
+      <Text
+        intent={buttonIntentToTextIntent[intent as ButtonIntent]}
+        size={buttonSizeToTextSize[size as ButtonSize]}
+      >
+        {children}
+      </Text>
     </button>
   );
 };

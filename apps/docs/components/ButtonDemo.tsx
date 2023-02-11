@@ -2,36 +2,35 @@ import { Button, ButtonIntent, ButtonSize } from "ui";
 import Demo from "./Demo";
 import SubDemo from "./SubDemo";
 
-const buttonItems: Array<{ intent: ButtonIntent; children: string }> = [
-  { intent: ButtonIntent.Primary, children: "prim" },
-  { intent: ButtonIntent.Secondary, children: "sec" },
-  { intent: ButtonIntent.Green, children: "green" },
-  { intent: ButtonIntent.Pink, children: "pink" },
-  { intent: ButtonIntent.Orange, children: "orange" },
-  { intent: ButtonIntent.NeonOrange, children: "neon-orange" },
-  { intent: ButtonIntent.NeonGreen, children: "neon-green" },
-];
+const button = Object.values(ButtonIntent).map((intent) => ({
+  intent,
+  children: intent,
+}));
 
 const ButtonDemo = () => {
   return (
     <Demo title={"Button"}>
-      <div className="grid grid-cols-3">
-        {buttonItems.map((item, index) => (
-          <div key={`button-demo-${item.intent}-${index}`}>
-            <SubDemo title={`${item.intent}`}>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8">
+        {button.map((item, index) => (
+          <div
+            key={`button-demo-${item.intent}-${index}`}
+            className="flex flex-col gap-2"
+          >
+            {/* <Text>{item.intent}</Text> */}
+            <SubDemo labels={{ size: ButtonSize.Sm }}>
               <Button intent={item.intent}>{item.children}</Button>
             </SubDemo>
-            <SubDemo title={`${item.intent}-round`}>
-              <Button intent={item.intent} round>
+            <SubDemo labels={{ size: ButtonSize.Sm, round: "true" }}>
+              <Button size={ButtonSize.Sm} intent={item.intent} round>
                 {item.children}
               </Button>
             </SubDemo>
-            <SubDemo title={`${item.intent}-${ButtonSize.Lg}`}>
+            <SubDemo labels={{ size: ButtonSize.Lg }}>
               <Button intent={item.intent} size={ButtonSize.Lg}>
                 {item.children}
               </Button>
             </SubDemo>
-            <SubDemo title={`${item.intent}-${ButtonSize.Lg}-round`}>
+            <SubDemo labels={{ size: ButtonSize.Lg, round: "true" }}>
               <Button intent={item.intent} size={ButtonSize.Lg} round>
                 {item.children}
               </Button>

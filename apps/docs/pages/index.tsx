@@ -10,7 +10,7 @@ export default function Docs() {
         <div className="flex justify-center">
           <div className="flex items-center gap-2">
             <LogoSpin />
-            <Text bold size={TextSize.Xl}>
+            <Text size={TextSize.Lg} bold>
               DSL
             </Text>
             <LogoSpin />
@@ -28,8 +28,8 @@ const LogoSpin = () => {
     <Image
       alt={"logo-spin"}
       src={"/images/logo-rotate.gif"}
-      width={45}
-      height={45}
+      width={35}
+      height={35}
     />
   );
 };

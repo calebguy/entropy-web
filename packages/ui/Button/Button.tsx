@@ -57,9 +57,6 @@ const buttonSizeToTextSize = {
 const buttonIntentToTextIntent = {
   [ButtonIntent.Primary]: TextIntent.White,
   [ButtonIntent.Secondary]: TextIntent.Black,
-  [ButtonIntent.Green]: TextIntent.Black,
-  [ButtonIntent.Pink]: TextIntent.Black,
-  [ButtonIntent.Orange]: TextIntent.Black,
   [ButtonIntent.NeonOrange]: TextIntent.Black,
   [ButtonIntent.NeonGreen]: TextIntent.Black,
   [ButtonIntent.DeepBlue]: TextIntent.DeepBlue,

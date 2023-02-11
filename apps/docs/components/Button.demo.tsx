@@ -10,7 +10,7 @@ const button = Object.values(ButtonIntent).map((intent) => ({
 const ButtonDemo = () => {
   return (
     <Demo title={"Button"}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8">
         {button.map((item, index) => (
           <div
             key={`button-demo-${item.intent}-${index}`}

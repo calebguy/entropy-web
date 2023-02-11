@@ -12,8 +12,10 @@ const TextFieldDemo = () => {
         <SubDemo labels={{ placeholder: "string" }}>
           <TextField placeholder="e+" />
         </SubDemo>
-        <SubDemo labels={{ type: "password", block: "true" }}>
-          <TextField type={"password"} block />
+        <SubDemo
+          labels={{ type: "password", block: "true", placeholder: "string" }}
+        >
+          <TextField placeholder={"pw plz"} type={"password"} block />
         </SubDemo>
         <SubDemo labels={{ value: "string", onChange: "() => void" }}>
           <TextField value={value} onChange={(e) => setValue(e.target.value)} />

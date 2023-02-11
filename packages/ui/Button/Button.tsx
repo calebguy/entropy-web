@@ -5,12 +5,9 @@ import { Text, TextIntent, TextSize } from "../Text/Text";
 export enum ButtonIntent {
   Primary = "primary",
   Secondary = "secondary",
-  Green = "green",
-  Pink = "pink",
-  Orange = "orange",
+  DeepBlue = "deep-blue",
   NeonOrange = "neon-orange",
   NeonGreen = "neon-green",
-  DeepBlue = "deep-blue",
 }
 
 export enum ButtonSize {
@@ -25,9 +22,6 @@ const buttonStyles = cva(
       intent: {
         [ButtonIntent.Primary]: "border-none bg-brand text-white",
         [ButtonIntent.Secondary]: "bg-white border-black",
-        [ButtonIntent.Green]: "bg-green-light border-green-dark",
-        [ButtonIntent.Pink]: "bg-pink-light border-pink-dark",
-        [ButtonIntent.Orange]: "bg-orange-light border-orange-dark",
         [ButtonIntent.NeonOrange]: "bg-orange-neon border-black",
         [ButtonIntent.NeonGreen]: "bg-green-neon border-black",
         [ButtonIntent.DeepBlue]: "bg-white border-deep-blue text-deep-blue",

@@ -5,6 +5,7 @@ import AspectRatioDemo from "../components/AspectRatio.demo";
 import ButtonDemo from "../components/Button.demo";
 import FormDemo from "../components/Form.demo";
 import PaneDemo from "../components/Pane.demo";
+import PillDemo from "../components/Pill.demo";
 import TextDemo from "../components/Text.demo";
 import TextFieldDemo from "../components/TextField.demo";
 import DisplayContext from "../state/DisplayContext";
@@ -32,6 +33,7 @@ export default function Docs() {
             </Button>
           </div>
           <ButtonDemo />
+          <PillDemo />
           <TextDemo />
           <PaneDemo />
           <TextFieldDemo />

@@ -1,5 +1,7 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
+import { css } from "utils";
+import styles from "./Text.module.css";
 
 export enum TextSize {
   Xs = "xs",
@@ -14,6 +16,7 @@ export enum TextIntent {
   White = "white",
   DeepBlue = "deep-blue",
   Gray = "gray",
+  Outline = "outline",
 }
 
 const textStyles = cva("font-sans", {
@@ -23,6 +26,7 @@ const textStyles = cva("font-sans", {
       [TextIntent.White]: "text-white",
       [TextIntent.DeepBlue]: "text-deep-blue",
       [TextIntent.Gray]: "text-gray",
+      [TextIntent.Outline]: css("text-white", styles["text-stroke"]),
     },
     size: {
       [TextSize.Xs]: "text-xs",
@@ -47,6 +51,6 @@ interface TextProps
   extends PropsWithChildren,
     VariantProps<typeof textStyles> {}
 
-export const Text: React.FC<TextProps> = ({ children, bold, intent, size }) => {
+export const Text = ({ children, bold, intent, size }: TextProps) => {
   return <span className={textStyles({ intent, bold, size })}>{children}</span>;
 };

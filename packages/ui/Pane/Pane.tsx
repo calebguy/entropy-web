@@ -32,8 +32,6 @@ interface PaneProps
   extends PropsWithChildren,
     VariantProps<typeof paneStyles> {}
 
-const Pane = ({ children, intent, size }: PaneProps) => {
+export const Pane = ({ children, intent, size }: PaneProps) => {
   return <div className={paneStyles({ intent, size })}>{children}</div>;
 };
-
-export default Pane;

@@ -29,7 +29,10 @@ const TextDemo = () => {
             })}
           >
             {Object.values(TextSize).map((size) => (
-              <SubDemo labels={{ size }}>
+              <SubDemo
+                key={`text-demo-sub-demo-${size}-${item.intent}`}
+                labels={{ size }}
+              >
                 <Text intent={item.intent} size={size}>
                   {item.children}
                 </Text>

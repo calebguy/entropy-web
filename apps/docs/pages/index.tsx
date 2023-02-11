@@ -1,13 +1,16 @@
 import Image from "next/image";
 import { useState } from "react";
-import { Button, ButtonIntent, ButtonSize } from "ui";
-import ButtonDemo from "../components/ButtonDemo";
-import PaneDemo from "../components/PaneDemo";
-import TextDemo from "../components/TextDemo";
+import { Button, ButtonIntent, Text, TextSize } from "ui";
+import AspectRatioDemo from "../components/AspectRatio.demo";
+import ButtonDemo from "../components/Button.demo";
+import FormDemo from "../components/Form.demo";
+import PaneDemo from "../components/Pane.demo";
+import TextDemo from "../components/Text.demo";
+import TextFieldDemo from "../components/TextField.demo";
 import DisplayContext from "../state/DisplayContext";
 
 export default function Docs() {
-  const [showProps, setShowProps] = useState(false);
+  const [showProps, setShowProps] = useState(true);
   return (
     <DisplayContext.Provider value={{ showProps, setShowProps }}>
       <main className="p-4 flex justify-center">
@@ -15,19 +18,25 @@ export default function Docs() {
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
               <LogoSpin />
-              <Button
-                onClick={() => setShowProps(!showProps)}
-                intent={ButtonIntent.Secondary}
-                size={ButtonSize.Lg}
-              >
-                DSL
-              </Button>
+              <Text size={TextSize.Xl}>DSL</Text>
               <LogoSpin />
             </div>
+          </div>
+          <div>
+            <Button
+              intent={ButtonIntent.Secondary}
+              round
+              onClick={() => setShowProps(!showProps)}
+            >
+              {showProps ? "-" : "+"}
+            </Button>
           </div>
           <ButtonDemo />
           <TextDemo />
           <PaneDemo />
+          <TextFieldDemo />
+          <FormDemo />
+          <AspectRatioDemo />
         </div>
       </main>
     </DisplayContext.Provider>

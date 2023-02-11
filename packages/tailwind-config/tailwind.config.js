@@ -19,6 +19,12 @@ module.exports = {
       lg: ["28px", "38px"],
       xl: ["48px", "52px"],
     },
+    borderRadius: {
+      sm: "5px",
+      md: "10px",
+      lg: "12px",
+      full: "9999px",
+    },
     extend: {
       colors: {
         brand: "#0000FF",

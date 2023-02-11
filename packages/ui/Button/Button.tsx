@@ -1,6 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
-import { Text } from "../Text/Text";
+import { Text, TextSize } from "../Text/Text";
 
 export enum ButtonIntent {
   Primary = "primary",
@@ -8,6 +8,8 @@ export enum ButtonIntent {
   Green = "green",
   Pink = "pink",
   Orange = "orange",
+  NeonOrange = "neon-orange",
+  NeonGreen = "neon-green",
 }
 
 export enum ButtonSize {
@@ -15,33 +17,34 @@ export enum ButtonSize {
   Lg = "lg",
 }
 
-const buttonStyles = cva("", {
-  variants: {
-    intent: {
-      [ButtonIntent.Primary]: "bg-brand text-white",
-      [ButtonIntent.Secondary]:
-        "bg-white border-[1px] border-black border-solid",
-      [ButtonIntent.Green]:
-        "bg-green-light border-[1px] border-green-dark border-solid",
-      [ButtonIntent.Pink]:
-        "bg-pink-light border-[1px] border-pink-dark border-solid",
-      [ButtonIntent.Orange]:
-        "bg-orange-light border-[1px] border-orange-dark border-solid",
+const buttonStyles = cva(
+  "border-[1px] border-solid inline-flex items-center justify-center",
+  {
+    variants: {
+      intent: {
+        [ButtonIntent.Primary]: "border-none bg-brand text-white",
+        [ButtonIntent.Secondary]: "bg-white border-black",
+        [ButtonIntent.Green]: "bg-green-light border-green-dark",
+        [ButtonIntent.Pink]: "bg-pink-light border-pink-dark",
+        [ButtonIntent.Orange]: "bg-orange-light border-orange-dark",
+        [ButtonIntent.NeonOrange]: "bg-orange-neon border-black",
+        [ButtonIntent.NeonGreen]: "bg-green-neon border-black",
+      },
+      size: {
+        [ButtonSize.Sm]: "px-4 py-0.25 rounded-md",
+        [ButtonSize.Lg]: "px-4 py-1.5 rounded-lg",
+      },
+      round: {
+        true: "!rounded-full",
+      },
     },
-    size: {
-      [ButtonSize.Sm]: "px-3 py-0.5 rounded-[12px]",
-      [ButtonSize.Lg]: "px-2.5 py-1.5 rounded-[12px]",
+    defaultVariants: {
+      intent: ButtonIntent.Primary,
+      round: false,
+      size: ButtonSize.Sm,
     },
-    round: {
-      true: "rounded-full",
-    },
-  },
-  defaultVariants: {
-    intent: ButtonIntent.Primary,
-    round: false,
-    size: ButtonSize.Sm,
-  },
-});
+  }
+);
 
 export interface ButtonProps
   extends PropsWithChildren,
@@ -49,6 +52,11 @@ export interface ButtonProps
   onClick?: () => void;
   children: string;
 }
+
+const buttonSizeToTextSize = {
+  [ButtonSize.Sm]: TextSize.Sm,
+  [ButtonSize.Lg]: TextSize.Lg,
+};
 
 export const Button = ({
   intent,
@@ -59,7 +67,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <button onClick={onClick} className={buttonStyles({ intent, round, size })}>
-      <Text>{children}</Text>
+      <Text size={buttonSizeToTextSize[size as ButtonSize]}>{children}</Text>
     </button>
   );
 };

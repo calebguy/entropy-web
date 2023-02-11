@@ -12,8 +12,8 @@ const textStyles = cva("font-sans", {
   variants: {
     intent: {},
     size: {
-      [TextSize.Xs]: "text-sm",
-      [TextSize.Sm]: "text-base",
+      [TextSize.Xs]: "text-xs",
+      [TextSize.Sm]: "text-sm",
       [TextSize.Md]: "text-lg",
       [TextSize.Lg]: "text-2xl",
     },

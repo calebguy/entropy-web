@@ -18,6 +18,7 @@ module.exports = {
         green: {
           light: "#D0E92B",
           dark: "#09B757",
+          neon: "#6EE881",
         },
         pink: {
           light: "#FFD2D7",
@@ -26,6 +27,7 @@ module.exports = {
         orange: {
           light: "#FFD335",
           dark: "#FF0000",
+          neon: "#FCB964",
         },
       },
       fontFamily: {

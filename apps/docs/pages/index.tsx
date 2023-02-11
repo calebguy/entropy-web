@@ -37,8 +37,8 @@ const LogoSpin = () => {
     <Image
       alt={"logo-spin"}
       src={"/images/logo-rotate.gif"}
-      width={35}
-      height={35}
+      width={55}
+      height={55}
     />
   );
 };

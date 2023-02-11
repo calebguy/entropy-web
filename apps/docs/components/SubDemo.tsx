@@ -20,7 +20,7 @@ const SubDemo = ({ children, labels }: SubDemoProps) => {
                 <Text size={TextSize.Xs} intent={TextIntent.Gray}>
                   {key}:{" "}
                 </Text>
-                <Text size={TextSize.Xs} bold>
+                <Text size={TextSize.Xs} intent={TextIntent.Gray} bold>
                   {labels[key]}
                 </Text>
               </div>

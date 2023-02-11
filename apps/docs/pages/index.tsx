@@ -1,25 +1,34 @@
 import Image from "next/image";
-import { Text, TextSize } from "ui";
+import { useState } from "react";
+import { Button, ButtonIntent, ButtonSize } from "ui";
 import ButtonDemo from "../components/ButtonDemo";
 import TextDemo from "../components/TextDemo";
+import DisplayContext from "../state/DisplayContext";
 
 export default function Docs() {
+  const [showProps, setShowProps] = useState(true);
   return (
-    <main className="p-4 flex justify-center">
-      <div className="max-w-2xl w-full flex flex-col gap-4">
-        <div className="flex justify-center">
-          <div className="flex items-center gap-2">
-            <LogoSpin />
-            <Text size={TextSize.Lg} bold>
-              DSL
-            </Text>
-            <LogoSpin />
+    <DisplayContext.Provider value={{ showProps, setShowProps }}>
+      <main className="p-4 flex justify-center">
+        <div className="max-w-2xl w-full flex flex-col gap-4">
+          <div className="flex justify-center">
+            <div className="flex items-center gap-2">
+              <LogoSpin />
+              <Button
+                onClick={() => setShowProps(!showProps)}
+                intent={ButtonIntent.Secondary}
+                size={ButtonSize.Lg}
+              >
+                DSL
+              </Button>
+              <LogoSpin />
+            </div>
           </div>
+          <ButtonDemo />
+          <TextDemo />
         </div>
-        <ButtonDemo />
-        <TextDemo />
-      </div>
-    </main>
+      </main>
+    </DisplayContext.Provider>
   );
 }
 

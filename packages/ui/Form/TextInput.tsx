@@ -1,5 +1,9 @@
 import { useEffect } from "react";
-import { useController, useFormContext } from "react-hook-form";
+import {
+  useController,
+  UseControllerProps,
+  useFormContext,
+} from "react-hook-form";
 import { TextField, TextFieldProps } from "../TextField/TextField";
 import { FormControl } from "./FormControl";
 
@@ -12,6 +16,7 @@ interface BaseInputProps
   defaultValue?: string;
   value?: string;
   onChange?: (value: string) => void;
+  rules?: UseControllerProps["rules"];
 }
 
 interface TextInputProps
@@ -26,13 +31,14 @@ export const TextInput = ({
   placeholder,
   value,
   onChange,
+  rules,
   defaultValue = "",
 }: TextInputProps) => {
   const { control } = useFormContext();
   const { field } = useController({
     name,
     control,
-    rules: { required: true },
+    rules,
     defaultValue: value && !defaultValue ? value : defaultValue,
   });
 

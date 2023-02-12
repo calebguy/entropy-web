@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, ButtonIntent, Form, TextInput } from "ui";
 import { css, getRandomOfLength, jsonify } from "utils";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const FormDemo = () => {
   const [value, setValue] = useState("test this out");
@@ -12,6 +12,7 @@ const FormDemo = () => {
         <SubDemo>
           <Form onSubmit={(values) => alert(jsonify(values))}>
             <TextInput
+              rules={{ required: true, maxLength: 4 }}
               name={"firstName"}
               placeholder={"...textonly..."}
               label={"<TextInput> Uncontrolled"}
@@ -27,6 +28,7 @@ const FormDemo = () => {
         <SubDemo>
           <Form onSubmit={(values) => alert(jsonify(values))}>
             <TextInput
+              rules={{ required: true }}
               helperText={"i must know your name m'dear"}
               value={value}
               onChange={(val) => setValue(val)}

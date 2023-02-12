@@ -10,6 +10,7 @@ module.exports = {
     "../../apps/web/components/**/*.{js,ts,jsx,tsx}",
     "../../apps/docs/pages/*.{js,ts,jsx,tsx}",
     "../../apps/docs/components/*.{js,ts,jsx,tsx}",
+    "../../apps/docs/components/demos/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     fontSize: {
@@ -29,6 +30,7 @@ module.exports = {
       colors: {
         brand: "#0000FF",
         ["deep-blue"]: "#042991",
+        error: "#dc2626",
         green: {
           light: "#D0E92B",
           dark: "#09B757",

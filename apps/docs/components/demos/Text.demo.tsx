@@ -1,7 +1,7 @@
 import { Text, TextIntent, TextSize } from "ui";
 import { css } from "utils";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const text = Object.values(TextIntent).map((intent) => ({
   intent,

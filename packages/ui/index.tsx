@@ -8,3 +8,5 @@ export * from "./Pane/Pane";
 export * from "./Pill/Pill";
 export * from "./Text/Text";
 export * from "./TextField/TextField";
+
+export * from './Spinner/Spinner'

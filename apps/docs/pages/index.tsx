@@ -1,14 +1,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Button, ButtonIntent, Text, TextSize } from "ui";
-import AspectRatioDemo from "../components/AspectRatio.demo";
-import ButtonDemo from "../components/Button.demo";
-import FormDemo from "../components/Form.demo";
-import IconDemo from "../components/Icon.demo";
-import PaneDemo from "../components/Pane.demo";
-import PillDemo from "../components/Pill.demo";
-import TextDemo from "../components/Text.demo";
-import TextFieldDemo from "../components/TextField.demo";
+import AspectRatioDemo from "../components/demos/AspectRatio.demo";
+import ButtonDemo from "../components/demos/Button.demo";
+import FormDemo from "../components/demos/Form.demo";
+import IconDemo from "../components/demos/Icon.demo";
+import PaneDemo from "../components/demos/Pane.demo";
+import PillDemo from "../components/demos/Pill.demo";
+import SpinnerDemo from "../components/demos/Spinner.demo";
+import TextDemo from "../components/demos/Text.demo";
+import TextFieldDemo from "../components/demos/TextField.demo";
 import DisplayContext from "../state/DisplayContext";
 
 export default function Docs() {
@@ -43,6 +44,7 @@ export default function Docs() {
           <FormDemo />
           <AspectRatioDemo />
           <IconDemo />
+          <SpinnerDemo />
         </div>
       </main>
     </DisplayContext.Provider>

@@ -1,7 +1,7 @@
 import { Icon, IconName } from "ui";
 import { css } from "utils";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const IconDemo = () => {
   return (
@@ -10,6 +10,7 @@ const IconDemo = () => {
         {Object.values(IconName).map((icon) => (
           <SubDemo labels={{ icon }}>
             <div
+              key={`icon-demo-${icon}`}
               className={css("flex", "justify-center", {
                 "bg-brand p-1 rounded-sm":
                   icon === IconName.Check || icon == IconName.Close,

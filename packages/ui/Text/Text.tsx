@@ -17,6 +17,7 @@ export enum TextIntent {
   DeepBlue = "deep-blue",
   Gray = "gray",
   Outline = "outline",
+  Error = "error",
 }
 
 const textStyles = cva("font-sans", {
@@ -27,6 +28,7 @@ const textStyles = cva("font-sans", {
       [TextIntent.DeepBlue]: "text-deep-blue",
       [TextIntent.Gray]: "text-gray",
       [TextIntent.Outline]: css("text-white", styles["text-stroke"]),
+      [TextIntent.Error]: "text-red-600",
     },
     size: {
       [TextSize.Xs]: "text-xs",
@@ -38,6 +40,9 @@ const textStyles = cva("font-sans", {
     bold: {
       true: "font-bold",
       false: "font-normal",
+    },
+    block: {
+      true: "block",
     },
   },
   defaultVariants: {
@@ -51,6 +56,10 @@ interface TextProps
   extends PropsWithChildren,
     VariantProps<typeof textStyles> {}
 
-export const Text = ({ children, bold, intent, size }: TextProps) => {
-  return <span className={textStyles({ intent, bold, size })}>{children}</span>;
+export const Text = ({ children, bold, intent, size, block }: TextProps) => {
+  return (
+    <span className={textStyles({ intent, bold, size, block })}>
+      {children}
+    </span>
+  );
 };

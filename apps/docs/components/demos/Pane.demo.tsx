@@ -1,7 +1,7 @@
 import { Pane, PaneIntent, PaneSize, Text, TextIntent } from "ui";
 import { css } from "utils";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const PaneDemo = () => {
   return (

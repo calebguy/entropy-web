@@ -1,13 +1,15 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
+import { css } from "utils";
+import { Spinner, SpinnerSize } from "../Spinner/Spinner";
 import { Text, TextIntent, TextSize } from "../Text/Text";
 
 export enum ButtonIntent {
   Primary = "primary",
   Secondary = "secondary",
   DeepBlue = "deep-blue",
-  NeonOrange = "neon-orange",
-  NeonGreen = "neon-green",
+  Orange = "orange",
+  Green = "green",
 }
 
 export enum ButtonSize {
@@ -15,20 +17,25 @@ export enum ButtonSize {
   Lg = "lg",
 }
 
+const sizeToRadius = {
+  [ButtonSize.Sm]: "rounded-md",
+  [ButtonSize.Lg]: "rounded-lg",
+};
+
 const buttonStyles = cva(
-  "border-[1px] border-solid inline-flex items-center justify-center",
+  "border-[1px] border-solid inline-flex items-center justify-center relative",
   {
     variants: {
       intent: {
         [ButtonIntent.Primary]: "border-none bg-brand text-white",
         [ButtonIntent.Secondary]: "bg-white border-black",
-        [ButtonIntent.NeonOrange]: "bg-orange-neon border-black",
-        [ButtonIntent.NeonGreen]: "bg-green-neon border-black",
+        [ButtonIntent.Orange]: "bg-orange-neon border-black",
+        [ButtonIntent.Green]: "bg-green-neon border-black",
         [ButtonIntent.DeepBlue]: "bg-white border-deep-blue text-deep-blue",
       },
       size: {
-        [ButtonSize.Sm]: "px-3 py-1 rounded-md",
-        [ButtonSize.Lg]: "px-6 py-1.5 rounded-lg",
+        [ButtonSize.Sm]: "px-3 py-1",
+        [ButtonSize.Lg]: "px-6 py-1.5",
       },
       round: {
         true: "!rounded-full",
@@ -48,6 +55,10 @@ export interface ButtonProps
   onClick?: () => void;
   children: string;
   submit?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
+  intent?: ButtonIntent;
+  size?: ButtonSize;
 }
 
 const buttonSizeToTextSize = {
@@ -55,11 +66,16 @@ const buttonSizeToTextSize = {
   [ButtonSize.Lg]: TextSize.Lg,
 };
 
+const buttonSizeToSpinnerSize = {
+  [ButtonSize.Sm]: SpinnerSize.Sm,
+  [ButtonSize.Lg]: SpinnerSize.Lg,
+};
+
 const buttonIntentToTextIntent = {
   [ButtonIntent.Primary]: TextIntent.White,
   [ButtonIntent.Secondary]: TextIntent.Black,
-  [ButtonIntent.NeonOrange]: TextIntent.Black,
-  [ButtonIntent.NeonGreen]: TextIntent.Black,
+  [ButtonIntent.Orange]: TextIntent.Black,
+  [ButtonIntent.Green]: TextIntent.Black,
   [ButtonIntent.DeepBlue]: TextIntent.DeepBlue,
 };
 
@@ -68,21 +84,55 @@ export const Button = ({
   onClick,
   children,
   round,
-  size,
+  size = ButtonSize.Sm,
   submit,
+  disabled,
+  loading,
 }: ButtonProps) => {
   return (
     <button
+      disabled={disabled || loading}
       type={submit ? "submit" : "button"}
       onClick={onClick}
-      className={buttonStyles({ intent, round, size })}
+      className={css(buttonStyles({ intent, round, size }), sizeToRadius[size])}
     >
       <Text
-        intent={buttonIntentToTextIntent[intent as ButtonIntent]}
-        size={buttonSizeToTextSize[size as ButtonSize]}
+        intent={buttonIntentToTextIntent[intent]}
+        size={buttonSizeToTextSize[size]}
       >
         {children}
       </Text>
+      {(loading || disabled) && (
+        <>
+          <div
+            className={css(
+              "w-full",
+              "h-full",
+              "absolute",
+              "inset-0",
+              "bg-white",
+              "opacity-80",
+              {
+                "rounded-full": round,
+                [sizeToRadius[size]]: !round,
+              }
+            )}
+          />
+          <div
+            className={css(
+              "w-full",
+              "h-full",
+              "absolute",
+              "inset-0",
+              "flex",
+              "justify-center",
+              "items-center"
+            )}
+          >
+            <Spinner size={buttonSizeToSpinnerSize[size]} />
+          </div>
+        </>
+      )}
     </button>
   );
 };

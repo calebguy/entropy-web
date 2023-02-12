@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react";
 import { Text, TextIntent, TextSize } from "ui";
+import { getRandomOfLength } from "utils";
 import { useDisplayContext } from "../state/DisplayContext";
 interface SubDemoProps extends PropsWithChildren {
   labels?: { [key: string]: string | number };
@@ -16,7 +17,10 @@ const SubDemo = ({ children, labels }: SubDemoProps) => {
           {labels &&
             showProps &&
             Object.keys(labels)?.map((key) => (
-              <div key={`SubDemo-${key}`} className="flex items-center gap-0.5">
+              <div
+                key={getRandomOfLength(20)}
+                className="flex items-center gap-0.5"
+              >
                 <Text size={TextSize.Xs} intent={TextIntent.Gray}>
                   {key}:{" "}
                 </Text>

@@ -1,6 +1,6 @@
 import { Button, ButtonIntent, ButtonSize } from "ui";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const button = Object.values(ButtonIntent).map((intent) => ({
   intent,
@@ -31,6 +31,13 @@ const ButtonDemo = () => {
             </SubDemo>
             <SubDemo labels={{ size: ButtonSize.Lg, round: "true" }}>
               <Button intent={item.intent} size={ButtonSize.Lg} round>
+                {item.children}
+              </Button>
+            </SubDemo>
+            <SubDemo
+              labels={{ size: ButtonSize.Lg, round: "true", loading: "true" }}
+            >
+              <Button intent={item.intent} size={ButtonSize.Lg} round loading>
                 {item.children}
               </Button>
             </SubDemo>

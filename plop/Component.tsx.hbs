@@ -1,0 +1,27 @@
+import { cva, VariantProps } from "class-variance-authority";
+import { PropsWithChildren } from "react";
+
+export enum {{pascalCase name}}Intent {}
+
+export enum {{pascalCase name}}Size {}
+
+const {{lowerCase name}}Styles = cva("", {
+    variants: {
+        intent: {},
+        size: {}
+    },
+    defaultVariants: {}
+})
+
+interface {{pascalCase name}}Props 
+extends PropsWithChildren, 
+VariantProps<typeof {{lowerCase name}}Styles> {}
+
+export const {{pascalCase name}} = ({ intent, size, children }: {{pascalCase name}}Props) => {
+    const styles = {{lowerCase name}}Styles({intent, size});
+    return (
+        <div className={styles}>
+            {children}
+        </div>
+    )
+}

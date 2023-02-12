@@ -1,10 +1,14 @@
-import { Button } from "ui";
+import { Button, Text, TextSize } from "ui";
 
 export default function Web() {
   return (
-    <div>
-      <h1 className={"font-bold text-green-400"}>sup bitch</h1>
-      <Button />
+    <div className="p-3">
+      <div className="flex justify-center">
+        <Text size={TextSize.Lg} bold>
+          WEB
+        </Text>
+      </div>
+      <Button>yeet</Button>
     </div>
   );
 }

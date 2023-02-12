@@ -3,6 +3,8 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../tailwind.config.js";
 const config = resolveConfig(tailwindConfig);
 
+const gray = config?.theme?.colors?.gray as string;
+
 export enum SpinnerSize {
   Sm = "sm",
   Lg = "lg",
@@ -20,8 +22,8 @@ interface SpinnerProps {
 export const Spinner = ({ size = SpinnerSize.Sm }: SpinnerProps) => {
   return (
     <Oval
-      color={config.theme.colors.gray}
-      secondaryColor={config.theme.colors.gray}
+      color={gray}
+      secondaryColor={gray}
       height={sizeMap[size]}
       width={sizeMap[size]}
       visible={true}

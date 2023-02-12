@@ -1,13 +1,18 @@
 import { PropsWithChildren } from "react";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 interface FormProps {}
 
 interface FormProps extends PropsWithChildren {
-  onSubmit: () => any;
+  onSubmit: (values: object) => any;
 }
 
-export const Form = ({ onSubmit }: FormProps) => {
-  const { handleSubmit } = useForm();
-  return <form onSubmit={handleSubmit(onSubmit)}></form>;
+export const Form = ({ onSubmit, children }: FormProps) => {
+  const methods = useForm();
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      {/* <div>{JSON.stringify(methods.getValues())}</div> */}
+    </FormProvider>
+  );
 };

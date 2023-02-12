@@ -47,6 +47,7 @@ export interface ButtonProps
     VariantProps<typeof buttonStyles> {
   onClick?: () => void;
   children: string;
+  submit?: boolean;
 }
 
 const buttonSizeToTextSize = {
@@ -68,9 +69,14 @@ export const Button = ({
   children,
   round,
   size,
+  submit,
 }: ButtonProps) => {
   return (
-    <button onClick={onClick} className={buttonStyles({ intent, round, size })}>
+    <button
+      type={submit ? "submit" : "button"}
+      onClick={onClick}
+      className={buttonStyles({ intent, round, size })}
+    >
       <Text
         intent={buttonIntentToTextIntent[intent as ButtonIntent]}
         size={buttonSizeToTextSize[size as ButtonSize]}

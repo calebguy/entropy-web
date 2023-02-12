@@ -17,27 +17,36 @@ const textfieldStyles = cva(
 interface HTMLInputProps
   extends Pick<
     React.HTMLProps<HTMLInputElement>,
-    "value" | "onChange" | "placeholder" | "defaultValue" | "type"
-  > {
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => any;
-  type?: "text" | "password" | "email";
-}
+    "value" | "placeholder" | "defaultValue" | "type" | "name"
+  > {}
 
-interface TextFieldProps
+export interface TextFieldProps
   extends PropsWithChildren,
     VariantProps<typeof textfieldStyles>,
-    HTMLInputProps {}
+    HTMLInputProps {
+  onChange?: (value: string) => any;
+  type?: "text" | "password" | "email";
+}
 
 export const TextField = ({
   intent,
   children,
   block,
   type = "text",
+  onChange,
   ...rest
 }: TextFieldProps) => {
   const styles = textfieldStyles({ intent, block });
   return (
-    <input type={type} className={styles} {...rest}>
+    <input
+      type={type}
+      className={styles}
+      onChange={(e) => {
+        //@ts-ignore
+        onChange && onChange((e.target as HTMLInputElement).value);
+      }}
+      {...rest}
+    >
       {children}
     </input>
   );

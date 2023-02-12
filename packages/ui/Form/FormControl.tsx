@@ -26,8 +26,8 @@ export const FormControl = ({
           <Text>{inputLabel}</Text>
         </label>
       )}
-      {helperText && <Text>{helperText}</Text>}
       {children}
+      {helperText && <Text>{helperText}</Text>}
       {error && <div className={css("text-red-500")}>{error.message}</div>}
     </div>
   );

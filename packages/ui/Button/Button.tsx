@@ -64,7 +64,7 @@ const buttonIntentToTextIntent = {
 };
 
 export const Button = ({
-  intent,
+  intent = ButtonIntent.Primary,
   onClick,
   children,
   round,

@@ -4,6 +4,7 @@ import { Button, ButtonIntent, Text, TextSize } from "ui";
 import AspectRatioDemo from "../components/AspectRatio.demo";
 import ButtonDemo from "../components/Button.demo";
 import FormDemo from "../components/Form.demo";
+import IconDemo from "../components/Icon.demo";
 import PaneDemo from "../components/Pane.demo";
 import PillDemo from "../components/Pill.demo";
 import TextDemo from "../components/Text.demo";
@@ -41,6 +42,7 @@ export default function Docs() {
           <TextFieldDemo />
           <FormDemo />
           <AspectRatioDemo />
+          <IconDemo />
         </div>
       </main>
     </DisplayContext.Provider>

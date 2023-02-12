@@ -5,7 +5,7 @@ import Demo from "./Demo";
 import SubDemo from "./SubDemo";
 
 const TextFieldDemo = () => {
-  const [value, setValue] = useState("hello");
+  const [value, setValue] = useState("e+ for the people");
   return (
     <Demo title={"TextField"}>
       <div className={css("grid", "grid-cols-1", "md:grid-cols-2", "gap-2")}>

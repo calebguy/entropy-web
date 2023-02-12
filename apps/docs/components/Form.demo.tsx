@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, ButtonIntent, Form, TextInput } from "ui";
-import { css } from "utils";
+import { css, getRandomOfLength, jsonify } from "utils";
 import Demo from "./Demo";
 import SubDemo from "./SubDemo";
 
@@ -9,12 +9,12 @@ const FormDemo = () => {
   return (
     <Demo title={"Form"}>
       <div className={css("grid", "grid-cols-2", "gap-4")}>
-        <SubDemo labels={{ uncontrolled: "true" }}>
-          <Form onSubmit={(values) => console.log("submit", values)}>
+        <SubDemo>
+          <Form onSubmit={(values) => alert(jsonify(values))}>
             <TextInput
               name={"firstName"}
               placeholder={"...textonly..."}
-              label={"<TextInput>"}
+              label={"<TextInput> Uncontrolled"}
               block
             />
             <div className={css("flex", "justify-center", "mt-4")}>
@@ -24,21 +24,24 @@ const FormDemo = () => {
             </div>
           </Form>
         </SubDemo>
-        <SubDemo labels={{ controlledValue: value }}>
-          <Form onSubmit={(values) => console.log("submit", values)}>
+        <SubDemo>
+          <Form onSubmit={(values) => alert(jsonify(values))}>
             <TextInput
+              helperText={"i must know your name m'dear"}
               value={value}
               onChange={(val) => setValue(val)}
               name={"firstName"}
               placeholder={"...textonly..."}
-              label={"<TextInput>"}
+              label={"<TextInput> Controlled"}
               block
             />
-            <div className={css("flex", "justify-center", "mt-4")}>
+            <div className={css("flex", "justify-center", "mt-4", "gap-4")}>
               <Button intent={ButtonIntent.Secondary} submit>
                 submit
               </Button>
-              <Button onClick={() => setValue("test")}>set to random</Button>
+              <Button onClick={() => setValue(getRandomOfLength(7))}>
+                set random
+              </Button>
             </div>
           </Form>
         </SubDemo>

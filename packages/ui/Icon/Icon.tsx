@@ -19,11 +19,11 @@ const iconStyles = cva("", {
 
 export enum IconName {
   Logo = "logo",
+  LogoInverted = "logo-inverted",
   Close = "close",
   Check = "check",
   FourSquare = "four-square",
   Plus = "plus",
-  LogoInverted = "logo-inverted",
 }
 
 const iconMapToComponentMap = {

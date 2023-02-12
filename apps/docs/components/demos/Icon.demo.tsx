@@ -8,9 +8,8 @@ const IconDemo = () => {
     <Demo title={"Icon"}>
       <div className={css("flex", "items-end", "gap-6")}>
         {Object.values(IconName).map((icon) => (
-          <SubDemo labels={{ icon }}>
+          <SubDemo key={`icon-demo-${icon}`} labels={{ icon }}>
             <div
-              key={`icon-demo-${icon}`}
               className={css("flex", "justify-center", {
                 "bg-brand p-1 rounded-sm":
                   icon === IconName.Check || icon == IconName.Close,

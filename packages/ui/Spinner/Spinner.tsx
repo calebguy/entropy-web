@@ -2,7 +2,6 @@ import { Oval } from "react-loader-spinner";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../tailwind.config.js";
 const config = resolveConfig(tailwindConfig);
-console.log(config.theme);
 
 export enum SpinnerSize {
   Sm = "sm",

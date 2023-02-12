@@ -3,7 +3,7 @@ import { Text, TextIntent, TextSize } from "ui";
 import { getRandomOfLength } from "utils";
 import { useDisplayContext } from "../state/DisplayContext";
 interface SubDemoProps extends PropsWithChildren {
-  labels?: { [key: string]: string | number };
+  labels?: { [key: string]: string | number | boolean };
 }
 
 const SubDemo = ({ children, labels }: SubDemoProps) => {
@@ -25,7 +25,7 @@ const SubDemo = ({ children, labels }: SubDemoProps) => {
                   {key}:{" "}
                 </Text>
                 <Text size={TextSize.Xs} intent={TextIntent.Gray} bold>
-                  {labels[key]}
+                  {labels[key].toString()}
                 </Text>
               </div>
             ))}

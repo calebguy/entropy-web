@@ -1,13 +1,18 @@
-import { Spinner } from "ui";
+import { Spinner, SpinnerSize } from "ui";
+import { css } from "utils";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";
 
 const SpinnerDemo = () => {
   return (
     <Demo title="Spinner">
-      <SubDemo>
-        <Spinner />
-      </SubDemo>
+      <div className={css("flex", "items-end", "gap-4")}>
+        {Object.values(SpinnerSize).map((size) => (
+          <SubDemo key={`spinner-${size}`} labels={{ size }}>
+            <Spinner size={size} />
+          </SubDemo>
+        ))}
+      </div>
     </Demo>
   );
 };

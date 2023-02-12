@@ -39,20 +39,21 @@ export const TextInput = ({
   useEffect(() => {
     if (value) {
       field.onChange(value);
-      console.log("running");
     }
   }, [value]);
   return (
     <FormControl name={field.name} label={label} helperText={helperText}>
       <TextField
+        ref={field.ref}
         placeholder={placeholder}
         block={block}
         name={field.name}
         value={field.value}
-        onChange={(value) => {
+        onChange={(value: string) => {
           field.onChange(value);
           onChange && onChange(value);
         }}
+        onBlur={field.onBlur}
       />
     </FormControl>
   );

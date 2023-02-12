@@ -13,7 +13,7 @@ import TextFieldDemo from "../components/demos/TextField.demo";
 import DisplayContext from "../state/DisplayContext";
 
 export default function Docs() {
-  const [showProps, setShowProps] = useState(true);
+  const [showProps, setShowProps] = useState(false);
   return (
     <DisplayContext.Provider value={{ showProps, setShowProps }}>
       <main className="p-4 flex justify-center">

@@ -1,7 +1,7 @@
 import { Pill, PillIntent } from "dsl";
 import { css } from "utils";
-import Demo from "../Demo";
-import SubDemo from "../SubDemo";
+import Demo from "./Demo";
+import SubDemo from "./SubDemo";
 
 const pills = Object.values(PillIntent).map((intent) => ({
   intent,

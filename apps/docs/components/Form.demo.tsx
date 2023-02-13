@@ -1,13 +1,8 @@
+import { Button, ButtonIntent, Form, TextInput } from "dsl";
 import { useState } from "react";
 import { css, getRandomOfLength, jsonify } from "utils";
-import {
-  Button,
-  ButtonIntent,
-  Form,
-  TextInput,
-} from "../../../../packages/dsl";
-import Demo from "../Demo";
-import SubDemo from "../SubDemo";
+import Demo from "./Demo";
+import SubDemo from "./SubDemo";
 
 const FormDemo = () => {
   const [value, setValue] = useState("e+++++");

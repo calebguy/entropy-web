@@ -1,7 +1,7 @@
 import { Button, ButtonIntent, ButtonSize } from "dsl";
 import { useState } from "react";
-import Demo from "../Demo";
-import SubDemo from "../SubDemo";
+import Demo from "./Demo";
+import SubDemo from "./SubDemo";
 
 const button = Object.values(ButtonIntent).map((intent) => ({
   intent,

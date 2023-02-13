@@ -1,7 +1,7 @@
 import { AspectRatio } from "dsl";
 import { css } from "utils";
-import Demo from "../Demo";
-import SubDemo from "../SubDemo";
+import Demo from "./Demo";
+import SubDemo from "./SubDemo";
 
 const AspectRatioDemo = () => {
   return (

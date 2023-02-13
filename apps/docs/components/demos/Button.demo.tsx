@@ -43,16 +43,6 @@ const ButtonDemo = () => {
                 {item.children}
               </Button>
             </SubDemo>
-            <SubDemo labels={{ size: ButtonSize.Sm, round: true, loading }}>
-              <Button
-                loading={loading}
-                size={ButtonSize.Sm}
-                intent={item.intent}
-                round
-              >
-                {item.children}
-              </Button>
-            </SubDemo>
             <SubDemo labels={{ size: ButtonSize.Lg, loading }}>
               <Button
                 loading={loading}

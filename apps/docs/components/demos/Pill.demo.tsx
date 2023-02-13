@@ -1,4 +1,4 @@
-import { Pill, PillIntent } from "ui";
+import { Pill, PillIntent } from "dsl";
 import { css } from "utils";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";

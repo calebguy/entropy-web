@@ -1,5 +1,5 @@
+import { Text, TextIntent, TextSize } from "dsl";
 import { PropsWithChildren } from "react";
-import { Text, TextIntent, TextSize } from "ui";
 import { getRandomOfLength } from "utils";
 import { useDisplayContext } from "../state/DisplayContext";
 interface SubDemoProps extends PropsWithChildren {

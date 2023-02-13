@@ -1,4 +1,4 @@
-import { Pane, PaneIntent, PaneSize, Text, TextIntent } from "ui";
+import { Pane, PaneIntent, PaneSize, Text, TextIntent } from "dsl";
 import { css } from "utils";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";

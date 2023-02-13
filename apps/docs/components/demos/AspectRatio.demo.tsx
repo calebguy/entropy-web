@@ -1,4 +1,4 @@
-import { AspectRatio } from "ui";
+import { AspectRatio } from "dsl";
 import { css } from "utils";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";

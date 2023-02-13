@@ -18,7 +18,8 @@ const helvetica = localFont({
 export default function MyApp({ Component, pageProps }: AppProps) {
   const description = "e+ DSL";
   const name = "e+ DSL";
-  const twitterCardUrl = "https://entropy-web-docs.vercel.app/twitter-card.png";
+  const twitterCardUrl =
+    "https://entropy-web-docs.vercel.app/images/twitter-card.png";
   const url = "https://entropy-web-docs.vercel.app/";
   return (
     <>

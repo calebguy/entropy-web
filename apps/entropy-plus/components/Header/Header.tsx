@@ -21,7 +21,6 @@ const Header = () => {
             }}
             className={css(
               "w-[35px]",
-              "w-full",
               "border-[1px]",
               "border-solid",
               "border-black",

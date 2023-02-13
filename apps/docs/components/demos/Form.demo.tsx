@@ -10,7 +10,7 @@ import Demo from "../Demo";
 import SubDemo from "../SubDemo";
 
 const FormDemo = () => {
-  const [value, setValue] = useState("test this out");
+  const [value, setValue] = useState("e+++++");
   return (
     <Demo title={"Form"}>
       <div className={css("grid", "grid-cols-2", "gap-4")}>

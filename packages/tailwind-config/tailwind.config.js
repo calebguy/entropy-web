@@ -2,15 +2,13 @@ const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
   content: [
-    // app content
-    // `**/*.{js,ts,jsx,tsx}`,
-    // include packages if not transpiling
-    "../../packages/**/*.{js,ts,jsx,tsx}",
-    "../../apps/web/pages/**/*.{js,ts,jsx,tsx}",
-    "../../apps/web/components/**/*.{js,ts,jsx,tsx}",
+    // @next could make this better by using src directories in each package / app
+    "../../packages/dsl/src/**/*.{js,ts,jsx,tsx}",
+    "../../apps/entropy-plus/pages/**/*.{js,ts,jsx,tsx}",
+    "../../apps/entropy-plus/components/**/*.{js,ts,jsx,tsx}",
+    "../../apps/entropy-plus/layouts/**/*.{js,ts,jsx,tsx}",
     "../../apps/docs/pages/*.{js,ts,jsx,tsx}",
     "../../apps/docs/components/*.{js,ts,jsx,tsx}",
-    "../../apps/docs/components/demos/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     fontSize: {

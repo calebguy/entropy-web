@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content={twitterCardUrl} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <main className={`${helvetica.variable}`}>
+      <main className={helvetica.variable}>
         <Component {...pageProps} />
       </main>{" "}
     </>

@@ -11,7 +11,9 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "plop": "plop",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev:e+": "turbo run dev --filter=entropy-plus",
+    "dev:dsl": "turbo run dev --filter=docs"
   },
   "devDependencies": {
     "eslint-config-custom": "workspace:*",

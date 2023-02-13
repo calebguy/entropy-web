@@ -5,10 +5,11 @@ import {
   useFormContext,
 } from "react-hook-form";
 import { TextField, TextFieldProps } from "../TextField/TextField";
-import { FormControl } from "./FormControl";
+import { FormControl, FormControlProps } from "./FormControl";
 
 interface BaseInputProps
-  extends Pick<React.HTMLProps<HTMLInputElement>, "name"> {
+  extends Pick<React.HTMLProps<HTMLInputElement>, "name">,
+    Pick<FormControlProps, "labelCenter"> {
   name: string;
   placeholder?: string;
   helperText?: string;
@@ -33,6 +34,7 @@ export const TextInput = ({
   onChange,
   rules,
   defaultValue = "",
+  labelCenter,
 }: TextInputProps) => {
   const { control } = useFormContext();
   const { field } = useController({
@@ -48,7 +50,12 @@ export const TextInput = ({
     }
   }, [value]);
   return (
-    <FormControl name={field.name} label={label} helperText={helperText}>
+    <FormControl
+      name={field.name}
+      label={label}
+      labelCenter={labelCenter}
+      helperText={helperText}
+    >
       <TextField
         ref={field.ref}
         placeholder={placeholder}

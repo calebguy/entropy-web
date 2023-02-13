@@ -5,13 +5,16 @@ interface FormProps {}
 
 interface FormProps extends PropsWithChildren {
   onSubmit: (values: object) => any;
+  className?: string;
 }
 
-export const Form = ({ onSubmit, children }: FormProps) => {
+export const Form = ({ onSubmit, children, className }: FormProps) => {
   const methods = useForm();
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form className={className} onSubmit={methods.handleSubmit(onSubmit)}>
+        {children}
+      </form>
       {/* <div>{JSON.stringify(methods.getValues())}</div> */}
     </FormProvider>
   );

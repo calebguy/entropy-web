@@ -10,7 +10,7 @@ This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes th
 
 - `docs`: app documenting our DSL ([Next.js](https://nextjs.org/))
 - `entropy-plus`: the entropy+ platform ([Next.js](https://nextjs.org/))
-- `dsl`: a Design System Language consisting of React components shared by both `entropy-plus` and `docs` applications based off of these [wireframes](https://www.figma.com/file/254LXaHq5RVRtKGv5z20Pm/entropy_plus_design?node-id=0%3A1&t=0db7P4kABYyoRlug-1)
+- `dsl`: a Design System Language consisting of React components shared by both `entropy-plus` and `docs`
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 

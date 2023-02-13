@@ -7,6 +7,7 @@ export interface FormControlProps extends PropsWithChildren {
   name: string;
   label?: string;
   helperText?: string;
+  labelCenter?: boolean;
 }
 
 const getErrorMessage = (type: any, name: string) => {
@@ -27,6 +28,7 @@ export const FormControl = ({
   children,
   helperText,
   name,
+  labelCenter,
 }: FormControlProps) => {
   const {
     formState: { errors },
@@ -35,7 +37,10 @@ export const FormControl = ({
   return (
     <div>
       {inputLabel && (
-        <label htmlFor={name}>
+        <label
+          htmlFor={name}
+          className={css({ "block w-full text-center": labelCenter })}
+        >
           <Text>{inputLabel}</Text>
         </label>
       )}

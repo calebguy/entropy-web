@@ -1,4 +1,4 @@
-import { Button, Text, TextSize } from "../../../packages/dsl";
+import { Button, ButtonIntent, Text, TextSize } from "dsl";
 
 export default function Web() {
   return (
@@ -9,6 +9,7 @@ export default function Web() {
         </Text>
       </div>
       <Button>yeet</Button>
+      <Button intent={ButtonIntent.Secondary}>suck it</Button>
     </div>
   );
 }

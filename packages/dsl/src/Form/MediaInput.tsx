@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { css, objectKeys } from "utils";
-import { Button } from "../Button/Button";
+import { Button } from "../src/Button/Button";
 
 // @next EVERYTHING
 

@@ -1,7 +1,7 @@
 import { Oval } from "react-loader-spinner";
 import resolveConfig from "tailwindcss/resolveConfig";
 // @ts-ignore
-import tailwindConfig from "../tailwind.config.js";
+import tailwindConfig from "../../tailwind.config.js";
 const config = resolveConfig(tailwindConfig);
 
 const gray = config?.theme?.colors?.gray as string;

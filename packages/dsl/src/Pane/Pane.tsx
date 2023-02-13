@@ -21,10 +21,15 @@ const paneStyles = cva("border-[1px] border-solid border-black", {
       [PaneSize.Sm]: "rounded-sm p-1",
       [PaneSize.Lg]: "rounded-md p-3",
     },
+    block: {
+      true: "w-full",
+      false: "inline-block",
+    },
   },
   defaultVariants: {
     intent: PaneIntent.Primary,
     size: PaneSize.Sm,
+    block: false,
   },
 });
 
@@ -32,6 +37,6 @@ interface PaneProps
   extends PropsWithChildren,
     VariantProps<typeof paneStyles> {}
 
-export const Pane = ({ children, intent, size }: PaneProps) => {
-  return <div className={paneStyles({ intent, size })}>{children}</div>;
+export const Pane = ({ children, intent, size, block }: PaneProps) => {
+  return <div className={paneStyles({ intent, size, block })}>{children}</div>;
 };

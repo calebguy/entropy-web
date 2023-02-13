@@ -6,7 +6,7 @@ import SubDemo from "./SubDemo";
 const IconDemo = () => {
   return (
     <Demo title={"Icon"}>
-      <div className={css("flex", "items-end", "gap-6")}>
+      <div className={css("flex", "items-end", "gap-6", "flex-wrap")}>
         {Object.values(IconName).map((icon) => (
           <SubDemo key={`icon-demo-${icon}`} labels={{ icon }}>
             <div

@@ -4,6 +4,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 
 import type { AppProps } from "next/app";
+import { css } from "utils";
 
 // @next can this live in the DSL?
 const helvetica = localFont({
@@ -38,7 +39,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:image" content={twitterCardUrl} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <main className={helvetica.variable}>
+      <main className={css(helvetica.variable, "grow", "flex", "flex-col")}>
         <Component {...pageProps} />
       </main>
     </>

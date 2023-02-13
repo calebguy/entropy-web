@@ -1,15 +1,17 @@
-import { Button, ButtonIntent, Text, TextSize } from "dsl";
+import { Text, TextIntent, TextSize } from "dsl";
+import { css } from "utils";
+import AuthedLayout from "../layouts/Authed.layout";
 
 export default function Web() {
   return (
-    <div className="p-3">
-      <div className="flex justify-center">
-        <Text size={TextSize.Lg} bold>
-          WEB
-        </Text>
+    <AuthedLayout>
+      <div className={css("flex", "flex-wrap", "h-full")}>
+        {new Array(500).fill(undefined).map((_, index) => (
+          <Text intent={TextIntent.Outline} size={TextSize.Xl} bold>
+            + {index === 250 && "entropy"}
+          </Text>
+        ))}
       </div>
-      <Button>yeet</Button>
-      <Button intent={ButtonIntent.Secondary}>suck it</Button>
-    </div>
+    </AuthedLayout>
   );
 }

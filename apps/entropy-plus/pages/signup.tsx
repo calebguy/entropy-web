@@ -1,4 +1,7 @@
 import {
+  AspectRatio,
+  Button,
+  ButtonIntent,
   Form,
   Pane,
   PaneSize,
@@ -19,7 +22,8 @@ const SignupPage = () => {
           "justify-center",
           "flex-col",
           "items-center",
-          "gap-4"
+          "gap-4",
+          "md:h-full"
         )}
       >
         <Pane size={PaneSize.Lg}>
@@ -31,10 +35,29 @@ const SignupPage = () => {
           onSubmit={(values) => console.log(values)}
           className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
         >
+          <div className={css("flex", "justify-center")}>
+            <div className={css("flex", "flex-col", "items-center", "gap-2")}>
+              <AspectRatio
+                ratio={"1/1"}
+                className={css(
+                  "max-w-[70px]",
+                  "w-full",
+                  "border-[1px]",
+                  "rounded-full",
+                  "border-black"
+                )}
+              />
+              <Button intent={ButtonIntent.Secondary} round>
+                upload profile pic
+              </Button>
+            </div>
+          </div>
+          <Text>Profile Info:</Text>
           <TextInput
             name={"name"}
             label={"Username"}
             placeholder={"create a username..."}
+            helperText={""}
             block
             labelCenter
           />
@@ -64,6 +87,11 @@ const SignupPage = () => {
             block
             labelCenter
           />
+          <div className={css("flex", "justify-center")}>
+            <Button intent={ButtonIntent.Secondary} round submit>
+              Create account
+            </Button>
+          </div>
         </Form>
       </div>
     </AppLayout>

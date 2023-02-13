@@ -6,8 +6,8 @@ import {
   Form,
   TextInput,
 } from "../../../../packages/dsl";
-import Demo from "./Demo";
-import SubDemo from "./SubDemo";
+import Demo from "../Demo";
+import SubDemo from "../SubDemo";
 
 const FormDemo = () => {
   const [value, setValue] = useState("test this out");

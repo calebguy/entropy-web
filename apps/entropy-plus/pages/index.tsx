@@ -1,4 +1,4 @@
-import { Button, Text, TextSize } from "ui";
+import { Button, Text, TextSize } from "../../../packages/dsl";
 
 export default function Web() {
   return (

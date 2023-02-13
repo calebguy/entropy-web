@@ -1,9 +1,10 @@
 import localFont from "@next/font/local";
+import "dsl/styles.css";
 import type { AppProps } from "next/app";
-import "ui/styles.css";
+import Head from "next/head";
 import "../styles/globals.css";
 
-// @next can this live in the UI package?
+// @next can this live in the DSL?
 const helvetica = localFont({
   src: [
     {
@@ -16,8 +17,13 @@ const helvetica = localFont({
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <main className={`${helvetica.variable}`}>
-      <Component {...pageProps} />
-    </main>
+    <>
+      <Head>
+        <title>e+ DSL</title>
+      </Head>
+      <main className={`${helvetica.variable}`}>
+        <Component {...pageProps} />
+      </main>{" "}
+    </>
   );
 }

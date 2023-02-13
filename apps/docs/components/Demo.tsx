@@ -1,5 +1,5 @@
+import { Text, TextSize } from "dsl";
 import { PropsWithChildren } from "react";
-import { Text, TextSize } from "ui";
 import { css } from "utils";
 
 interface DemoProps extends PropsWithChildren {

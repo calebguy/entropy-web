@@ -1,6 +1,6 @@
+import { Button, ButtonIntent, Text, TextSize } from "dsl";
 import Image from "next/image";
 import { useState } from "react";
-import { Button, ButtonIntent, Text, TextSize } from "ui";
 import AspectRatioDemo from "../components/demos/AspectRatio.demo";
 import ButtonDemo from "../components/demos/Button.demo";
 import FormDemo from "../components/demos/Form.demo";

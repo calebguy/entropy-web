@@ -1,4 +1,4 @@
-import { Icon, IconName } from "ui";
+import { Icon, IconName } from "dsl";
 import { css } from "utils";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";

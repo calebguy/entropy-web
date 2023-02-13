@@ -5,7 +5,7 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: "packages/ui/{{name}}/{{name}}.tsx",
+        path: "packages/dsl/{{name}}/{{name}}.tsx",
         templateFile: "plop/Component.tsx.hbs",
       },
       {
@@ -15,7 +15,7 @@ module.exports = function (plop) {
       },
       {
         type: "append",
-        path: "packages/ui/index.tsx",
+        path: "packages/dsl/index.tsx",
         template: "export * from './{{name}}/{{name}}'",
       },
     ],

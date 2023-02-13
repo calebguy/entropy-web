@@ -1,5 +1,5 @@
+import { Button, ButtonIntent, ButtonSize } from "dsl";
 import { useState } from "react";
-import { Button, ButtonIntent, ButtonSize } from "ui";
 import Demo from "../Demo";
 import SubDemo from "../SubDemo";
 

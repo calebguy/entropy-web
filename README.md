@@ -1,20 +1,18 @@
-# Turborepo starter
+# Entropy Web
 
-This is an official pnpm starter turborepo.
+Entropy on the web.
 
 ## What's inside?
 
-This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes the following packages/apps:
+This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes the following packages & apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- `docs`: app documenting our DSL ([Next.js](https://nextjs.org/))
+- `entropy-plus`: the entropy+ platform ([Next.js](https://nextjs.org/))
+- `dsl`: a Design System Language consisting of React components shared by both `entropy-plus` and `docs` applications based off of these [wireframes](https://www.figma.com/file/254LXaHq5RVRtKGv5z20Pm/entropy_plus_design?node-id=0%3A1&t=0db7P4kABYyoRlug-1)
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
 
@@ -26,20 +24,26 @@ This turborepo has some additional tools already setup for you:
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages, run:
 
 ```
-cd my-turborepo
 pnpm run build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop all apps and packages, run:
 
 ```
-cd my-turborepo
 pnpm run dev
+```
+
+### Creating DSL components
+
+When creating new DSL components, to get some boilerplate code up, run:
+
+```
+pnpm plop
 ```
 
 ### Remote Caching
@@ -49,7 +53,6 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
 pnpm dlx turbo login
 ```
 

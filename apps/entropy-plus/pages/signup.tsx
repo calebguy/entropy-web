@@ -32,7 +32,7 @@ const SignupPage = () => {
           </Text>
         </Pane>
         <Form
-          onSubmit={(values) => console.log(values)}
+          onSubmit={async (values) => console.log(values)}
           className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
         >
           <div className={css("flex", "justify-center")}>

@@ -22,7 +22,7 @@ interface BaseInputProps
 
 interface TextInputProps
   extends BaseInputProps,
-    Pick<TextFieldProps, "block"> {}
+    Pick<TextFieldProps, "block" | "type"> {}
 
 export const TextInput = ({
   name,
@@ -35,6 +35,7 @@ export const TextInput = ({
   rules,
   defaultValue = "",
   labelCenter,
+  type,
 }: TextInputProps) => {
   const { control } = useFormContext();
   const { field } = useController({
@@ -57,6 +58,7 @@ export const TextInput = ({
       helperText={helperText}
     >
       <TextField
+        type={type}
         ref={field.ref}
         placeholder={placeholder}
         block={block}

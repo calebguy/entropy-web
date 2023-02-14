@@ -4,7 +4,7 @@ import { FormProvider, useForm } from "react-hook-form";
 interface FormProps {}
 
 interface FormProps extends PropsWithChildren {
-  onSubmit: (values: object) => any;
+  onSubmit: (values: any) => Promise<any>;
   className?: string;
 }
 

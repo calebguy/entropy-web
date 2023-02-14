@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@next/font": "^13.1.6",
+    "axios": "^1.3.2",
     "dsl": "workspace:*",
+    "mobx": "^6.8.0",
+    "mobx-react-lite": "^3.4.0",
     "next": "^13.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

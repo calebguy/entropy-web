@@ -7,9 +7,14 @@ export default function Web() {
     <AuthedLayout>
       <div className={css("flex", "items-center", "h-full")}>
         <div className={css("flex", "flex-wrap")}>
-          {new Array(500).fill(undefined).map((_, index) => (
-            <Text intent={TextIntent.Outline} size={TextSize.Xl} bold>
-              + {index === 250 && "entropy"}
+          {new Array(342).fill(undefined).map((_, index) => (
+            <Text
+              key={`e-plus-${index}`}
+              intent={TextIntent.Outline}
+              size={TextSize.Xl}
+              bold
+            >
+              + {index === 177 && "entropy"}
             </Text>
           ))}
         </div>

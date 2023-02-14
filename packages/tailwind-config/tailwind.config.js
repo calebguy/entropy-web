@@ -16,7 +16,7 @@ module.exports = {
       sm: ["12px", "14px"],
       base: ["14px", "16px"],
       lg: ["18px", "26px"],
-      xl: ["38px", "48px"],
+      xl: ["38px", "42px"],
     },
     borderRadius: {
       sm: "5px",

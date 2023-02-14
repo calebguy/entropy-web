@@ -10,7 +10,7 @@ const FormDemo = () => {
     <Demo title={"Form"}>
       <div className={css("grid", "grid-cols-2", "gap-4")}>
         <SubDemo>
-          <Form onSubmit={(values) => alert(jsonify(values))}>
+          <Form onSubmit={async (values) => alert(jsonify(values))}>
             <TextInput
               rules={{ required: true, maxLength: 4 }}
               name={"firstName"}
@@ -26,7 +26,7 @@ const FormDemo = () => {
           </Form>
         </SubDemo>
         <SubDemo>
-          <Form onSubmit={(values) => alert(jsonify(values))}>
+          <Form onSubmit={async (values) => alert(jsonify(values))}>
             <TextInput
               rules={{ required: true }}
               helperText={"i must know your name m'dear"}

@@ -1,22 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useController } from "react-hook-form";
 import { bytesToSize, css, objectKeys } from "utils";
 import { Button, ButtonIntent } from "../Button/Button";
 import { Icon, IconName } from "../Icon/Icon";
+import { Text, TextIntent, TextSize } from "../Text/Text";
 import { FormControl, FormControlProps } from "./FormControl";
+
+export enum MediaInputIntent {
+  Primary = "primary",
+  Secondary = "secondary",
+}
 
 export interface FileWithPreview extends File {
   preview: string;
 }
 
 export interface MediaInputProps extends FormControlProps {
+  intent?: MediaInputIntent;
   buttonLabel?: string;
   value?: File;
   defaultValue?: File;
   onDropAccepted?: (file: File) => void;
   onClear?: () => void;
-  renderIsDropActive?: () => React.ReactNode;
   required?: boolean;
   disabled?: boolean;
   noClick?: boolean;
@@ -31,7 +37,6 @@ const MediaInput: React.FC<MediaInputProps> = ({
   labelCenter,
   onDropAccepted,
   onClear,
-  renderIsDropActive,
   required: isRequired,
   disabled,
   noClick,
@@ -40,10 +45,9 @@ const MediaInput: React.FC<MediaInputProps> = ({
   maxSizeBytes,
   acceptedMimeToExtension,
   buttonLabel,
+  intent = MediaInputIntent.Primary,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
-
-  const minHeight = preview ? 200 : 200;
   const maxFiles = 1;
 
   const {
@@ -59,6 +63,33 @@ const MediaInput: React.FC<MediaInputProps> = ({
   const onDrop = useCallback((acceptedFiles: any) => {
     field.onChange(acceptedFiles);
   }, []);
+  const isPrimary = useMemo(
+    () => intent === MediaInputIntent.Primary,
+    [intent]
+  );
+  const isSecondary = useMemo(
+    () => intent === MediaInputIntent.Secondary,
+    [intent]
+  );
+  const primaryStyles = css(
+    "flex",
+    "flex-col",
+    "relative",
+    "justify-center",
+    "items-center",
+    "p-7",
+    "rounded-sm",
+    "bg-gray-medium"
+  );
+  const secondaryStyles = css(
+    "rounded-full",
+    "bg-white",
+    "flex",
+    "justify-center",
+    "items-center"
+  );
+  const primaryStyle = { minHeight: 200 };
+  const secondaryStyle = { height: 85, width: 85 };
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
     fileRejections.forEach((file) => {
@@ -101,6 +132,82 @@ const MediaInput: React.FC<MediaInputProps> = ({
     noClick: noClick,
   });
 
+  const rootProps = getRootProps();
+
+  const renderExitButton = useCallback(() => {
+    return (
+      <div className={css("absolute", "top-3", "right-3")}>
+        <button
+          onClick={() => {
+            field.onChange(null);
+            setPreview(null);
+            onClear && onClear();
+          }}
+        >
+          <Icon name={IconName.Close} />
+        </button>
+      </div>
+    );
+  }, [field, setPreview, onClear]);
+
+  const renderPreview = useCallback(() => {
+    return (
+      <div
+        className={css(
+          "!bg-contain",
+          "!bg-center",
+          "!bg-no-repeat",
+          "w-full",
+          "h-full",
+          "grow"
+        )}
+        style={{ background: `url(${preview})` }}
+      />
+    );
+  }, [preview]);
+
+  const renderButton = useCallback(
+    () => (
+      <Button
+        round
+        disabled={disabled}
+        intent={ButtonIntent.Secondary}
+        onClick={(e) =>
+          isSecondary && rootProps.onClick ? rootProps.onClick(e) : undefined
+        }
+      >
+        {buttonLabel ? buttonLabel : "Select Media"}
+      </Button>
+    ),
+    [disabled, buttonLabel, isSecondary, rootProps.onClick]
+  );
+
+  const renderMimeHelper = () => {
+    return (
+      acceptedMimeToExtension && (
+        <Text intent={TextIntent.Gray} size={TextSize.Sm}>
+          accepted:{" "}
+          {objectKeys(acceptedMimeToExtension).map((mime, index, arr) => {
+            const extensions = acceptedMimeToExtension[mime];
+            if (index === 0 || arr.length === 1) {
+              return extensions.join(", ");
+            }
+            return ", " + extensions.join(", ");
+          })}
+        </Text>
+      )
+    );
+  };
+
+  const renderMaxSizeHelper = () => {
+    return (
+      maxSizeBytes && (
+        <Text intent={TextIntent.Gray} size={TextSize.Sm}>
+          Max Size: {bytesToSize(maxSizeBytes)}
+        </Text>
+      )
+    );
+  };
   return (
     <FormControl
       helperText={helperText}
@@ -108,122 +215,57 @@ const MediaInput: React.FC<MediaInputProps> = ({
       label={label}
       labelCenter={labelCenter}
     >
-      <div className={css("relative", "inline-block", "w-full")}>
+      <div
+        className={css("relative", "inline-block", "w-full", {
+          "flex flex-col items-center gap-4": isSecondary,
+        })}
+      >
         <div
-          {...getRootProps()}
-          style={{ minHeight }}
-          className={css(
-            "border-[1px]",
-            "border-solid",
-            "flex",
-            "flex-col",
-            "relative",
-            "justify-center",
-            "items-center",
-            "overflow-hidden",
-            "rounded-sm",
-            "p-7",
-            "bg-gray-medium",
-            {
-              "border-red-700": isError && !isDragActive,
-              "border-black": !isError && !isDragActive,
-              "border-brand": isDragActive,
-              "cursor-pointer": !noClick,
-              "cursor-default": noClick,
-            }
-          )}
+          {...rootProps}
+          style={isPrimary ? primaryStyle : secondaryStyle}
+          className={css("border-[1px]", "border-solid", "overflow-hidden", {
+            "border-red-700": isError && !isDragActive,
+            "border-black": !isError && !isDragActive,
+            "border-brand": isDragActive,
+            "cursor-pointer hover:border-brand": !noClick,
+            "cursor-default": noClick,
+            [secondaryStyles]: isSecondary,
+            [primaryStyles]: isPrimary,
+          })}
         >
-          {isDragActive && (
+          {isDragActive && <Icon name={IconName.Logo} />}
+          {preview && renderPreview()}
+          {!isDragActive && !preview && isPrimary && (
             <>
-              {renderIsDropActive && renderIsDropActive()}
-              {!renderIsDropActive && <Icon name={IconName.Logo} />}
+              {renderButton()}
+              <div
+                className={css(
+                  "mt-2",
+                  "flex",
+                  "flex-col",
+                  "items-center",
+                  "gap-1"
+                )}
+              >
+                {renderMaxSizeHelper()}
+                {renderMimeHelper()}
+              </div>
             </>
           )}
-          {preview && (
-            <div
-              className={css(
-                "!bg-contain",
-                "!bg-center",
-                "!bg-no-repeat",
-                "w-full",
-                "h-full",
-                "grow"
-              )}
-              style={{ background: `url(${preview})` }}
-            />
-          )}
-          {!isDragActive && !preview && (
-            <div
-              className={css(
-                "flex",
-                "flex-col",
-                "items-center",
-                "text-neutral-700",
-                "gap-3",
-                "mt-3"
-              )}
-            >
-              <div>
-                <Button
-                  round
-                  disabled={disabled}
-                  intent={ButtonIntent.Secondary}
-                >
-                  {buttonLabel ? buttonLabel : "Select Media"}
-                </Button>
-              </div>
-              <div className={css("text-center", "text-neutral-600")}>
-                {acceptedMimeToExtension && (
-                  <div className={css("text-xs")}>
-                    accepted:{" "}
-                    {objectKeys(acceptedMimeToExtension).map(
-                      (mime, index, arr) => {
-                        if (index === arr.length - 1) {
-                          return (
-                            ", " + acceptedMimeToExtension[mime].join(", ")
-                          );
-                        } else {
-                          return acceptedMimeToExtension[mime].join(", ");
-                        }
-                      }
-                    )}
-                  </div>
-                )}
-                {maxSizeBytes && (
-                  <div className={css("mt-0.5", "text-xs")}>
-                    Max Size: {bytesToSize(maxSizeBytes)}
-                  </div>
-                )}
-              </div>
-              <input {...getInputProps()} />
-            </div>
-          )}
+          {<input {...getInputProps()} />}
         </div>
-        {!isDragActive && preview && (
-          <div className={css("absolute", "top-3", "right-3")}>
-            <button
-              onClick={() => {
-                field.onChange(null);
-                setPreview(null);
-                onClear && onClear();
-              }}
-            >
-              <Icon name={IconName.Close} />
-            </button>
-            {/* <Button
-              disabled={disabled}
-              onClick={() => {
-                field.onChange(null);
-                setPreview(null);
-                if (onClear) {
-                  onClear();
-                }
-              }}
-            >
-              <Icon name={IconName.Close} />
-            </Button> */}
-          </div>
+
+        {isSecondary && (
+          <>
+            {renderButton()}
+            <div className={css("flex", "flex-col", "items-center", "gap-1")}>
+              {renderMaxSizeHelper()}
+              {renderMimeHelper()}
+            </div>
+          </>
         )}
+
+        {!isDragActive && preview && renderExitButton()}
       </div>
     </FormControl>
   );

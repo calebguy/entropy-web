@@ -25,7 +25,7 @@ const sizeToRadius = {
 };
 
 const buttonStyles = cva(
-  "border-[1px] border-solid inline-flex items-center justify-center relative",
+  "border-[1px] border-solid inline-flex items-center justify-center relative disabled:opacity-50",
   {
     variants: {
       intent: {
@@ -59,7 +59,7 @@ const buttonStyles = cva(
 export interface ButtonProps
   extends PropsWithChildren,
     VariantProps<typeof buttonStyles> {
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   children: React.ReactNode;
   submit?: boolean;
   disabled?: boolean;

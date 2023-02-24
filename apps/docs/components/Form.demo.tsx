@@ -1,5 +1,5 @@
 import { Button, ButtonIntent, ButtonSize, Form, Submit, TextInput } from "dsl";
-import MediaInput from "dsl/src/Form/MediaInput";
+import MediaInput, { MediaInputIntent } from "dsl/src/Form/MediaInput";
 import { useState } from "react";
 import { css, getRandomOfLength, jsonify } from "utils";
 import Demo from "./Demo";
@@ -20,16 +20,27 @@ const FormDemo = () => {
               block
             />
             <MediaInput
+              maxSizeBytes={10000000}
+              acceptedMimeToExtension={{
+                "image/jpeg": [".jpg", ".jpeg"],
+              }}
               name={"media"}
-              label={"<MediaInput> Uncontrolled"}
+              label={`<MediaInput> Uncontrolled ${MediaInputIntent.Primary}`}
               helperText={"help me out!"}
               buttonLabel={"Choose Image from Library"}
               required
             />
+            <div className={css("flex", "justify-center")}>
+              <MediaInput
+                intent={MediaInputIntent.Secondary}
+                name={"more media"}
+                buttonLabel={"choose profile pic"}
+              />
+            </div>
             <div className={css("flex", "justify-center", "mt-4")}>
               <Submit
                 size={ButtonSize.Lg}
-                intent={ButtonIntent.Gray}
+                intent={ButtonIntent.Primary}
                 block
                 bold
               />

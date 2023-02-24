@@ -26,7 +26,7 @@ const textStyles = cva("font-sans", {
       [TextIntent.Black]: "text-black",
       [TextIntent.White]: "text-white",
       [TextIntent.DeepBlue]: "text-deep-blue",
-      [TextIntent.Gray]: "text-gray",
+      [TextIntent.Gray]: "text-gray-dark",
       [TextIntent.Outline]: css("text-white", styles["text-stroke"]),
       [TextIntent.Error]: "text-red-600",
     },

@@ -1,4 +1,5 @@
-import { Button, ButtonIntent, Form, TextInput } from "dsl";
+import { Button, ButtonIntent, ButtonSize, Form, Submit, TextInput } from "dsl";
+import MediaInput from "dsl/src/Form/MediaInput";
 import { useState } from "react";
 import { css, getRandomOfLength, jsonify } from "utils";
 import Demo from "./Demo";
@@ -10,7 +11,7 @@ const FormDemo = () => {
     <Demo title={"Form"}>
       <div className={css("grid", "grid-cols-2", "gap-4")}>
         <SubDemo>
-          <Form onSubmit={async (values) => alert(jsonify(values))}>
+          <Form onSubmit={async (values) => console.log(values)}>
             <TextInput
               rules={{ required: true, maxLength: 4 }}
               name={"firstName"}
@@ -18,10 +19,20 @@ const FormDemo = () => {
               label={"<TextInput> Uncontrolled"}
               block
             />
+            <MediaInput
+              name={"media"}
+              label={"<MediaInput> Uncontrolled"}
+              helperText={"help me out!"}
+              buttonLabel={"Choose Image from Library"}
+              required
+            />
             <div className={css("flex", "justify-center", "mt-4")}>
-              <Button intent={ButtonIntent.Secondary} submit>
-                submit
-              </Button>
+              <Submit
+                size={ButtonSize.Lg}
+                intent={ButtonIntent.Gray}
+                block
+                bold
+              />
             </div>
           </Form>
         </SubDemo>

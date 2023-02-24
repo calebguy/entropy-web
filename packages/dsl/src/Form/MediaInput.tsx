@@ -1,62 +1,74 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
-import { css, objectKeys } from "utils";
-import { Button } from "../src/Button/Button";
-
-// @next EVERYTHING
+import { useController } from "react-hook-form";
+import { bytesToSize, css, objectKeys } from "utils";
+import { Button, ButtonIntent } from "../Button/Button";
+import { Icon, IconName } from "../Icon/Icon";
+import { FormControl, FormControlProps } from "./FormControl";
 
 export interface FileWithPreview extends File {
   preview: string;
 }
 
-export interface MediaInputProps {
+export interface MediaInputProps extends FormControlProps {
+  buttonLabel?: string;
+  value?: File;
+  defaultValue?: File;
   onDropAccepted?: (file: File) => void;
   onClear?: () => void;
   renderIsDropActive?: () => React.ReactNode;
-  //   validate?: Validator;
+  required?: boolean;
   disabled?: boolean;
   noClick?: boolean;
-  maxSizeBytes: number;
-  acceptedMimeToExtension: { [key: string]: string[] };
-  name: string;
-  description?: string;
-  label?: string;
-  value?: File | null;
+  maxSizeBytes?: number;
+  acceptedMimeToExtension?: { [key: string]: string[] };
 }
 
 const MediaInput: React.FC<MediaInputProps> = ({
+  name,
+  label,
+  helperText,
+  labelCenter,
   onDropAccepted,
   onClear,
   renderIsDropActive,
-  name,
-  //   validate,
+  required: isRequired,
   disabled,
-  description,
-  label,
   noClick,
   value,
+  defaultValue,
   maxSizeBytes,
   acceptedMimeToExtension,
+  buttonLabel,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const minHeight = preview ? 200 : 200;
   const maxFiles = 1;
 
-  //   const { input, meta, isRequired } = useFormField(name, validate);
-  //   const isError = meta.error && meta.touched;
+  const {
+    field,
+    formState: { errors },
+  } = useController({
+    name,
+    rules: isRequired ? { required: true } : undefined,
+    defaultValue: value && !defaultValue ? value : defaultValue,
+  });
 
-  //   const onDrop = useCallback((acceptedFiles: any) => {
-  //     input.onChange(acceptedFiles);
-  //   }, []);
+  const isError = errors[name];
+  const onDrop = useCallback((acceptedFiles: any) => {
+    field.onChange(acceptedFiles);
+  }, []);
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
     fileRejections.forEach((file) => {
       file.errors.forEach((error) => {
         if (error.code === "file-too-large") {
-          //   errorToast(`File must be smaller than ${bytesToSize(maxSizeBytes)}`);
+          if (maxSizeBytes) {
+            alert(`File must be smaller than ${bytesToSize(maxSizeBytes)}`);
+          }
         } else {
-          //   errorToast(error.message);
+          alert(error.message);
         }
       });
     });
@@ -73,9 +85,9 @@ const MediaInput: React.FC<MediaInputProps> = ({
     }
   }, []);
 
-  //   useEffect(() => {
-  //     input.onChange(value);
-  //   }, [value]);
+  useEffect(() => {
+    field.onChange(value);
+  }, [value]);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     onDropRejected,
@@ -85,122 +97,135 @@ const MediaInput: React.FC<MediaInputProps> = ({
     disabled: disabled,
     accept: acceptedMimeToExtension,
     multiple: false,
-    // onDrop: onDrop,
+    onDrop: onDrop,
     noClick: noClick,
   });
 
-  function bytesToSize(maxSizeBytes: number): import("react").ReactNode {
-    throw new Error("Function not implemented.");
-  }
-
   return (
-    // <FormControl
-    //   description={description}
-    //   isRequired={isRequired}
-    //   name={name}
-    //   label={label}
-    // >
-    <div className={css("relative", "inline-block", "w-full")}>
-      <div
-        {...getRootProps()}
-        style={{ minHeight }}
-        className={css(
-          "border-[1px]",
-          "border-dashed",
-          "flex",
-          "flex-col",
-          "relative",
-          "justify-center",
-          "items-center",
-          "overflow-hidden",
-          "rounded-sm",
-          "p-7",
-          "hover:border-black",
-          "dark:border-neutral-600",
-          "dark:hover:border-neutral-400",
-          {
-            // "border-red-700": isError && !isDragActive,
-            // "border-gray-400": !isError && !isDragActive,
-            "border-neutral-600": isDragActive,
-            "cursor-pointer": !noClick,
-            "cursor-default": noClick,
-          }
-        )}
-      >
-        {isDragActive && (
-          <>
-            {renderIsDropActive && renderIsDropActive()}
-            {!renderIsDropActive && (
-              <div className={css("text-xs", "text-black", "dark:text-white")}>
-                wow
+    <FormControl
+      helperText={helperText}
+      name={name}
+      label={label}
+      labelCenter={labelCenter}
+    >
+      <div className={css("relative", "inline-block", "w-full")}>
+        <div
+          {...getRootProps()}
+          style={{ minHeight }}
+          className={css(
+            "border-[1px]",
+            "border-solid",
+            "flex",
+            "flex-col",
+            "relative",
+            "justify-center",
+            "items-center",
+            "overflow-hidden",
+            "rounded-sm",
+            "p-7",
+            "bg-gray-medium",
+            {
+              "border-red-700": isError && !isDragActive,
+              "border-black": !isError && !isDragActive,
+              "border-brand": isDragActive,
+              "cursor-pointer": !noClick,
+              "cursor-default": noClick,
+            }
+          )}
+        >
+          {isDragActive && (
+            <>
+              {renderIsDropActive && renderIsDropActive()}
+              {!renderIsDropActive && <Icon name={IconName.Logo} />}
+            </>
+          )}
+          {preview && (
+            <div
+              className={css(
+                "!bg-contain",
+                "!bg-center",
+                "!bg-no-repeat",
+                "w-full",
+                "h-full",
+                "grow"
+              )}
+              style={{ background: `url(${preview})` }}
+            />
+          )}
+          {!isDragActive && !preview && (
+            <div
+              className={css(
+                "flex",
+                "flex-col",
+                "items-center",
+                "text-neutral-700",
+                "gap-3",
+                "mt-3"
+              )}
+            >
+              <div>
+                <Button
+                  round
+                  disabled={disabled}
+                  intent={ButtonIntent.Secondary}
+                >
+                  {buttonLabel ? buttonLabel : "Select Media"}
+                </Button>
               </div>
-            )}
-          </>
-        )}
-        {preview && (
-          <div
-            className={css(
-              "!bg-contain",
-              "!bg-center",
-              "!bg-no-repeat",
-              "w-full",
-              "h-full",
-              "grow"
-            )}
-            style={{ background: `url(${preview})` }}
-          />
-        )}
-        {!isDragActive && !preview && (
-          <div
-            className={css(
-              "flex",
-              "flex-col",
-              "items-center",
-              "text-neutral-700",
-              "gap-3",
-              "mt-3"
-            )}
-          >
-            <div>
-              <Button disabled={disabled}>Select File</Button>
+              <div className={css("text-center", "text-neutral-600")}>
+                {acceptedMimeToExtension && (
+                  <div className={css("text-xs")}>
+                    accepted:{" "}
+                    {objectKeys(acceptedMimeToExtension).map(
+                      (mime, index, arr) => {
+                        if (index === arr.length - 1) {
+                          return (
+                            ", " + acceptedMimeToExtension[mime].join(", ")
+                          );
+                        } else {
+                          return acceptedMimeToExtension[mime].join(", ");
+                        }
+                      }
+                    )}
+                  </div>
+                )}
+                {maxSizeBytes && (
+                  <div className={css("mt-0.5", "text-xs")}>
+                    Max Size: {bytesToSize(maxSizeBytes)}
+                  </div>
+                )}
+              </div>
+              <input {...getInputProps()} />
             </div>
-            <div className={css("text-center", "text-neutral-600")}>
-              <div className={css("text-xs")}>
-                accepted:{" "}
-                {objectKeys(acceptedMimeToExtension).map((mime, index, arr) => {
-                  if (index === arr.length - 1) {
-                    return ", " + acceptedMimeToExtension[mime].join(", ");
-                  } else {
-                    return acceptedMimeToExtension[mime].join(", ");
-                  }
-                })}
-              </div>
-              <div className={css("mt-0.5", "text-xs")}>
-                Max Size: {bytesToSize(maxSizeBytes)}
-              </div>
-            </div>
-            <input {...getInputProps()} />
-          </div>
-        )}
-      </div>
-      {/* {!isDragActive && preview && (
+          )}
+        </div>
+        {!isDragActive && preview && (
           <div className={css("absolute", "top-3", "right-3")}>
-            <Button
+            <button
+              onClick={() => {
+                field.onChange(null);
+                setPreview(null);
+                onClear && onClear();
+              }}
+            >
+              <Icon name={IconName.Close} />
+            </button>
+            {/* <Button
               disabled={disabled}
               onClick={() => {
-                input.onChange(null);
+                field.onChange(null);
                 setPreview(null);
                 if (onClear) {
                   onClear();
                 }
               }}
             >
-              <IoCloseOutline size={14} />
-            </Button>
+              <Icon name={IconName.Close} />
+            </Button> */}
           </div>
-        )} */}
-    </div>
-    // </FormControl>
+        )}
+      </div>
+    </FormControl>
   );
 };
 

@@ -5,12 +5,12 @@ module.exports = function (plop) {
     actions: [
       {
         type: "add",
-        path: "packages/dsl/{{name}}/{{name}}.tsx",
+        path: "packages/dsl/src/{{name}}/{{name}}.tsx",
         templateFile: "plop/Component.tsx.hbs",
       },
       {
         type: "add",
-        path: "apps/docs/components/demos/{{name}}.demo.tsx",
+        path: "apps/docs/components/{{name}}.demo.tsx",
         templateFile: "plop/Demo.tsx.hbs",
       },
       {

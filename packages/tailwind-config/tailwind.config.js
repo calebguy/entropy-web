@@ -43,7 +43,11 @@ module.exports = {
           dark: "#FF0000",
           neon: "#FCB964",
         },
-        gray: "#737577",
+        gray: {
+          light: "#D9D9D9",
+          medium: "#C4C4C4",
+          dark: "#737577",
+        },
       },
       fontFamily: {
         sans: ["var(--font-helvetica-neue)", ...fontFamily.sans],

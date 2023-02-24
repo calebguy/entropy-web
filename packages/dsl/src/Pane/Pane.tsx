@@ -15,7 +15,7 @@ const paneStyles = cva("border-[1px] border-solid border-black", {
   variants: {
     intent: {
       [PaneIntent.Primary]: "bg-white",
-      [PaneIntent.Secondary]: "bg-gray",
+      [PaneIntent.Secondary]: "bg-gray-dark",
     },
     size: {
       [PaneSize.Sm]: "rounded-sm p-1",

@@ -1,5 +1,6 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
+import { useFormState } from "react-hook-form";
 import { css } from "utils";
 import { Spinner, SpinnerSize } from "../Spinner/Spinner";
 import { Text, TextIntent, TextSize } from "../Text/Text";
@@ -10,6 +11,7 @@ export enum ButtonIntent {
   DeepBlue = "deep-blue",
   Orange = "orange",
   Green = "green",
+  Gray = "gray",
 }
 
 export enum ButtonSize {
@@ -32,13 +34,18 @@ const buttonStyles = cva(
         [ButtonIntent.Orange]: "bg-orange-neon border-black",
         [ButtonIntent.Green]: "bg-green-neon border-black",
         [ButtonIntent.DeepBlue]: "bg-white border-deep-blue text-deep-blue",
+        [ButtonIntent.Gray]:
+          "bg-gray-medium border-none disabled:bg-gray-light",
       },
       size: {
         [ButtonSize.Sm]: "px-3 py-2",
-        [ButtonSize.Lg]: "px-6 py-1.5",
+        [ButtonSize.Lg]: "px-6 py-3.5",
       },
       round: {
         true: "!rounded-full",
+      },
+      block: {
+        true: "w-full",
       },
     },
     defaultVariants: {
@@ -53,12 +60,13 @@ export interface ButtonProps
   extends PropsWithChildren,
     VariantProps<typeof buttonStyles> {
   onClick?: () => void;
-  children: string;
+  children: React.ReactNode;
   submit?: boolean;
   disabled?: boolean;
   loading?: boolean;
   intent?: ButtonIntent;
   size?: ButtonSize;
+  bold?: boolean;
 }
 
 const buttonSizeToTextSize = {
@@ -77,6 +85,7 @@ const buttonIntentToTextIntent = {
   [ButtonIntent.Orange]: TextIntent.Black,
   [ButtonIntent.Green]: TextIntent.Black,
   [ButtonIntent.DeepBlue]: TextIntent.DeepBlue,
+  [ButtonIntent.Gray]: TextIntent.White,
 };
 
 export const Button = ({
@@ -88,21 +97,27 @@ export const Button = ({
   submit,
   disabled,
   loading,
+  block,
+  bold,
 }: ButtonProps) => {
   return (
     <button
       disabled={disabled || loading}
       type={submit ? "submit" : "button"}
       onClick={onClick}
-      className={css(buttonStyles({ intent, round, size }), sizeToRadius[size])}
+      className={css(
+        buttonStyles({ intent, round, size, block }),
+        sizeToRadius[size]
+      )}
     >
       <Text
         intent={buttonIntentToTextIntent[intent]}
         size={buttonSizeToTextSize[size]}
+        bold={bold}
       >
         {children}
       </Text>
-      {(loading || disabled) && (
+      {loading && (
         <>
           <div
             className={css(
@@ -134,5 +149,22 @@ export const Button = ({
         </>
       )}
     </button>
+  );
+};
+
+interface SubmitProps extends Omit<ButtonProps, "submit" | "children"> {
+  children?: string;
+}
+
+export const Submit = ({ ...rest }: SubmitProps) => {
+  const state = useFormState();
+  const hasErrors = Object.keys(state.errors).length > 0;
+  return (
+    <Button
+      submit
+      disabled={hasErrors}
+      children={rest.children ? rest.children : "Submit"}
+      {...rest}
+    />
   );
 };

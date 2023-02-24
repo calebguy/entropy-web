@@ -223,18 +223,24 @@ const MediaInput: React.FC<MediaInputProps> = ({
         <div
           {...rootProps}
           style={isPrimary ? primaryStyle : secondaryStyle}
-          className={css("border-[1px]", "border-solid", "overflow-hidden", {
-            "border-red-700": isError && !isDragActive,
-            "border-black": !isError && !isDragActive,
-            "border-brand": isDragActive,
-            "cursor-pointer hover:border-brand": !noClick,
-            "cursor-default": noClick,
-            [secondaryStyles]: isSecondary,
-            [primaryStyles]: isPrimary,
-          })}
+          className={css(
+            "border-[1px]",
+            "border-solid",
+            "overflow-hidden",
+            "relative",
+            {
+              "border-red-700": isError && !isDragActive,
+              "border-black": !isError && !isDragActive,
+              "border-brand": isDragActive,
+              "cursor-pointer hover:border-brand": !noClick,
+              "cursor-default": noClick,
+              [secondaryStyles]: isSecondary,
+              [primaryStyles]: isPrimary,
+            }
+          )}
         >
           {isDragActive && <Icon name={IconName.Logo} />}
-          {preview && renderPreview()}
+          {preview && !isDragActive && renderPreview()}
           {!isDragActive && !preview && isPrimary && (
             <>
               {renderButton()}

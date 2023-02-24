@@ -38,7 +38,7 @@ const buttonStyles = cva(
           "bg-gray-medium border-none disabled:bg-gray-light",
       },
       size: {
-        [ButtonSize.Sm]: "px-3 py-2",
+        [ButtonSize.Sm]: "px-3 py-1",
         [ButtonSize.Lg]: "px-6 py-3.5",
       },
       round: {

@@ -7,42 +7,40 @@ const Header = () => {
   return (
     <div className={css("flex", "justify-between")}>
       <Link href={isAuthed ? "/sort" : "/"}>
-        <Icon name={IconName.Logo} />
+        <Icon name={IconName.Logo} size={41} />
       </Link>
-      <div className={css("flex", "items-center", "gap-2")}>
-        {isAuthed && (
-          <>
-            <Link href={"/upload"}>
-              <Icon name={IconName.Plus} />
-            </Link>
-            <Link href={"/dashboard"}>
-              <Icon name={IconName.FourSquare} />
-            </Link>
-            <Link href={`/profile/test`}>
-              <AspectRatio
-                style={{
-                  backgroundImage:
-                    "url(https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg)",
-                }}
-                className={css(
-                  "w-[35px]",
-                  "border-[1px]",
-                  "border-solid",
-                  "border-black",
-                  "rounded-full",
-                  "bg-cover"
-                )}
-                ratio={"1/1"}
-              />
-            </Link>
-          </>
-        )}
-        {!isAuthed && (
-          <Link href={"/signup"}>
-            <Text bold>Signup</Text>
+      {isAuthed && (
+        <div className={css("flex", "items-center", "gap-6")}>
+          <Link href={"/upload"}>
+            <Icon name={IconName.Plus} size={29} />
           </Link>
-        )}
-      </div>
+          <Link href={"/dashboard"}>
+            <Icon name={IconName.FourSquare} size={29} />
+          </Link>
+          <Link href={`/curator/gainor`}>
+            <AspectRatio
+              style={{
+                backgroundImage:
+                  "url(https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg)",
+              }}
+              className={css(
+                "w-[35px]",
+                "border-[1px]",
+                "border-solid",
+                "border-black",
+                "rounded-full",
+                "bg-cover"
+              )}
+              ratio={"1/1"}
+            />
+          </Link>
+        </div>
+      )}
+      {!isAuthed && (
+        <Link href={"/signup"}>
+          <Text bold>Signup</Text>
+        </Link>
+      )}
     </div>
   );
 };

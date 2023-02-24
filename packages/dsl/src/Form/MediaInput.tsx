@@ -138,7 +138,8 @@ const MediaInput: React.FC<MediaInputProps> = ({
     return (
       <div className={css("absolute", "top-3", "right-3")}>
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             field.onChange(null);
             setPreview(null);
             onClear && onClear();
@@ -216,7 +217,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
       labelCenter={labelCenter}
     >
       <div
-        className={css("relative", "inline-block", "w-full", {
+        className={css("inline-block", "w-full", {
           "flex flex-col items-center gap-4": isSecondary,
         })}
       >
@@ -258,6 +259,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
               </div>
             </>
           )}
+          {!isDragActive && preview && renderExitButton()}
           {<input {...getInputProps()} />}
         </div>
 
@@ -270,8 +272,6 @@ const MediaInput: React.FC<MediaInputProps> = ({
             </div>
           </>
         )}
-
-        {!isDragActive && preview && renderExitButton()}
       </div>
     </FormControl>
   );

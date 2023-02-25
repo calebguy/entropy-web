@@ -13,15 +13,21 @@ import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { css } from "utils";
-import { TwitterChannel } from "../interfaces";
+import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import Http from "../services/Http";
 
 interface SortPageProps {
+  image: Photo;
   twitterChannels: TwitterChannel[];
+  currentChannel: TwitterChannel;
 }
 
-const SortPage = ({ twitterChannels }: SortPageProps) => {
+const SortPage = ({
+  twitterChannels,
+  currentChannel,
+  image,
+}: SortPageProps) => {
   return (
     <AppLayout>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -39,7 +45,7 @@ const SortPage = ({ twitterChannels }: SortPageProps) => {
             "gap-2"
           )}
         >
-          <UserPreview username={"gainor"} />
+          {image.curator && <UserPreview profile={image.curator} />}
           <AspectRatio
             ratio={"1/1.2"}
             className={css(
@@ -65,7 +71,10 @@ const SortPage = ({ twitterChannels }: SortPageProps) => {
             </div>
           </AspectRatio>
           <div className={css("self-start", "-my-1")}>
-            <TwitterProfileSelector channels={twitterChannels} />
+            <TwitterProfileSelector
+              channels={twitterChannels}
+              currentChannel={currentChannel}
+            />
           </div>
         </div>
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
@@ -81,11 +90,34 @@ const SortPage = ({ twitterChannels }: SortPageProps) => {
   );
 };
 
+const SmallIcon = ({ imageUrl }: { imageUrl: string }) => {
+  return (
+    <AspectRatio
+      ratio={"1/1"}
+      className={css(
+        "rounded-full",
+        "w-[28px]",
+        "bg-cover",
+        "bg-center",
+        "border-[1px]",
+        "border-black"
+      )}
+      style={{
+        backgroundImage: `url(${imageUrl})`,
+      }}
+    />
+  );
+};
+
 interface TwitterProfileSelectorProps {
   channels: TwitterChannel[];
+  currentChannel: TwitterChannel;
 }
 
-const TwitterProfileSelector = ({ channels }: TwitterProfileSelectorProps) => {
+const TwitterProfileSelector = ({
+  channels,
+  currentChannel,
+}: TwitterProfileSelectorProps) => {
   const [show, setShow] = useState(false);
   return (
     <div
@@ -99,42 +131,25 @@ const TwitterProfileSelector = ({ channels }: TwitterProfileSelectorProps) => {
         { "border-black": show, "border-transparent": !show }
       )}
     >
-      <button
-        onClick={() => setShow(!show)}
-        className={css(
-          "rounded-full",
-          "bg-brand",
-          "p-1",
-          "cursor-pointer",
-          "border-[1px]",
-          "border-black"
-        )}
-      >
-        <Icon name={IconName.Logo} size={18} fill={"white"} />
+      <button onClick={() => setShow(!show)} className={css()}>
+        <SmallIcon imageUrl={currentChannel.profile_image_url} />
       </button>
       {show && (
         <>
-          {channels.map((channel) => (
-            <Link
-              className={css("hover:scale-105")}
-              key={`twitter-channel-selector-${channel.profile_image_url}`}
-              // @next -- what is the intended functionality here?
-              href={"/sort"}
-            >
-              <AspectRatio
-                ratio={"1/1"}
-                className={css(
-                  "rounded-full",
-                  "w-[28px]",
-                  "bg-cover",
-                  "bg-center",
-                  "border-[1px]",
-                  "border-black"
-                )}
-                style={{ backgroundImage: `url(${channel.profile_image_url})` }}
-              />
-            </Link>
-          ))}
+          {channels
+            .filter(
+              (channel) => channel.screen_name !== currentChannel.screen_name
+            )
+            .map((channel) => (
+              <Link
+                className={css("hover:scale-105")}
+                key={`twitter-channel-selector-${channel.profile_image_url}`}
+                // @next -- what is the intended functionality here?
+                href={"/sort"}
+              >
+                <SmallIcon imageUrl={channel.profile_image_url} />
+              </Link>
+            ))}
         </>
       )}
     </div>
@@ -142,10 +157,10 @@ const TwitterProfileSelector = ({ channels }: TwitterProfileSelectorProps) => {
 };
 
 interface UserPreviewProps {
-  username: string;
+  profile: Profile;
 }
 
-const UserPreview = ({ username }: UserPreviewProps) => {
+const UserPreview = ({ profile }: UserPreviewProps) => {
   return (
     <Pane size={PaneSize.Sm} block>
       <div className={css("flex", "justify-between", "items-center")}>
@@ -160,9 +175,9 @@ const UserPreview = ({ username }: UserPreviewProps) => {
               "border-black"
             )}
           />
-          <Text>@{username}</Text>
+          <Text>@{profile.name}</Text>
         </div>
-        <Link href={`/curator/${username}`}>
+        <Link href={`/curator/${profile.slug}`}>
           <Button size={ButtonSize.Sm} intent={ButtonIntent.Secondary} round>
             view profile
           </Button>
@@ -175,10 +190,12 @@ const UserPreview = ({ username }: UserPreviewProps) => {
 export const getServerSideProps: GetServerSideProps<
   SortPageProps
 > = async () => {
-  const twitterChannels = await Http.getTwitterChannels();
+  const { image, twitter_channels, current_channel } = await Http.getSort();
   return {
     props: {
-      twitterChannels,
+      image,
+      currentChannel: current_channel,
+      twitterChannels: twitter_channels,
     },
   };
 };

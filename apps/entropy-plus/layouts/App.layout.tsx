@@ -16,7 +16,7 @@ const AppLayout = ({ children }: AuthedLayoutProps) => {
         <Divider />
       </div>
       <div className={css("flex", "justify-center", "p-4", "grow")}>
-        <div className={css("max-w-2xl", "w-full")}>{children}</div>
+        <div className={css("max-w-4xl", "w-full")}>{children}</div>
       </div>
     </>
   );

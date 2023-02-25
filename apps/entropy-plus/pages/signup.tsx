@@ -1,9 +1,9 @@
 import {
-  Button,
   ButtonIntent,
   Form,
   Pane,
   PaneSize,
+  Submit,
   Text,
   TextInput,
   TextIntent,
@@ -51,6 +51,7 @@ const SignupPage = () => {
               label={"Username"}
               placeholder={"create a username..."}
               helperText={""}
+              rules={{ required: true }}
               block
               labelCenter
             />
@@ -58,6 +59,7 @@ const SignupPage = () => {
               name={"email"}
               label={"Email"}
               placeholder={"enter your email..."}
+              rules={{ required: true }}
               block
               labelCenter
             />
@@ -65,12 +67,14 @@ const SignupPage = () => {
               name={"password"}
               label={"Password"}
               placeholder={"create a password..."}
+              type={"password"}
               block
               labelCenter
             />
             <TextInput
               name={"confirmPassword"}
               placeholder={"confirm password..."}
+              type={"password"}
               block
             />
             <TextInput
@@ -81,9 +85,12 @@ const SignupPage = () => {
               labelCenter
             />
             <div className={css("flex", "justify-center")}>
-              <Button intent={ButtonIntent.Secondary} round submit>
+              <Submit intent={ButtonIntent.Secondary} round>
                 Create account
-              </Button>
+              </Submit>
+              {/* <Button intent={ButtonIntent.Secondary} round submit>
+                Create account
+              </Button> */}
             </div>
           </Form>
         </div>

@@ -52,7 +52,7 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
                   <Text>entropy score</Text>
                 </div>
               </div>
-              <div className={css("flex", "items-end", "gap-1")}>
+              <div className={css("flex", "items-end", "gap-2")}>
                 <Text size={TextSize.Lg}>@{profile.name}</Text>
                 {profile.bio && <Text>{profile.bio}</Text>}
               </div>

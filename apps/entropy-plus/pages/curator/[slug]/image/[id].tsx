@@ -75,7 +75,9 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
               "bg-center",
               "bg-no-repeat",
               "w-full",
-              "rounded-sm"
+              "rounded-md",
+              "border-[1px]",
+              "border-black"
             )}
             style={{ backgroundImage: `url(${image.url})` }}
           />

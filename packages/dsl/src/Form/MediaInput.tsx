@@ -145,7 +145,16 @@ const MediaInput: React.FC<MediaInputProps> = ({
             onClear && onClear();
           }}
         >
-          <Icon name={IconName.Close} />
+          <div
+            className={css(
+              "rounded-full",
+              "border-[1px]",
+              "border-black",
+              "bg-black"
+            )}
+          >
+            <Icon name={IconName.Close} size={20} fill={"white"} />
+          </div>
         </button>
       </div>
     );

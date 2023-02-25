@@ -38,8 +38,7 @@ const SortPage = ({
             "flex-col",
             "justify-center",
             "items-center",
-            "md:max-w-md",
-            "max-w-sm",
+            "sm:max-w-xl",
             "mx-auto",
             "w-full",
             "gap-2"
@@ -47,29 +46,19 @@ const SortPage = ({
         >
           {image.curator && <UserPreview profile={image.curator} />}
           <AspectRatio
-            ratio={"1/1.2"}
+            ratio={`${image.image?.width_field}/${image.image?.height_field}`}
             className={css(
               "mx-auto",
               "w-full",
               "border-[1px]",
               "border-black",
               "rounded-sm",
-              "bg-brand"
+              "bg-cover",
+              "bg-center",
+              "bg-no-repeat"
             )}
-          >
-            <div
-              className={css(
-                "flex",
-                "items-center",
-                "justify-center",
-                "rounded-sm"
-              )}
-            >
-              <div className={css("bg-white", "rounded-full", "p-2")}>
-                <Icon name={IconName.Logo} />
-              </div>
-            </div>
-          </AspectRatio>
+            style={{ backgroundImage: `url(${image.url})` }}
+          />
           <div className={css("self-start", "-my-1")}>
             <TwitterProfileSelector
               channels={twitterChannels}
@@ -144,7 +133,7 @@ const TwitterProfileSelector = ({
               <Link
                 className={css("hover:scale-105")}
                 key={`twitter-channel-selector-${channel.profile_image_url}`}
-                // @next -- what is the intended functionality here?
+                // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
                 href={"/sort"}
               >
                 <SmallIcon imageUrl={channel.profile_image_url} />
@@ -172,8 +161,16 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
               "bg-brand",
               "rounded-full",
               "border-[1px]",
-              "border-black"
+              "border-black",
+              "bg-contain",
+              "bg-center",
+              "bg-no-repeat"
             )}
+            style={
+              profile.profile_image
+                ? { backgroundImage: `url(${profile.profile_image})` }
+                : undefined
+            }
           />
           <Text>@{profile.name}</Text>
         </div>

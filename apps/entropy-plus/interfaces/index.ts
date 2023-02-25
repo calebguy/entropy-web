@@ -36,7 +36,10 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
-interface CloudinaryField {}
+interface CloudinaryField {
+  width_field: number;
+  height_field: number;
+}
 
 export interface ContentSource {}
 

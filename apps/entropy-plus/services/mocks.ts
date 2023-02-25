@@ -42,8 +42,11 @@ export const MOCK_GET_SORT_RESPONSE: GetSortResponse = {
   image: {
     title: "string",
     created: "Datetime",
-    image: null,
-    url: "string",
+    image: {
+      width_field: 1019,
+      height_field: 607,
+    },
+    url: "https://d2w9rnfcy7mm78.cloudfront.net/4947982/original_b6c46d340f2949daff548b63fc78679a.png?1567530746?bc=0",
     thumb_url: null,
     square_url: null,
     tweet_id: null,
@@ -74,7 +77,8 @@ export const MOCK_GET_SORT_RESPONSE: GetSortResponse = {
     creator_nft_approved: null,
     submitter: null,
     curator: {
-      profile_image: null,
+      profile_image:
+        "https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg",
       name: "gainor",
       bio: null,
       handle: "gainor",

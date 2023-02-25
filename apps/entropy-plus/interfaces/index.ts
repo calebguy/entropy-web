@@ -36,14 +36,6 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
-interface CloudinaryField {
-  width_field: number;
-  height_field: number;
-  url: string;
-}
-
-export interface ContentSource {}
-
 export interface Profile {
   // user: User;
   profile_image: Nullable<CloudinaryField>;
@@ -74,10 +66,9 @@ interface User {
   date_joined: Datetime;
 }
 
-export interface GetSortResponse {
-  image: Photo;
-  twitter_channels: TwitterChannel[];
-  current_channel: TwitterChannel;
+export interface Acheivement {
+  isTopFivePercent: boolean;
+  isCoreCurator: boolean;
 }
 
 export interface TwitterChannel {
@@ -85,7 +76,30 @@ export interface TwitterChannel {
   screen_name: string;
 }
 
+interface CloudinaryField {
+  width_field: number;
+  height_field: number;
+  url: string;
+}
+
+export interface ContentSource {}
+
 export interface LoginPayload {
   username: string;
   password: string;
+}
+
+export interface GetSortResponse {
+  image: Photo;
+  twitter_channels: TwitterChannel[];
+  current_channel: TwitterChannel;
+}
+
+export interface GetProfileResponse {
+  profile: Profile;
+  images: Photo[];
+  acheivements: {
+    isTopFivePercent: boolean;
+    isCoreCurator: boolean;
+  };
 }

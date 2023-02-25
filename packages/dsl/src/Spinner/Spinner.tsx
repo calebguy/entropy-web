@@ -4,6 +4,7 @@ import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../tailwind.config.js";
 const config = resolveConfig(tailwindConfig);
 
+//@ts-ignore
 const gray = config?.theme?.colors?.gray.dark as string;
 
 export enum SpinnerSize {

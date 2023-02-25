@@ -168,7 +168,7 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
             )}
             style={
               profile.profile_image
-                ? { backgroundImage: `url(${profile.profile_image})` }
+                ? { backgroundImage: `url(${profile.profile_image.url})` }
                 : undefined
             }
           />

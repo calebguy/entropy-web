@@ -77,8 +77,11 @@ export const MOCK_GET_SORT_RESPONSE: GetSortResponse = {
     creator_nft_approved: null,
     submitter: null,
     curator: {
-      profile_image:
-        "https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg",
+      profile_image: {
+        url: "https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg",
+        height_field: 100,
+        width_field: 100,
+      },
       name: "gainor",
       bio: null,
       handle: "gainor",

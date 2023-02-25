@@ -39,6 +39,7 @@ export interface Photo {
 interface CloudinaryField {
   width_field: number;
   height_field: number;
+  url: string;
 }
 
 export interface ContentSource {}

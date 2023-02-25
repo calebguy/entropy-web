@@ -1,6 +1,6 @@
 import { Divider } from "dsl";
 import { css } from "utils";
-import Header from "../components/Header/Header";
+import Header from "../components/Header";
 
 interface AuthedLayoutProps extends React.PropsWithChildren {}
 

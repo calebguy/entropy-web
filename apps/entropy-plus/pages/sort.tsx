@@ -8,11 +8,13 @@ import {
   Pane,
   PaneSize,
   Text,
+  TextSize,
 } from "dsl";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { css } from "utils";
+import ProfileIcon from "../components/ProfileIcon";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import Http from "../services/Http";
@@ -153,28 +155,11 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
   return (
     <Pane size={PaneSize.Sm} block>
       <div className={css("flex", "justify-between", "items-center")}>
-        <div className={css("flex", "items-center", "gap-1")}>
+        <div className={css("flex", "items-center", "gap-2")}>
           <Link href={`/curator/${profile.slug}`}>
-            <AspectRatio
-              ratio={"1/1"}
-              className={css(
-                "w-[30px]",
-                "bg-brand",
-                "rounded-full",
-                "border-[1px]",
-                "border-black",
-                "bg-contain",
-                "bg-center",
-                "bg-no-repeat"
-              )}
-              style={
-                profile.profile_image
-                  ? { backgroundImage: `url(${profile.profile_image.url})` }
-                  : undefined
-              }
-            />
+            <ProfileIcon profile={profile} />
           </Link>
-          <Text>@{profile.name}</Text>
+          <Text size={TextSize.Lg}>@{profile.name}</Text>
         </div>
         <Link href={`/curator/${profile.slug}`}>
           <Button size={ButtonSize.Sm} intent={ButtonIntent.Secondary} round>
@@ -189,7 +174,9 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
 export const getServerSideProps: GetServerSideProps<
   SortPageProps
 > = async () => {
-  const { image, twitter_channels, current_channel } = await Http.getSort();
+  const {
+    data: { image, twitter_channels, current_channel },
+  } = await Http.getSort();
   return {
     props: {
       image,

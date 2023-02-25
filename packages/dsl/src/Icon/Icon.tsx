@@ -2,8 +2,11 @@ import { PropsWithChildren } from "react";
 import Close from "./CustomIcons/Close";
 import FourSquare from "./CustomIcons/FourSquare";
 import Heart from "./CustomIcons/Heart";
+import Instagram from "./CustomIcons/Instagram";
 import Logo from "./CustomIcons/Logo";
+import Mouse from "./CustomIcons/Mouse";
 import Plus from "./CustomIcons/Plus";
+import Twitter from "./CustomIcons/Twitter";
 
 export enum IconSize {}
 
@@ -13,6 +16,9 @@ export enum IconName {
   Heart = "heart",
   FourSquare = "four-square",
   Plus = "plus",
+  Instagram = "instagram",
+  Mouse = "mouse",
+  Twitter = "twitter",
 }
 
 const iconMapToComponentMap = {
@@ -21,6 +27,9 @@ const iconMapToComponentMap = {
   [IconName.Plus]: Plus,
   [IconName.Close]: Close,
   [IconName.Heart]: Heart,
+  [IconName.Instagram]: Instagram,
+  [IconName.Mouse]: Mouse,
+  [IconName.Twitter]: Twitter,
 };
 
 interface IconProps extends PropsWithChildren {

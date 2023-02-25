@@ -1,5 +1,5 @@
 export type Datetime = string;
-type Nullable<T> = T | null;
+export type Nullable<T> = T | null;
 
 export interface Photo {
   title: string;
@@ -102,4 +102,9 @@ export interface GetProfileResponse {
     isTopFivePercent: boolean;
     isCoreCurator: boolean;
   };
+}
+
+export interface GetCuratorImageResponse {
+  profile: Profile;
+  image: Photo;
 }

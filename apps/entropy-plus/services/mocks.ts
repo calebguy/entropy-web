@@ -1,4 +1,8 @@
-import { GetSortResponse, Profile } from "../interfaces";
+import {
+  GetCuratorImageResponse,
+  GetSortResponse,
+  Profile,
+} from "../interfaces";
 import { GetProfileResponse } from "./../interfaces/index";
 
 const twitterChannels = [
@@ -39,7 +43,7 @@ const twitterChannels = [
   },
 ];
 
-const MOCK_PROFILE: Profile = {
+export const MOCK_PROFILE: Profile = {
   profile_image: {
     url: "https://res.cloudinary.com/dpooqlfdf/image/upload/v1675634340/yjtez64evmrzjolxtu0e.jpg",
     height_field: 100,
@@ -48,9 +52,9 @@ const MOCK_PROFILE: Profile = {
   name: "gainor",
   bio: "Test this out",
   handle: "gainor",
-  twitter_handle: "gainor",
-  ig_handle: null,
-  website: null,
+  twitter_handle: "https://twitter.com/gainormather",
+  ig_handle: "https://google.com",
+  website: "https://gainor.xyz",
   slug: "gainor",
   admin_approved: true,
   profile_views: null,
@@ -117,4 +121,9 @@ export const MOCK_GET_PROFILE_RESPONSE: GetProfileResponse = {
     isCoreCurator: true,
     isTopFivePercent: true,
   },
+};
+
+export const MOCK_GET_CURATOR_IMAGE_RESPONSE: GetCuratorImageResponse = {
+  image: MOCK_IMAGE,
+  profile: MOCK_PROFILE,
 };

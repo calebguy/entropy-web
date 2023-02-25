@@ -1,10 +1,10 @@
 import { Text, TextIntent, TextSize } from "dsl";
 import { css } from "utils";
-import AuthedLayout from "../layouts/Authed.layout";
+import AppLayout from "../layouts/App.layout";
 
 export default function Web() {
   return (
-    <AuthedLayout>
+    <AppLayout>
       <div className={css("flex", "items-center", "h-full")}>
         <div className={css("flex", "flex-wrap")}>
           {new Array(342).fill(undefined).map((_, index) => (
@@ -19,6 +19,6 @@ export default function Web() {
           ))}
         </div>
       </div>
-    </AuthedLayout>
+    </AppLayout>
   );
 }

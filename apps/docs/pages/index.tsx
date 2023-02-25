@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import AspectRatioDemo from "../components/AspectRatio.demo";
 import ButtonDemo from "../components/Button.demo";
+import DividerDemo from "../components/Divider.demo";
 import FormDemo from "../components/Form.demo";
 import IconDemo from "../components/Icon.demo";
 import PaneDemo from "../components/Pane.demo";
@@ -45,6 +46,7 @@ export default function Docs() {
           <AspectRatioDemo />
           <IconDemo />
           <SpinnerDemo />
+          <DividerDemo />
         </div>
       </main>
     </DisplayContext.Provider>

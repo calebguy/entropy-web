@@ -2,6 +2,11 @@ import axios, { AxiosInstance } from "axios";
 import env from "../environment";
 import { LoginPayload } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
+import {
+  MOCK_GET_CURATOR_IMAGE_RESPONSE,
+  MOCK_GET_PROFILE_RESPONSE,
+  MOCK_GET_SORT_RESPONSE,
+} from "./mocks";
 
 class Http {
   http: AxiosInstance;
@@ -23,6 +28,21 @@ class Http {
 
   getMe() {
     return this.http.get("/me");
+  }
+
+  async getSort() {
+    return { data: MOCK_GET_SORT_RESPONSE };
+    // return this.http.get<GetSortResponse>("/sort");
+  }
+
+  async getProfile(slug: string) {
+    return { data: MOCK_GET_PROFILE_RESPONSE };
+    // return this.http.get<GetProfileResponse>(`/profile/${slug}`);
+  }
+
+  async getCuratorImage(curatorSlug: string, id: string) {
+    return { data: MOCK_GET_CURATOR_IMAGE_RESPONSE };
+    // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
   }
 }
 

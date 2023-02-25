@@ -2,7 +2,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { forwardRef, PropsWithChildren } from "react";
 
 const textfieldStyles = cva(
-  "border-[1px] border-solid border-black outline-none text-black font-sans px-2 py-2 rounded-sm text-base placeholder:text-gray font-normal placeholder:text-center",
+  "border-[1px] border-solid border-black outline-none text-black font-sans px-2 py-2 rounded-sm text-base placeholder:text-gray-dark font-normal placeholder:text-center",
   {
     variants: {
       intent: {},

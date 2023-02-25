@@ -1,29 +1,24 @@
-import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
-import LogoInverted from "./CustomIcons/ LogoInverted";
-import Check from "./CustomIcons/Check";
 import Close from "./CustomIcons/Close";
 import FourSquare from "./CustomIcons/FourSquare";
+import Heart from "./CustomIcons/Heart";
+import Instagram from "./CustomIcons/Instagram";
 import Logo from "./CustomIcons/Logo";
+import Mouse from "./CustomIcons/Mouse";
 import Plus from "./CustomIcons/Plus";
+import Twitter from "./CustomIcons/Twitter";
 
 export enum IconSize {}
 
-const iconStyles = cva("", {
-  variants: {
-    intent: {},
-    size: {},
-  },
-  defaultVariants: {},
-});
-
 export enum IconName {
   Logo = "logo",
-  LogoInverted = "logo-inverted",
   Close = "close",
-  Check = "check",
+  Heart = "heart",
   FourSquare = "four-square",
   Plus = "plus",
+  Instagram = "instagram",
+  Mouse = "mouse",
+  Twitter = "twitter",
 }
 
 const iconMapToComponentMap = {
@@ -31,16 +26,21 @@ const iconMapToComponentMap = {
   [IconName.FourSquare]: FourSquare,
   [IconName.Plus]: Plus,
   [IconName.Close]: Close,
-  [IconName.Check]: Check,
-  [IconName.LogoInverted]: LogoInverted,
+  [IconName.Heart]: Heart,
+  [IconName.Instagram]: Instagram,
+  [IconName.Mouse]: Mouse,
+  [IconName.Twitter]: Twitter,
 };
 
-interface IconProps extends PropsWithChildren, VariantProps<typeof iconStyles> {
+interface IconProps extends PropsWithChildren {
   name: IconName;
+  size?: number;
+  fill?: string;
 }
 
-export const Icon = ({ intent, size, children, name }: IconProps) => {
-  const styles = iconStyles({ intent, size });
+export interface CustomIconProps extends Pick<IconProps, "size" | "fill"> {}
+
+export const Icon = ({ size = 32, name, fill }: IconProps) => {
   const Component = iconMapToComponentMap[name];
-  return <Component />;
+  return <Component size={size} fill={fill} />;
 };

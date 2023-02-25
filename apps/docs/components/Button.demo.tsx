@@ -15,6 +15,7 @@ const ButtonDemo = () => {
       title={"Button"}
       nextToTitle={
         <Button
+          round
           intent={ButtonIntent.Secondary}
           onClick={() => setLoading(!loading)}
         >

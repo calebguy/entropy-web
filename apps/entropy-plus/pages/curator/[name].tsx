@@ -1,7 +1,9 @@
 import { Text } from "dsl";
 import AppLayout from "../../layouts/App.layout";
 
-const ProfilePage = () => {
+interface CuratorPageProps {}
+
+const CuratorPage = () => {
   return (
     <AppLayout>
       <Text>profile</Text>
@@ -9,4 +11,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default CuratorPage;

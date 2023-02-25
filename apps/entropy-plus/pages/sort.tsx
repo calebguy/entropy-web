@@ -154,24 +154,26 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
     <Pane size={PaneSize.Sm} block>
       <div className={css("flex", "justify-between", "items-center")}>
         <div className={css("flex", "items-center", "gap-1")}>
-          <AspectRatio
-            ratio={"1/1"}
-            className={css(
-              "w-[30px]",
-              "bg-brand",
-              "rounded-full",
-              "border-[1px]",
-              "border-black",
-              "bg-contain",
-              "bg-center",
-              "bg-no-repeat"
-            )}
-            style={
-              profile.profile_image
-                ? { backgroundImage: `url(${profile.profile_image.url})` }
-                : undefined
-            }
-          />
+          <Link href={`/curator/${profile.slug}`}>
+            <AspectRatio
+              ratio={"1/1"}
+              className={css(
+                "w-[30px]",
+                "bg-brand",
+                "rounded-full",
+                "border-[1px]",
+                "border-black",
+                "bg-contain",
+                "bg-center",
+                "bg-no-repeat"
+              )}
+              style={
+                profile.profile_image
+                  ? { backgroundImage: `url(${profile.profile_image.url})` }
+                  : undefined
+              }
+            />
+          </Link>
           <Text>@{profile.name}</Text>
         </div>
         <Link href={`/curator/${profile.slug}`}>

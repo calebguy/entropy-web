@@ -45,6 +45,7 @@ export const MOCK_GET_SORT_RESPONSE: GetSortResponse = {
     image: {
       width_field: 1019,
       height_field: 607,
+      url: "https://d2w9rnfcy7mm78.cloudfront.net/4947982/original_b6c46d340f2949daff548b63fc78679a.png?1567530746?bc=0",
     },
     url: "https://d2w9rnfcy7mm78.cloudfront.net/4947982/original_b6c46d340f2949daff548b63fc78679a.png?1567530746?bc=0",
     thumb_url: null,

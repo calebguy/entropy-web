@@ -67,7 +67,7 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
             </div>
           </div>
         </div>
-        <div className={css("flex", "items-center")}>
+        <div className={css("flex", "items-center", "order-1", "md:order-2")}>
           <AspectRatio
             ratio={"1/1"}
             className={css(

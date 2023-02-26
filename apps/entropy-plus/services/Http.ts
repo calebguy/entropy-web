@@ -3,7 +3,7 @@ import env from "../environment";
 import { LoginPayload } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
-  MOCK_GET_CURATOR_IMAGE_RESPONSE,
+  GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
   MOCK_GET_PROFILE_RESPONSE,
   MOCK_GET_SORT_RESPONSE,
 } from "./mocks";
@@ -41,7 +41,7 @@ class Http {
   }
 
   async getCuratorImage(curatorSlug: string, id: string) {
-    return { data: MOCK_GET_CURATOR_IMAGE_RESPONSE };
+    return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
     // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
   }
 }

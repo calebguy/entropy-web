@@ -81,7 +81,7 @@ const SortPage = ({
   );
 };
 
-const SmallIcon = ({ imageUrl }: { imageUrl: string }) => {
+const TwitterChannelIcon = ({ imageUrl }: { imageUrl: string }) => {
   return (
     <AspectRatio
       ratio={"1/1"}
@@ -123,7 +123,7 @@ const TwitterProfileSelector = ({
       )}
     >
       <button onClick={() => setShow(!show)} className={css()}>
-        <SmallIcon imageUrl={currentChannel.profile_image_url} />
+        <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
       </button>
       {show && (
         <>
@@ -138,7 +138,7 @@ const TwitterProfileSelector = ({
                 // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
                 href={"/sort"}
               >
-                <SmallIcon imageUrl={channel.profile_image_url} />
+                <TwitterChannelIcon imageUrl={channel.profile_image_url} />
               </Link>
             ))}
         </>
@@ -156,9 +156,7 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
     <Pane size={PaneSize.Sm} block>
       <div className={css("flex", "justify-between", "items-center")}>
         <div className={css("flex", "items-center", "gap-2")}>
-          <Link href={`/curator/${profile.slug}`}>
-            <ProfileIcon profile={profile} />
-          </Link>
+          <ProfileIcon profile={profile} />
           <Text size={TextSize.Lg}>@{profile.name}</Text>
         </div>
         <Link href={`/curator/${profile.slug}`}>

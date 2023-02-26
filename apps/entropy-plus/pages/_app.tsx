@@ -28,6 +28,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>E+</title>
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height,  initial-scale=1.0, user-scalable=no;user-scalable=0;"
+        />
         <meta name="description" content={description} key="desc" />
         <meta property="og:site_name" content={name} />
         <meta property="og:title" content={name} />

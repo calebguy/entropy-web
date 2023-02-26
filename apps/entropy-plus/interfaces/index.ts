@@ -2,6 +2,7 @@ export type Datetime = string;
 export type Nullable<T> = T | null;
 
 export interface Photo {
+  id: number;
   title: string;
   created: Datetime;
   image: Nullable<CloudinaryField>;

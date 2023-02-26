@@ -136,7 +136,12 @@ const MediaInput: React.FC<MediaInputProps> = ({
 
   const renderExitButton = useCallback(() => {
     return (
-      <div className={css("absolute", "top-3", "right-3")}>
+      <div
+        className={css("absolute", {
+          "top-3 right-3": isPrimary,
+          "translate-y-[90%]": !isPrimary,
+        })}
+      >
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -158,7 +163,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
         </button>
       </div>
     );
-  }, [field, setPreview, onClear]);
+  }, [field, setPreview, onClear, isPrimary]);
 
   const renderPreview = useCallback(() => {
     return (

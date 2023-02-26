@@ -1,11 +1,12 @@
 import { Icon, IconName, Text } from "dsl";
 import Link from "next/link";
+import { useState } from "react";
 import { css } from "utils";
 import { MOCK_PROFILE } from "../services/mocks";
 import ProfileIcon from "./ProfileIcon";
 
 const Header = () => {
-  const isAuthed = true;
+  const isAuthed = useState(true);
   return (
     <div className={css("flex", "justify-between")}>
       <Link href={isAuthed ? "/sort" : "/"}>
@@ -19,9 +20,7 @@ const Header = () => {
           <Link href={"/dashboard"}>
             <Icon name={IconName.FourSquare} size={29} />
           </Link>
-          <Link href={`/curator/gainor`}>
-            <ProfileIcon profile={MOCK_PROFILE} />
-          </Link>
+          <ProfileIcon profile={MOCK_PROFILE} />
         </div>
       )}
       {!isAuthed && (

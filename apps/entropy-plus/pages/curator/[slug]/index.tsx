@@ -12,7 +12,7 @@ import {
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { css, objectKeys } from "utils";
+import { css, formatWithThousandsSeparators, objectKeys } from "utils";
 import AcheivementPill from "../../../components/AcheivementPill";
 import ProfileIcon from "../../../components/ProfileIcon";
 import { Acheivement, Photo, Profile } from "../../../interfaces";
@@ -47,14 +47,20 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
                 </div>
                 <div className={css("flex", "flex-col", "items-end")}>
                   <Text size={TextSize.Xl} bold>
-                    {profile.entropy_score}
+                    {formatWithThousandsSeparators(
+                      Number(profile.entropy_score)
+                    )}
                   </Text>
                   <Text>entropy score</Text>
                 </div>
               </div>
-              <div className={css("flex", "items-end", "gap-2")}>
+              <div className={css("flex", "gap-1", "flex-col", "sm:flex-row")}>
                 <Text size={TextSize.Lg}>@{profile.name}</Text>
-                {profile.bio && <Text>{profile.bio}</Text>}
+                {profile.bio && (
+                  <div className={css("break-words")}>
+                    <Text>{profile.bio}</Text>
+                  </div>
+                )}
               </div>
               {acheivmentKeys.length > 0 && (
                 <div
@@ -117,9 +123,21 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
         )}
       </div>
       {images.length > 0 && (
-        <div className={css("grid", "grid-cols-4", "mt-2")}>
+        <div
+          className={css(
+            "grid",
+            "grid-cols-2",
+            "sm:grid-cols-3",
+            "md:grid-cols-4",
+            "gap-2",
+            "mt-2"
+          )}
+        >
           {images.map((image) => (
-            <Link href={`${slug}/image/${100}`}>
+            <Link
+              key={`curator-image-${image.url}`}
+              href={`${slug}/image/${image.id}`}
+            >
               <AspectRatio
                 className={css(
                   "bg-cover",
@@ -129,7 +147,7 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
                   "border-black",
                   "rounded-md"
                 )}
-                ratio={`${image.image?.width_field}/${image.image?.height_field}`}
+                ratio={`1/1`}
                 style={{ backgroundImage: `url(${image.image?.url})` }}
               />
             </Link>

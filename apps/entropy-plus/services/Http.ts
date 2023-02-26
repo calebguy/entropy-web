@@ -4,8 +4,8 @@ import { LoginPayload } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
+  GET_MOCK_GET_SORT_RESPONSE,
   MOCK_GET_PROFILE_RESPONSE,
-  MOCK_GET_SORT_RESPONSE,
 } from "./mocks";
 
 class Http {
@@ -31,7 +31,7 @@ class Http {
   }
 
   async getSort() {
-    return { data: MOCK_GET_SORT_RESPONSE };
+    return { data: GET_MOCK_GET_SORT_RESPONSE() };
     // return this.http.get<GetSortResponse>("/sort");
   }
 

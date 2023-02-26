@@ -126,3 +126,20 @@ export function bytesToSize(bytes: number): string {
   if (i === 0) return `${bytes} ${sizes[i]}`;
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
 }
+
+/**
+ *
+ * getRandomIntInclusive
+ *
+ * Gets a random number between two numbers, inclusive of the outer bound
+ *
+ * @param min number
+ * @param max number
+ * @return number
+ *
+ */
+export function getRandomIntInclusive(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}

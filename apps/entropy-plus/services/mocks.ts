@@ -1,3 +1,4 @@
+import { getRandomIntInclusive } from "utils";
 import {
   GetCuratorImageResponse,
   GetSortResponse,
@@ -163,7 +164,7 @@ export const MOCK_IMAGES = [
 ].concat(brianImages.map((image) => GET_MOCK_IMAGE(image)));
 
 export const MOCK_GET_SORT_RESPONSE: GetSortResponse = {
-  image: MOCK_IMAGES[0],
+  image: MOCK_IMAGES[getRandomIntInclusive(0, MOCK_IMAGES.length - 1)],
   twitter_channels: twitterChannels,
   current_channel: twitterChannels[0],
 };

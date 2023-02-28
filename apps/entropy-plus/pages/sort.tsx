@@ -40,7 +40,7 @@ const SortPage = ({
             "flex-col",
             "justify-center",
             "items-center",
-            "sm:max-w-xl",
+            "sm:max-w-lg",
             "mx-auto",
             "w-full",
             "gap-2"

@@ -7,6 +7,7 @@ import {
   Pane,
   PaneSize,
   Text,
+  TextIntent,
   TextSize,
 } from "dsl";
 import { GetServerSideProps } from "next";
@@ -21,11 +22,11 @@ import Http from "../../../services/Http";
 
 interface CuratorPageProps {
   profile: Profile;
-  images: Photo[];
+  photos: Photo[];
   acheivements: Acheivement;
 }
 
-const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
+const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
   const {
     query: { slug },
   } = useRouter();
@@ -58,7 +59,7 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
                 <Text size={TextSize.Lg}>@{profile.name}</Text>
                 {profile.bio && (
                   <div className={css("break-words")}>
-                    <Text>{profile.bio}</Text>
+                    <Text intent={TextIntent.Gray}>{profile.bio}</Text>
                   </div>
                 )}
               </div>
@@ -122,7 +123,7 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
           </Pane>
         )}
       </div>
-      {images.length > 0 && (
+      {photos.length > 0 && (
         <div
           className={css(
             "grid",
@@ -133,22 +134,20 @@ const CuratorPage = ({ profile, images, acheivements }: CuratorPageProps) => {
             "mt-2"
           )}
         >
-          {images.map((image) => (
+          {photos.map((photo) => (
             <Link
-              key={`curator-image-${image.url}`}
-              href={`${slug}/image/${image.id}`}
+              key={`curator-image-${photo.url}`}
+              href={`${slug}/image/${photo.id}`}
             >
               <AspectRatio
                 className={css(
                   "bg-cover",
                   "bg-center",
                   "bg-no-repeat",
-                  "border-[1px]",
-                  "border-black",
                   "rounded-md"
                 )}
                 ratio={`1/1`}
-                style={{ backgroundImage: `url(${image.image?.url})` }}
+                style={{ backgroundImage: `url(${photo.image?.url})` }}
               />
             </Link>
           ))}
@@ -168,7 +167,7 @@ export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   return {
     props: {
       profile,
-      images,
+      photos: images,
       acheivements,
     },
   };

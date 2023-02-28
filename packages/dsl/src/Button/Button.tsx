@@ -16,11 +16,13 @@ export enum ButtonIntent {
 
 export enum ButtonSize {
   Sm = "sm",
+  Md = "md",
   Lg = "lg",
 }
 
 const sizeToRadius = {
   [ButtonSize.Sm]: "rounded-md",
+  [ButtonSize.Md]: "rounded-md",
   [ButtonSize.Lg]: "rounded-lg",
 };
 
@@ -39,6 +41,7 @@ const buttonStyles = cva(
       },
       size: {
         [ButtonSize.Sm]: "px-3 py-1",
+        [ButtonSize.Md]: "px-4 py-3",
         [ButtonSize.Lg]: "px-6 py-3.5",
       },
       round: {
@@ -71,11 +74,13 @@ export interface ButtonProps
 
 const buttonSizeToTextSize = {
   [ButtonSize.Sm]: TextSize.Md,
+  [ButtonSize.Md]: TextSize.Md,
   [ButtonSize.Lg]: TextSize.Lg,
 };
 
 const buttonSizeToSpinnerSize = {
   [ButtonSize.Sm]: SpinnerSize.Sm,
+  [ButtonSize.Md]: SpinnerSize.Sm,
   [ButtonSize.Lg]: SpinnerSize.Lg,
 };
 

@@ -44,6 +44,21 @@ const ButtonDemo = () => {
                 {item.children}
               </Button>
             </SubDemo>
+            <SubDemo labels={{ size: ButtonSize.Md, loading }}>
+              <Button loading={loading} intent={item.intent}>
+                {item.children}
+              </Button>
+            </SubDemo>
+            <SubDemo labels={{ size: ButtonSize.Md, round: true, loading }}>
+              <Button
+                loading={loading}
+                size={ButtonSize.Md}
+                intent={item.intent}
+                round
+              >
+                {item.children}
+              </Button>
+            </SubDemo>
             <SubDemo labels={{ size: ButtonSize.Lg, loading }}>
               <Button
                 loading={loading}

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { useController } from "react-hook-form";
 import { bytesToSize, css, objectKeys } from "utils";
-import { Button, ButtonIntent } from "../Button/Button";
+import { Button, ButtonIntent, ButtonSize } from "../Button/Button";
 import { Icon, IconName } from "../Icon/Icon";
 import { Text, TextIntent, TextSize } from "../Text/Text";
 import { FormControl, FormControlProps } from "./FormControl";
@@ -79,7 +79,8 @@ const MediaInput: React.FC<MediaInputProps> = ({
     "items-center",
     "p-7",
     "rounded-sm",
-    "bg-gray-medium"
+    "bg-gray-medium",
+    "h-full"
   );
   const secondaryStyles = css(
     "rounded-full",
@@ -187,6 +188,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
         round
         disabled={disabled}
         intent={ButtonIntent.Secondary}
+        size={isSecondary ? ButtonSize.Sm : ButtonSize.Md}
         onClick={(e) =>
           isSecondary && rootProps.onClick ? rootProps.onClick(e) : undefined
         }
@@ -231,7 +233,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
       labelCenter={labelCenter}
     >
       <div
-        className={css("inline-block", "w-full", {
+        className={css("inline-block", "w-full", "h-full", {
           "flex flex-col items-center gap-4": isSecondary,
         })}
       >

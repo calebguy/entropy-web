@@ -35,7 +35,7 @@ export const FormControl = ({
   } = useFormContext();
   const error = errors[name];
   return (
-    <div>
+    <div className={css("w-full")}>
       {inputLabel && (
         <label
           htmlFor={name}

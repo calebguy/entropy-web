@@ -101,10 +101,7 @@ export interface GetSortResponse {
 export interface GetProfileResponse {
   profile: Profile;
   images: Photo[];
-  acheivements: {
-    isTopFivePercent: boolean;
-    isCoreCurator: boolean;
-  };
+  acheivements: Acheivement;
 }
 
 export interface GetCuratorImageResponse {

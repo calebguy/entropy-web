@@ -177,6 +177,8 @@ export const GET_MOCK_PROFILE_RESPONSE = (): GetProfileResponse => ({
   acheivements: {
     isCoreCurator: true,
     isTopFivePercent: true,
+    isJuiced: true,
+    isArchivist: true,
   },
 });
 

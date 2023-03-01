@@ -3,9 +3,11 @@ import env from "../environment";
 import { LoginPayload } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
+  GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
   GET_MOCK_GET_SORT_RESPONSE,
-  MOCK_GET_PROFILE_RESPONSE,
+  GET_MOCK_LEADERBOARD_RESPONSE,
+  GET_MOCK_PROFILE_RESPONSE,
 } from "./mocks";
 
 class Http {
@@ -36,13 +38,23 @@ class Http {
   }
 
   async getProfile(slug: string) {
-    return { data: MOCK_GET_PROFILE_RESPONSE };
+    return { data: GET_MOCK_PROFILE_RESPONSE() };
     // return this.http.get<GetProfileResponse>(`/profile/${slug}`);
   }
 
   async getCuratorImage(curatorSlug: string, id: string) {
     return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
     // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
+  }
+
+  async getDashboard() {
+    return { data: GET_MOCK_DASHBAORD_RESPONSE() };
+    // return this.http.get<GetDashboardResponse>("/dashboard");
+  }
+
+  async getLeaderboard() {
+    return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
+    // return this.http.get<GetLeaderboardResponse>("/leaderboard");
   }
 }
 

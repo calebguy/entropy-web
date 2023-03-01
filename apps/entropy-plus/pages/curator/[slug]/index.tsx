@@ -47,7 +47,7 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
                   </Button>
                 </div>
                 <div className={css("flex", "flex-col", "items-end")}>
-                  <Text size={TextSize.Xl} bold>
+                  <Text size={TextSize.Xxl} bold>
                     {formatWithThousandsSeparators(
                       Number(profile.entropy_score)
                     )}

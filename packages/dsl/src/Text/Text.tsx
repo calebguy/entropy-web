@@ -9,6 +9,7 @@ export enum TextSize {
   Md = "md",
   Lg = "lg",
   Xl = "xl",
+  Xxl = "xxl",
 }
 
 export enum TextIntent {
@@ -36,6 +37,7 @@ const textStyles = cva("font-sans", {
       [TextSize.Md]: "text-base",
       [TextSize.Lg]: "text-lg",
       [TextSize.Xl]: "text-xl",
+      [TextSize.Xxl]: "text-xxl",
     },
     bold: {
       true: "font-bold",

@@ -22,7 +22,7 @@ export default function Docs() {
           <div className="flex justify-center">
             <div className="flex items-center gap-2">
               <LogoSpin />
-              <Text size={TextSize.Xl} bold>
+              <Text size={TextSize.Xxl} bold>
                 DSL
               </Text>
               <LogoSpin />

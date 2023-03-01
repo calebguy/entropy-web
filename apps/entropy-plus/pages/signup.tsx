@@ -30,7 +30,7 @@ const SignupPage = () => {
       >
         <Pane size={PaneSize.Lg} block>
           <div className={css("text-center")}>
-            <Text intent={TextIntent.Outline} size={TextSize.Xl}>
+            <Text intent={TextIntent.Outline} size={TextSize.Xxl}>
               Join entropy+
             </Text>
           </div>

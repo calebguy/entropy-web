@@ -11,7 +11,7 @@ export default function Web() {
             <Text
               key={`e-plus-${index}`}
               intent={TextIntent.Outline}
-              size={TextSize.Xl}
+              size={TextSize.Xxl}
               bold
             >
               + {index === 177 && "entropy"}

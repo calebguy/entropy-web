@@ -1,6 +1,8 @@
 import { getRandomIntInclusive } from "utils";
 import {
   GetCuratorImageResponse,
+  GetDashboardResponse,
+  GetLeaderboardResponse,
   GetSortResponse,
   Photo,
   Profile,
@@ -169,14 +171,14 @@ export const GET_MOCK_GET_SORT_RESPONSE = (): GetSortResponse => ({
   current_channel: twitterChannels[0],
 });
 
-export const MOCK_GET_PROFILE_RESPONSE: GetProfileResponse = {
+export const GET_MOCK_PROFILE_RESPONSE = (): GetProfileResponse => ({
   profile: MOCK_PROFILE,
   images: MOCK_IMAGES,
   acheivements: {
     isCoreCurator: true,
     isTopFivePercent: true,
   },
-};
+});
 
 export const GET_MOCK_GET_CURATOR_IMAGE_RESPONSE = (
   id: number
@@ -187,3 +189,23 @@ export const GET_MOCK_GET_CURATOR_IMAGE_RESPONSE = (
     profile: MOCK_PROFILE,
   };
 };
+
+export const GET_MOCK_DASHBAORD_RESPONSE = (): GetDashboardResponse => ({
+  profile: MOCK_PROFILE,
+  rankedCurators: [MOCK_PROFILE, MOCK_PROFILE, MOCK_PROFILE],
+  suggestedPhotos: MOCK_IMAGES.splice(0, 8),
+  rank: 10,
+  userInvitesCount: 4,
+  curatedPhotosCount: 103,
+  allPhotosCount: 3982,
+  acheivements: {
+    isCoreCurator: true,
+    isTopFivePercent: true,
+    isJuiced: true,
+    isArchivist: true,
+  },
+});
+
+export const GET_MOCK_LEADERBOARD_RESPONSE = (): GetLeaderboardResponse => ({
+  curators: [MOCK_PROFILE, MOCK_PROFILE, MOCK_PROFILE],
+});

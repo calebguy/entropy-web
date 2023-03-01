@@ -8,7 +8,7 @@ const FourOhFour = () => {
     <AppLayout>
       <div className={css("flex", "justify-center", "h-full", "items-center")}>
         <div className={css("flex", "flex-col", "items-center", "gap-1")}>
-          <Text size={TextSize.Xl} intent={TextIntent.Outline}>
+          <Text size={TextSize.Xxl} intent={TextIntent.Outline}>
             ...error...
           </Text>
           <Link href={"/"}>

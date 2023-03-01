@@ -70,6 +70,8 @@ interface User {
 export interface Acheivement {
   isTopFivePercent: boolean;
   isCoreCurator: boolean;
+  isJuiced: boolean;
+  isArchivist: boolean;
 }
 
 export interface TwitterChannel {
@@ -108,4 +110,19 @@ export interface GetProfileResponse {
 export interface GetCuratorImageResponse {
   profile: Profile;
   image: Photo;
+}
+
+export interface GetDashboardResponse {
+  profile: Profile;
+  rankedCurators: Profile[];
+  suggestedPhotos: Photo[];
+  rank: number;
+  userInvitesCount: number;
+  curatedPhotosCount: number;
+  allPhotosCount: number;
+  acheivements: Acheivement;
+}
+
+export interface GetLeaderboardResponse {
+  curators: Profile[];
 }

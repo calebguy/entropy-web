@@ -87,9 +87,16 @@ interface CloudinaryField {
 
 export interface ContentSource {}
 
-export interface LoginPayload {
+export interface LoginDto {
   username: string;
   password: string;
+}
+
+export interface PostLoginResponse {
+  access: string;
+  access_expires: number;
+  refresh: string;
+  refresh_expires: number;
 }
 
 export interface GetSortResponse {

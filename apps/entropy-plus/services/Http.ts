@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import env from "../environment";
-import { LoginPayload } from "../interfaces";
+import { LoginDto, PostLoginResponse } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
@@ -10,18 +9,27 @@ import {
   GET_MOCK_PROFILE_RESPONSE,
 } from "./mocks";
 
-class Http {
+// @next -- base instance that implements all routes
+// @next -- one instance only calls proxys endpoints
+// @next -- other instance calls api directly
+
+class _Http {
+  static PROXY_PREFIX = "/api/proxy";
   http: AxiosInstance;
   constructor() {
     this.http = axios.create({
-      baseURL: env.api.baseUrl,
+      baseURL: _Http.PROXY_PREFIX,
       withCredentials: true,
     });
+    // custom interceptor possibly for server vs client??
     this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
-  login({ username, password }: LoginPayload) {
-    return this.http.post("/api/login/", { username, password });
+  login({ username, password }: LoginDto) {
+    return this.http.post<PostLoginResponse>("/api/login/token/", {
+      username,
+      password,
+    });
   }
 
   refreshToken() {
@@ -29,7 +37,7 @@ class Http {
   }
 
   getMe() {
-    return this.http.get("/me");
+    return this.http.get("/api/login/me");
   }
 
   async getSort() {
@@ -56,6 +64,9 @@ class Http {
     return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
   }
+
+  private getAuthHeader() {}
 }
 
-export default new Http();
+const Http = new _Http();
+export default Http;

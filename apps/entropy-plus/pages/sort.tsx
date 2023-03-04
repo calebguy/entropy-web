@@ -18,6 +18,7 @@ import ProfileIcon from "../components/ProfileIcon";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import Http from "../services/Http";
+import { ACCESS_COOKIE_NAME } from "./api/proxy/[...path]";
 
 interface SortPageProps {
   image: Photo;
@@ -169,9 +170,16 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
-  SortPageProps
-> = async () => {
+export const getServerSideProps: GetServerSideProps<SortPageProps> = async ({
+  req,
+  res,
+}) => {
+  try {
+    const Cookies = require("cookies");
+    const cookies = new Cookies(req, res);
+    const authToken = cookies.get(ACCESS_COOKIE_NAME);
+  } catch (error) {}
+
   const {
     data: { image, twitter_channels, current_channel },
   } = await Http.getSort();

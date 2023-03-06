@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import env from "../environment";
 import { LoginDto, PostLoginResponse } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
@@ -14,11 +15,11 @@ import {
 // @next -- other instance calls api directly
 
 class _Http {
-  static PROXY_PREFIX = "/api/proxy";
   http: AxiosInstance;
-  constructor() {
+  private _accessToken?: string;
+  constructor(baseURL: string) {
     this.http = axios.create({
-      baseURL: _Http.PROXY_PREFIX,
+      baseURL,
       withCredentials: true,
     });
     // custom interceptor possibly for server vs client??
@@ -65,8 +66,25 @@ class _Http {
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
   }
 
-  private getAuthHeader() {}
+  set accessToken(accessToken: string) {
+    this._accessToken = accessToken;
+    this.setAcessTokenInterceptor();
+  }
+
+  private setAcessTokenInterceptor() {
+    this.http.interceptors.request.use(
+      (config) => {
+        config.headers["Authorization"] = `Bearer ${this._accessToken}`;
+        config.headers["Accept"] = "application/json";
+        config.headers["Content-Type"] = "application/json";
+        return config;
+      },
+      (e) => Promise.reject(e)
+    );
+  }
 }
 
-const Http = new _Http();
-export default Http;
+const PROXY_PREFIX = "/api/proxy";
+
+export const HttpForServer = new _Http(env.api.baseUrl);
+export const HttpForClient = new _Http(PROXY_PREFIX);

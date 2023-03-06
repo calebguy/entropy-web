@@ -1,7 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import Router from "next/router";
 import { Profile } from "../interfaces";
-import Http from "../services/Http";
+import { HttpForClient } from "../services/Http";
 import { LoginDto } from "./../interfaces/index";
 
 class AuthStore {
@@ -17,9 +17,9 @@ class AuthStore {
   }
 
   login({ username, password }: LoginDto) {
-    return Http.login({ username, password })
+    return HttpForClient.login({ username, password })
       .then(({ data }) => {
-        Router.push("/sort");
+        Router.push("/me");
       })
       .catch((e) => {
         console.error(e);

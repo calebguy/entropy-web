@@ -16,7 +16,7 @@ import ProfileIcon from "../components/ProfileIcon";
 import RankEmblem from "../components/RankEmblem";
 import { GetDashboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer } from "../services/Http";
+import { Http } from "../services/Http";
 
 interface DashboardPageProps extends GetDashboardResponse {}
 
@@ -171,7 +171,7 @@ const DashboardPage = ({
 export const getServerSideProps: GetServerSideProps<
   DashboardPageProps
 > = async () => {
-  const { data } = await HttpForServer.getDashboard();
+  const { data } = await Http.getDashboard();
   return {
     props: {
       ...data,

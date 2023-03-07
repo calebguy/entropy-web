@@ -9,9 +9,14 @@ const Header = () => {
   const isAuthed = useState(true);
   return (
     <div className={css("flex", "justify-between")}>
-      <Link href={isAuthed ? "/sort" : "/"}>
-        <Icon name={IconName.Logo} size={41} />
-      </Link>
+      <div className={css("flex", "items-center", "gap-4")}>
+        <Link href={isAuthed ? "/sort" : "/"}>
+          <Icon name={IconName.Logo} size={41} />
+        </Link>
+        <Link href={"/me"}>
+          <Text>ME</Text>
+        </Link>
+      </div>
       {isAuthed && (
         <div className={css("flex", "items-center", "gap-6")}>
           <Link href={"/upload"}>

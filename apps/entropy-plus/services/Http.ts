@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
 import { LoginDto, PostLoginResponse } from "../interfaces";
 import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
@@ -16,7 +17,8 @@ import {
 
 class _Http {
   http: AxiosInstance;
-  private _accessToken?: string;
+  _accessToken?: string;
+
   constructor(baseURL: string) {
     this.http = axios.create({
       baseURL,
@@ -66,7 +68,7 @@ class _Http {
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
   }
 
-  set accessToken(accessToken: string) {
+  setAccessToken(accessToken: string) {
     this._accessToken = accessToken;
     this.setAcessTokenInterceptor();
   }
@@ -84,7 +86,5 @@ class _Http {
   }
 }
 
-const PROXY_PREFIX = "/api/proxy";
-
-export const HttpForServer = new _Http(env.api.baseUrl);
-export const HttpForClient = new _Http(PROXY_PREFIX);
+export const Http = new _Http(env.api.baseUrl);
+export const HttpProxy = new _Http(PROXY_PREFIX);

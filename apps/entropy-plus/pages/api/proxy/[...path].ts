@@ -2,11 +2,10 @@ import Cookies from "cookies";
 import httpProxy from "http-proxy";
 import { NextApiRequest, NextApiResponse } from "next";
 import url from "url";
+import { ACCESS_COOKIE_NAME, PROXY_PREFIX } from "../../../constants";
 import env from "../../../environment";
 
 // https://github.com/maximilianschmitt/next-auth
-
-export const ACCESS_COOKIE_NAME = "access";
 
 const proxy = httpProxy.createProxyServer();
 
@@ -25,7 +24,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     const authToken = cookies.get(ACCESS_COOKIE_NAME);
 
     // rewrite the url & add a trailing slash to make django happy
-    req.url = req.url?.replace(/^\/api\/proxy/, "") + "/";
+    req.url = req.url?.replace(PROXY_PREFIX, "") + "/";
+
+    console.log("PROXYURL", req.url);
 
     // don't forward any cookies to the api
     req.headers.cookie = "";
@@ -64,9 +65,12 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
                   resolve(responseBody);
                 } else {
                   const cookies = new Cookies(req, res);
+                  const expires = new Date();
+                  expires.setUTCSeconds(access_expires);
                   cookies.set("access", access, {
                     httpOnly: true,
                     sameSite: "lax",
+                    expires,
                   });
                   const payload = {
                     authToken,
@@ -74,6 +78,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
                     refresh_expires,
                     access_expires,
                   };
+                  console.log("PAYLOAD", payload);
                   res.status(200).json(payload);
                   resolve(payload);
                 }

@@ -17,7 +17,8 @@ import {
 
 class _Http {
   http: AxiosInstance;
-  _accessToken?: string;
+  private _accessToken?: string;
+  private _refreshToken?: string;
 
   constructor(baseURL: string) {
     this.http = axios.create({
@@ -36,7 +37,7 @@ class _Http {
   }
 
   refreshToken() {
-    return this.http.post("/token/refresh");
+    return this.http.post("/api/login/token/refresh/");
   }
 
   getMe() {
@@ -70,15 +71,23 @@ class _Http {
 
   setAccessToken(accessToken: string) {
     this._accessToken = accessToken;
-    this.setAcessTokenInterceptor();
+    this.updateInterceptor();
   }
 
-  private setAcessTokenInterceptor() {
+  setRefreshToken(refreshToken: any) {
+    this._refreshToken = refreshToken;
+    this.updateInterceptor();
+  }
+
+  private updateInterceptor() {
     this.http.interceptors.request.use(
       (config) => {
         config.headers["Authorization"] = `Bearer ${this._accessToken}`;
         config.headers["Accept"] = "application/json";
         config.headers["Content-Type"] = "application/json";
+        if (this._refreshToken) {
+          config.headers["Cookie"] = `refresh_token=${this._refreshToken};`;
+        }
         return config;
       },
       (e) => Promise.reject(e)

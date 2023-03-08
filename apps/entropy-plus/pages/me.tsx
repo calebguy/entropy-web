@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { css, jsonify } from "utils";
 import withAuth from "../helpers/auth";
 import AppLayout from "../layouts/App.layout";
-import { Http, HttpProxy } from "../services/Http";
+import { HttpForClient, HttpForServer } from "../services/Http";
 
 interface MeProps {
   me: any;
@@ -11,10 +11,10 @@ interface MeProps {
 
 const MePage = ({ me }: MeProps) => {
   const getMe = useCallback(() => {
-    return HttpProxy.getMe().catch((e) => {
-      return HttpProxy.refreshToken().then((data) => {
+    return HttpForClient.getMe().catch((e) => {
+      return HttpForClient.refreshToken().then((data) => {
         console.log("refreshed token");
-        HttpProxy.getMe();
+        HttpForClient.getMe();
       });
     });
   }, []);
@@ -29,7 +29,7 @@ const MePage = ({ me }: MeProps) => {
 };
 
 export const getServerSideProps = withAuth<MeProps>(async () => {
-  const { data: me } = await Http.getMe();
+  const { data: me } = await HttpForServer.getMe();
   return {
     props: { me },
   };

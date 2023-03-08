@@ -19,6 +19,7 @@ class EntropyHttp {
       baseURL: baseUrl,
       withCredentials: true,
     });
+    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
   login({ username, password }: LoginDto) {
@@ -62,13 +63,12 @@ class EntropyHttp {
   }
 }
 
-class _Http extends EntropyHttp {
+class _HttpForServer extends EntropyHttp {
   private _accessToken?: string;
   private _refreshToken?: string;
 
-  constructor(baseURL: string) {
-    super(baseURL);
-    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
+  constructor() {
+    super(env.api.baseUrl);
   }
 
   setAccessToken(accessToken: string) {
@@ -97,5 +97,11 @@ class _Http extends EntropyHttp {
   }
 }
 
-export const Http = new _Http(env.api.baseUrl);
-export const HttpProxy = new _Http(PROXY_PREFIX);
+class _HttpForClient extends EntropyHttp {
+  constructor() {
+    super(PROXY_PREFIX);
+  }
+}
+
+export const HttpForServer = new _HttpForServer();
+export const HttpForClient = new _HttpForClient();

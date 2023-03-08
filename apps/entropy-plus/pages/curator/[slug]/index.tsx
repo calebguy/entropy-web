@@ -18,7 +18,7 @@ import AcheivementPill from "../../../components/AcheivementPill";
 import ProfileIcon from "../../../components/ProfileIcon";
 import { Acheivement, Photo, Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
-import { Http } from "../../../services/Http";
+import { HttpForServer } from "../../../services/Http";
 
 interface CuratorPageProps {
   profile: Profile;
@@ -163,7 +163,7 @@ export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   const { slug } = context.query;
   const {
     data: { profile, images, acheivements },
-  } = await Http.getProfile(slug as string);
+  } = await HttpForServer.getProfile(slug as string);
   return {
     props: {
       profile,

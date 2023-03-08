@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "../constants";
 import { AuthTokens } from "../interfaces";
 import UnauthenticatedError from "../services/exceptions/Unauthenticated.error";
-import { Http } from "../services/Http";
+import { HttpForServer } from "../services/Http";
 import redirectToLogin from "./redirectToLogin";
 const Cookies = require("cookies");
 
@@ -16,7 +16,7 @@ export default function withAuth<T>(
       if (!accessToken) {
         throw new UnauthenticatedError();
       }
-      Http.setAccessToken(accessToken);
+      HttpForServer.setAccessToken(accessToken);
       return callback(accessToken);
     } catch (e) {
       if (e instanceof UnauthenticatedError) {
@@ -25,11 +25,11 @@ export default function withAuth<T>(
         if (!refreshToken) {
           return redirectToLogin();
         }
-        Http.setRefreshToken(refreshToken);
+        HttpForServer.setRefreshToken(refreshToken);
         try {
-          const { data: authData } = await Http.refreshToken();
+          const { data: authData } = await HttpForServer.refreshToken();
           setCookies({ req: context.req, res: context.res, authData });
-          Http.setAccessToken(authData.access);
+          HttpForServer.setAccessToken(authData.access);
           return callback(authData.access);
         } catch (e) {
           return redirectToLogin();

@@ -1,7 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import Router from "next/router";
 import { Profile } from "../interfaces";
-import { HttpProxy } from "../services/Http";
+import { HttpForClient } from "../services/Http";
 import { LoginDto } from "./../interfaces/index";
 
 class AuthStore {
@@ -17,7 +17,7 @@ class AuthStore {
   }
 
   login({ username, password }: LoginDto) {
-    return HttpProxy.login({ username, password })
+    return HttpForClient.login({ username, password })
       .then(({ data }) => {
         Router.push("/me");
       })

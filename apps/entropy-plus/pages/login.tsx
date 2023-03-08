@@ -1,4 +1,4 @@
-import { Button, ButtonIntent, Form, Icon, IconName, TextInput } from "dsl";
+import { ButtonIntent, Form, Icon, IconName, Submit, TextInput } from "dsl";
 import { observer } from "mobx-react-lite";
 import { css } from "utils";
 import { LoginDto } from "../interfaces";
@@ -38,9 +38,7 @@ const Login = observer(() => {
           rules={{ required: true }}
         />
         <div className={css("flex", "justify-center")}>
-          <Button intent={ButtonIntent.Secondary} submit>
-            Login
-          </Button>
+          <Submit intent={ButtonIntent.Secondary}>Login</Submit>
         </div>
       </Form>
     </div>

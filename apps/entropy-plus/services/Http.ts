@@ -11,22 +11,14 @@ import {
   GET_MOCK_PROFILE_RESPONSE,
 } from "./mocks";
 
-// @next -- base instance that implements all routes
-// @next -- one instance only calls proxys endpoints
-// @next -- other instance calls api directly
+class EntropyHttp {
+  protected http: AxiosInstance;
 
-class _Http {
-  http: AxiosInstance;
-  private _accessToken?: string;
-  private _refreshToken?: string;
-
-  constructor(baseURL: string) {
+  constructor(baseUrl: string) {
     this.http = axios.create({
-      baseURL,
+      baseURL: baseUrl,
       withCredentials: true,
     });
-    // custom interceptor possibly for server vs client??
-    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
   login({ username, password }: LoginDto) {
@@ -67,6 +59,16 @@ class _Http {
   async getLeaderboard() {
     return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
+  }
+}
+
+class _Http extends EntropyHttp {
+  private _accessToken?: string;
+  private _refreshToken?: string;
+
+  constructor(baseURL: string) {
+    super(baseURL);
+    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
   setAccessToken(accessToken: string) {

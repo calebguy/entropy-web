@@ -85,6 +85,14 @@ interface CloudinaryField {
   url: string;
 }
 
+export interface AuthTokens {
+  access: string;
+  refresh: string;
+  access_expires: number;
+  refresh_expires: number;
+  detail?: string;
+}
+
 export interface ContentSource {}
 
 export interface LoginDto {

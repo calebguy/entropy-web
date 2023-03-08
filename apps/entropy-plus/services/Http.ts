@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
 import { LoginDto, PostLoginResponse } from "../interfaces";
+import { AuthTokens, Me } from "./../interfaces/index";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
@@ -29,11 +30,19 @@ class EntropyHttp {
   }
 
   refreshToken() {
-    return this.http.post("/api/login/token/refresh/");
+    return this.http.post<AuthTokens>("/api/login/token/refresh/");
   }
 
   getMe() {
-    return this.http.get("/api/login/me");
+    return this.http.get<Me>("/api/login/me");
+  }
+
+  getPing() {
+    return this.http.get("/api/ping");
+  }
+
+  postImage() {
+    return this.http.post("/api/upload/image");
   }
 
   async getSort() {

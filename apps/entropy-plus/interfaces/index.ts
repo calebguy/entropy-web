@@ -93,6 +93,13 @@ export interface AuthTokens {
   detail?: string;
 }
 
+export interface Me {
+  id: number;
+  handle: string;
+  bio: string | null;
+  profile_image: CloudinaryField | null;
+}
+
 export interface ContentSource {}
 
 export interface LoginDto {

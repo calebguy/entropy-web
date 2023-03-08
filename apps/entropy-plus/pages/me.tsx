@@ -11,18 +11,19 @@ interface MeProps {
 
 const MePage = ({ me }: MeProps) => {
   const getMe = useCallback(() => {
-    return HttpForClient.getMe().catch((e) => {
-      return HttpForClient.refreshToken().then((data) => {
-        console.log("refreshed token");
-        HttpForClient.getMe();
-      });
-    });
+    return HttpForClient.getMe();
   }, []);
   return (
     <AppLayout>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
         <Text>{jsonify(me)}</Text>
-        <Button onClick={() => getMe()}>GET ME</Button>
+        <Button
+          onClick={() =>
+            getMe().then(({ data }) => console.log("debug:: NEW DATA", data))
+          }
+        >
+          GET ME
+        </Button>
       </div>
     </AppLayout>
   );

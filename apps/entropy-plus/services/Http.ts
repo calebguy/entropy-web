@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
 import { LoginDto, PostLoginResponse } from "../interfaces";
-import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
@@ -19,7 +18,7 @@ class EntropyHttp {
       baseURL: baseUrl,
       withCredentials: true,
     });
-    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
+    // this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
   login({ username, password }: LoginDto) {
@@ -100,6 +99,17 @@ class _HttpForServer extends EntropyHttp {
 class _HttpForClient extends EntropyHttp {
   constructor() {
     super(PROXY_PREFIX);
+    this.http.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const config = error?.config;
+        if (error?.response?.status === 401 && !config._retry) {
+          config.sent = true;
+          await this.refreshToken();
+          return this.http(config);
+        }
+      }
+    );
   }
 }
 

@@ -49,6 +49,7 @@ const twitterChannels = [
 ];
 
 export const MOCK_PROFILE: Profile = {
+  id: 0,
   profile_image: {
     url: "https://res.cloudinary.com/dpooqlfdf/image/upload/v1667501807/qy4stehdletuhpewxdud.png",
     height_field: 100,

@@ -134,9 +134,9 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
             "mt-2"
           )}
         >
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <Link
-              key={`curator-image-${photo.url}`}
+              key={`curator-image-${photo.url}-${index}`}
               href={`${slug}/image/${photo.id}`}
             >
               <AspectRatio

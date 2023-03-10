@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import { LoginDto, PostLoginResponse } from "../interfaces";
-import { AuthTokens, Me } from "./../interfaces/index";
+import { LoginDto, PostLoginResponse, Profile } from "../interfaces";
+import { AuthTokens } from "./../interfaces/index";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
@@ -33,16 +33,24 @@ class EntropyHttp {
     return this.http.post<AuthTokens>("/api/login/token/refresh/");
   }
 
+  // @next -- route returns 404
+  logout() {
+    return this.http.post("/api/login/token/logout/");
+  }
+
   getMe() {
-    return this.http.get<Me>("/api/login/me");
+    return this.http.get<Profile>("/api/login/me");
   }
 
   getPing() {
     return this.http.get("/api/ping");
   }
 
-  postImage() {
-    return this.http.post("/api/upload/image");
+  postImage(image: File, imageSource: string) {
+    const formData = new FormData();
+    formData.append("picture", image);
+    formData.append("image_source", imageSource);
+    return this.http.post("/api/upload/image/", formData);
   }
 
   async getSort() {
@@ -113,7 +121,7 @@ class _HttpForClient extends EntropyHttp {
       async (error) => {
         const config = error?.config;
         if (error?.response?.status === 401 && !config._retry) {
-          config.sent = true;
+          config._retry = true;
           await this.refreshToken();
           return this.http(config);
         }

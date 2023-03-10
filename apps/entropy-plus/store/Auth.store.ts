@@ -6,24 +6,52 @@ import { LoginDto } from "./../interfaces/index";
 
 class AuthStore {
   @observable
-  profile?: Profile;
+  isLoggedIn = false;
+
+  @observable
+  profile: Profile | null = null;
 
   constructor() {
     makeObservable(this);
   }
 
   init() {
-    console.log("auth store init");
+    this.getProfile()
+      .then(() => (this.isLoggedIn = true))
+      .catch(() => (this.isLoggedIn = false));
   }
 
   login({ username, password }: LoginDto) {
     return HttpForClient.login({ username, password })
-      .then(({ data }) => {
-        Router.push("/me");
+      .then(() => {
+        this.isLoggedIn = true;
+        this.getProfile().then(() => {
+          Router.push("/me");
+        });
+      })
+      .catch((e) => {
+        this.isLoggedIn = false;
+        console.error(e);
+      });
+  }
+
+  logout() {
+    return HttpForClient.logout()
+      .then(() => {
+        this.isLoggedIn = false;
+        Router.push("/login");
       })
       .catch((e) => {
         console.error(e);
       });
+  }
+
+  private getProfile() {
+    return HttpForClient.getMe().then(({ data }) => {
+      this.profile = data;
+      console.log(this.profile);
+      return data;
+    });
   }
 }
 

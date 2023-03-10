@@ -1,6 +1,6 @@
 import { makeObservable, observable } from "mobx";
 import Router from "next/router";
-import { Profile } from "../interfaces";
+import { Nullable, Profile } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 import { LoginDto } from "./../interfaces/index";
 
@@ -9,7 +9,7 @@ class AuthStore {
   isLoggedIn = false;
 
   @observable
-  profile: Profile | null = null;
+  profile: Nullable<Profile> = null;
 
   constructor() {
     makeObservable(this);

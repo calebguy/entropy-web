@@ -45,10 +45,10 @@ export interface Profile {
   name: Nullable<string>;
   slug: string;
   entropy_score: Nullable<string>;
+  twitter_handle: string;
+  ig_handle: Nullable<string>;
+  website: Nullable<string>;
 
-  // twitter_handle: string;
-  // ig_handle: Nullable<string>;
-  // website: Nullable<string>;
   // admin_approved: boolean;
   // profile_views: Nullable<string>;
   // seen_feed_images: Nullable<string>;

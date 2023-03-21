@@ -49,7 +49,6 @@ class AuthStore {
   private getProfile() {
     return HttpForClient.getMe().then(({ data }) => {
       this.profile = data;
-      console.log(this.profile);
       return data;
     });
   }

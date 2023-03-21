@@ -134,6 +134,8 @@ class _HttpForClient extends EntropyHttp {
           config._retry = true;
           await this.refreshToken();
           return this.http(config);
+        } else {
+          return Promise.reject(error);
         }
       }
     );

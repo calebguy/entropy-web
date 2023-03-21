@@ -1,16 +1,9 @@
-import {
-  Divider,
-  Dropdown,
-  DropdownItem,
-  Icon,
-  IconName,
-  Text,
-  TextSize,
-} from "dsl";
+import { Dropdown, DropdownItem, Icon, IconName, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import Router from "next/router";
 import { css } from "utils";
+import Dev from "../environment/Dev";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
 import ProfileIcon from "./ProfileIcon";
@@ -24,18 +17,29 @@ const Header = observer(() => {
             <Link href={AppStore.auth.isLoggedIn ? "/sort" : "/"}>
               <Icon name={IconName.Logo} size={41} />
             </Link>
-            <div className={css("flex", "gap-2", "items-center")}>
-              <Link href={"/me"}>
-                <Text>ME</Text>
-              </Link>
-              <button
-                onClick={() => {
-                  HttpForClient.logout().then(() => Router.push("/login"));
-                }}
+            <Dev>
+              <div
+                className={css(
+                  "border-[1px]",
+                  "border-dashed",
+                  "border-gray-medium",
+                  "px-1",
+                  "flex",
+                  "gap-2"
+                )}
               >
-                <Text>logout</Text>
-              </button>
-            </div>
+                <Link href={"/me"}>
+                  <Text>me</Text>
+                </Link>
+                <button
+                  onClick={() => {
+                    HttpForClient.logout().then(() => Router.push("/login"));
+                  }}
+                >
+                  <Text>logout</Text>
+                </button>
+              </div>
+            </Dev>
           </div>
           <div className={css("flex", "items-center", "gap-6")}>
             <Link href={"/upload"}>
@@ -48,7 +52,6 @@ const Header = observer(() => {
               <ProfileIcon profile={AppStore.auth.profile} />
             )}
           </div>
-          <Divider />
         </>
       )}
       {!AppStore.auth.isLoggedIn && (

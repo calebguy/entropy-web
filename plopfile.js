@@ -16,7 +16,7 @@ module.exports = function (plop) {
       {
         type: "append",
         path: "packages/dsl/index.tsx",
-        template: "export * from './{{name}}/{{name}}'",
+        template: "export * from './src/{{name}}/{{name}}'",
       },
     ],
   });

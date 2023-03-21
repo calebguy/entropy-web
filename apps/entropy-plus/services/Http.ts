@@ -19,7 +19,6 @@ class EntropyHttp {
       baseURL: baseUrl,
       withCredentials: true,
     });
-    // this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
   login({ username, password }: LoginDto) {
@@ -33,7 +32,6 @@ class EntropyHttp {
     return this.http.post<AuthTokens>("/api/login/token/refresh/");
   }
 
-  // @next -- route returns 404
   logout() {
     return this.http.post("/api/login/token/logout/");
   }
@@ -51,6 +49,10 @@ class EntropyHttp {
     formData.append("picture", image);
     formData.append("image_source", imageSource);
     return this.http.post("/api/upload/image/", formData);
+  }
+
+  async joinWaitlist(email: string) {
+    return this.http.post("/api/waitlist/", { email });
   }
 
   async getSort() {
@@ -76,6 +78,14 @@ class EntropyHttp {
   async getLeaderboard() {
     return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
+  }
+
+  static createForServer() {
+    return new _HttpForServer();
+  }
+
+  static createForClient() {
+    return new _HttpForClient();
   }
 }
 
@@ -130,5 +140,5 @@ class _HttpForClient extends EntropyHttp {
   }
 }
 
-export const HttpForServer = new _HttpForServer();
-export const HttpForClient = new _HttpForClient();
+export const HttpForServer = EntropyHttp.createForServer();
+export const HttpForClient = EntropyHttp.createForClient();

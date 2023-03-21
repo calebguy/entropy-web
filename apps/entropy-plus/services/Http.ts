@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
+import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import { LoginPayload } from "../interfaces";
-import ApiErrorInterceptor from "./interceptors/api-error.interceptor";
+import { LoginDto, PostLoginResponse, Profile } from "../interfaces";
+import { AuthTokens } from "./../interfaces/index";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
@@ -10,26 +11,46 @@ import {
   GET_MOCK_PROFILE_RESPONSE,
 } from "./mocks";
 
-class Http {
-  http: AxiosInstance;
-  constructor() {
+class EntropyHttp {
+  protected http: AxiosInstance;
+
+  constructor(baseUrl: string) {
     this.http = axios.create({
-      baseURL: env.api.baseUrl,
+      baseURL: baseUrl,
       withCredentials: true,
     });
-    this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
+    // this.http.interceptors.response.use((res) => res, ApiErrorInterceptor);
   }
 
-  login({ username, password }: LoginPayload) {
-    return this.http.post("/api/login/", { username, password });
+  login({ username, password }: LoginDto) {
+    return this.http.post<PostLoginResponse>("/api/login/token/", {
+      username,
+      password,
+    });
   }
 
   refreshToken() {
-    return this.http.post("/token/refresh");
+    return this.http.post<AuthTokens>("/api/login/token/refresh/");
+  }
+
+  // @next -- route returns 404
+  logout() {
+    return this.http.post("/api/login/token/logout/");
   }
 
   getMe() {
-    return this.http.get("/me");
+    return this.http.get<Profile>("/api/login/me");
+  }
+
+  getPing() {
+    return this.http.get("/api/ping");
+  }
+
+  postImage(image: File, imageSource: string) {
+    const formData = new FormData();
+    formData.append("picture", image);
+    formData.append("image_source", imageSource);
+    return this.http.post("/api/upload/image/", formData);
   }
 
   async getSort() {
@@ -58,4 +79,56 @@ class Http {
   }
 }
 
-export default new Http();
+class _HttpForServer extends EntropyHttp {
+  private _accessToken?: string;
+  private _refreshToken?: string;
+
+  constructor() {
+    super(env.api.baseUrl);
+  }
+
+  setAccessToken(accessToken: string) {
+    this._accessToken = accessToken;
+    this.updateInterceptor();
+  }
+
+  setRefreshToken(refreshToken: any) {
+    this._refreshToken = refreshToken;
+    this.updateInterceptor();
+  }
+
+  private updateInterceptor() {
+    this.http.interceptors.request.use(
+      (config) => {
+        config.headers["Authorization"] = `Bearer ${this._accessToken}`;
+        config.headers["Accept"] = "application/json";
+        config.headers["Content-Type"] = "application/json";
+        if (this._refreshToken) {
+          config.headers["Cookie"] = `refresh_token=${this._refreshToken};`;
+        }
+        return config;
+      },
+      (e) => Promise.reject(e)
+    );
+  }
+}
+
+class _HttpForClient extends EntropyHttp {
+  constructor() {
+    super(PROXY_PREFIX);
+    this.http.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const config = error?.config;
+        if (error?.response?.status === 401 && !config._retry) {
+          config._retry = true;
+          await this.refreshToken();
+          return this.http(config);
+        }
+      }
+    );
+  }
+}
+
+export const HttpForServer = new _HttpForServer();
+export const HttpForClient = new _HttpForClient();

@@ -18,7 +18,7 @@ import AcheivementPill from "../../../components/AcheivementPill";
 import ProfileIcon from "../../../components/ProfileIcon";
 import { Acheivement, Photo, Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
-import Http from "../../../services/Http";
+import { HttpForServer } from "../../../services/Http";
 
 interface CuratorPageProps {
   profile: Profile;
@@ -69,9 +69,9 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
                 >
                   {objectKeys(acheivements)
                     .filter((key) => !!acheivements[key])
-                    .map((key) => (
+                    .map((key, index) => (
                       <AcheivementPill
-                        key={`profile-acheivement-${key}`}
+                        key={`profile-acheivement-${key}-${index}`}
                         acheivement={key}
                       />
                     ))}
@@ -134,9 +134,9 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
             "mt-2"
           )}
         >
-          {photos.map((photo) => (
+          {photos.map((photo, index) => (
             <Link
-              key={`curator-image-${photo.url}`}
+              key={`curator-image-${photo.url}-${index}`}
               href={`${slug}/image/${photo.id}`}
             >
               <AspectRatio
@@ -163,7 +163,7 @@ export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   const { slug } = context.query;
   const {
     data: { profile, images, acheivements },
-  } = await Http.getProfile(slug as string);
+  } = await HttpForServer.getProfile(slug as string);
   return {
     props: {
       profile,

@@ -164,9 +164,11 @@ interface SubmitProps extends Omit<ButtonProps, "submit" | "children"> {
 export const Submit = ({ ...rest }: SubmitProps) => {
   const state = useFormState();
   const hasErrors = Object.keys(state.errors).length > 0;
+  console.log("debug:: submitting", state.isSubmitting);
   return (
     <Button
       submit
+      loading={state.isSubmitting}
       disabled={hasErrors}
       children={rest.children ? rest.children : "Submit"}
       {...rest}

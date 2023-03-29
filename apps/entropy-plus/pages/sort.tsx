@@ -17,7 +17,7 @@ import { css } from "utils";
 import ProfileIcon from "../components/ProfileIcon";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import Http from "../services/Http";
+import { HttpForServer } from "../services/Http";
 
 interface SortPageProps {
   image: Photo;
@@ -169,12 +169,13 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<
-  SortPageProps
-> = async () => {
+export const getServerSideProps: GetServerSideProps<SortPageProps> = async ({
+  req,
+  res,
+}) => {
   const {
     data: { image, twitter_channels, current_channel },
-  } = await Http.getSort();
+  } = await HttpForServer.getSort();
   return {
     props: {
       image,

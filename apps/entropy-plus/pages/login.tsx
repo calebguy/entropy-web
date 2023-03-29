@@ -1,12 +1,10 @@
-import { Button, ButtonIntent, Form, Icon, IconName, TextInput } from "dsl";
+import { ButtonIntent, Form, Icon, IconName, Submit, TextInput } from "dsl";
 import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
 import { css } from "utils";
-import { LoginPayload } from "../interfaces";
-import LoginStore from "../store/Login.store";
+import { LoginDto } from "../interfaces";
+import AppStore from "../store/App.store";
 
 const Login = observer(() => {
-  const store = useMemo(() => new LoginStore(), []);
   return (
     <div
       className={css(
@@ -22,8 +20,8 @@ const Login = observer(() => {
       <Icon name={IconName.Logo} />
       <Form
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
-        onSubmit={({ username, password }: LoginPayload) =>
-          store.onSubmit(username, password)
+        onSubmit={({ username, password }: LoginDto) =>
+          AppStore.auth.login({ username, password })
         }
       >
         <TextInput
@@ -40,9 +38,7 @@ const Login = observer(() => {
           rules={{ required: true }}
         />
         <div className={css("flex", "justify-center")}>
-          <Button intent={ButtonIntent.Secondary} submit>
-            Login
-          </Button>
+          <Submit intent={ButtonIntent.Secondary}>Login</Submit>
         </div>
       </Form>
     </div>

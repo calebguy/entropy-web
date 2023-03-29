@@ -38,23 +38,24 @@ export interface Photo {
 }
 
 export interface Profile {
-  // user: User;
+  id: number;
+  handle: string;
+  bio: Nullable<string>;
   profile_image: Nullable<CloudinaryField>;
   name: Nullable<string>;
-  bio: Nullable<string>;
-  handle: string;
+  slug: string;
+  entropy_score: Nullable<string>;
   twitter_handle: string;
   ig_handle: Nullable<string>;
   website: Nullable<string>;
-  slug: string;
-  admin_approved: boolean;
-  profile_views: Nullable<string>;
-  seen_feed_images: Nullable<string>;
-  linked_feed_images: Nullable<string>;
-  entropy_score: Nullable<string>;
-  total_feed_impressions: Nullable<string>;
-  profile_awards: Nullable<string>;
-  wallet_address: Nullable<string>;
+
+  // admin_approved: boolean;
+  // profile_views: Nullable<string>;
+  // seen_feed_images: Nullable<string>;
+  // linked_feed_images: Nullable<string>;
+  // total_feed_impressions: Nullable<string>;
+  // profile_awards: Nullable<string>;
+  // wallet_address: Nullable<string>;
 }
 
 interface User {
@@ -85,11 +86,31 @@ interface CloudinaryField {
   url: string;
 }
 
+export interface AuthTokens {
+  access: string;
+  refresh: string;
+  access_expires: number;
+  refresh_expires: number;
+  detail?: string;
+}
+
 export interface ContentSource {}
 
-export interface LoginPayload {
+export interface LoginDto {
   username: string;
   password: string;
+}
+
+// export interface UploadImageDto {
+//   image: File;
+//   image_source: string;
+// }
+
+export interface PostLoginResponse {
+  access: string;
+  access_expires: number;
+  refresh: string;
+  refresh_expires: number;
 }
 
 export interface GetSortResponse {

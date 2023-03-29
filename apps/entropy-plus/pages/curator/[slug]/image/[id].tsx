@@ -13,7 +13,7 @@ import { css } from "utils";
 import ProfileIcon from "../../../../components/ProfileIcon";
 import { Photo, Profile } from "../../../../interfaces";
 import AppLayout from "../../../../layouts/App.layout";
-import Http from "../../../../services/Http";
+import { HttpForServer } from "../../../../services/Http";
 
 interface ImageByIdProps {
   profile: Profile;
@@ -93,7 +93,7 @@ export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
   const { curator, id } = context.query;
   const {
     data: { profile, image },
-  } = await Http.getCuratorImage(curator as string, id as string);
+  } = await HttpForServer.getCuratorImage(curator as string, id as string);
   return {
     props: {
       profile,

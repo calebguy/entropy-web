@@ -49,6 +49,7 @@ const twitterChannels = [
 ];
 
 export const MOCK_PROFILE: Profile = {
+  id: 0,
   profile_image: {
     url: "https://res.cloudinary.com/dpooqlfdf/image/upload/v1667501807/qy4stehdletuhpewxdud.png",
     height_field: 100,
@@ -61,14 +62,14 @@ export const MOCK_PROFILE: Profile = {
   ig_handle: "https://google.com",
   website: "https://super.xyz",
   slug: "superuser",
-  admin_approved: true,
-  profile_views: null,
-  seen_feed_images: null,
-  linked_feed_images: null,
   entropy_score: "1040360",
-  total_feed_impressions: "12",
-  profile_awards: null,
-  wallet_address: null,
+  // admin_approved: true,
+  // profile_views: null,
+  // seen_feed_images: null,
+  // linked_feed_images: null,
+  // total_feed_impressions: "12",
+  // profile_awards: null,
+  // wallet_address: null,
 };
 
 const GET_MOCK_IMAGE = ({

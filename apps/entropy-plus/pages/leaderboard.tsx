@@ -4,7 +4,7 @@ import { css } from "utils";
 import Leaderboard from "../components/Leaderboard";
 import { GetLeaderboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import Http from "../services/Http";
+import { HttpForServer } from "../services/Http";
 
 interface LeaderboardPageProps extends GetLeaderboardResponse {}
 
@@ -24,7 +24,7 @@ const LeaderboardPage = ({ curators }: LeaderboardPageProps) => {
 export const getServerSideProps: GetServerSideProps<
   LeaderboardPageProps
 > = async () => {
-  const { data } = await Http.getLeaderboard();
+  const { data } = await HttpForServer.getLeaderboard();
   return {
     props: {
       ...data,

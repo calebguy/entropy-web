@@ -4,7 +4,9 @@ import Head from "next/head";
 import "../styles/globals.css";
 
 import type { AppProps } from "next/app";
+import { useEffect } from "react";
 import { css } from "utils";
+import AppStore from "../store/App.store";
 
 // @next can this live in the DSL?
 const helvetica = localFont({
@@ -24,6 +26,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const twitterCardUrl =
     "https://entropy-web-docs.vercel.app/images/twitter-card.png";
   const url = "https://entropy-web-docs.vercel.app/";
+  useEffect(() => {
+    AppStore.init();
+  }, []);
   return (
     <>
       <Head>

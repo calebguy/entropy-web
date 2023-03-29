@@ -2,13 +2,20 @@ import { ButtonIntent, ButtonSize, Form, Submit, TextInput } from "dsl";
 import MediaInput from "dsl/src/Form/MediaInput";
 import { css } from "utils";
 import AppLayout from "../layouts/App.layout";
+import { HttpForClient } from "../services/Http";
 
 const UploadPage = () => {
   return (
     <AppLayout>
       <div className={css("h-full")}>
         <Form
-          onSubmit={async () => {}}
+          onSubmit={(vals) => {
+            return HttpForClient.postImage(vals.image, vals.source).then(
+              ({ data }) => {
+                console.log("data", data);
+              }
+            );
+          }}
           className={css(
             "grid",
             "grid-cols-1",
@@ -30,7 +37,7 @@ const UploadPage = () => {
             )}
           >
             <MediaInput
-              name={"file"}
+              name={"image"}
               buttonLabel={"Choose Image from Library"}
             />
           </div>
@@ -38,7 +45,7 @@ const UploadPage = () => {
             <TextInput
               name={"creator"}
               label={"Curator"}
-              rules={{ required: true }}
+              // rules={{ required: true }}
               block
             />
             <TextInput
@@ -50,7 +57,7 @@ const UploadPage = () => {
             <TextInput
               name={"description"}
               label={"Description"}
-              rules={{ required: true }}
+              // rules={{ required: true }}
               block
             />
             <div className={css("mt-2")}>

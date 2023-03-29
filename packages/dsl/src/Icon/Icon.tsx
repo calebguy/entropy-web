@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+import { BsChevronDown } from "react-icons/bs";
 import Close from "./CustomIcons/Close";
 import FourSquare from "./CustomIcons/FourSquare";
 import Heart from "./CustomIcons/Heart";
@@ -19,6 +20,7 @@ export enum IconName {
   Instagram = "instagram",
   Mouse = "mouse",
   Twitter = "twitter",
+  ChevronDown = "chevron-down",
 }
 
 const iconMapToComponentMap = {
@@ -30,6 +32,7 @@ const iconMapToComponentMap = {
   [IconName.Instagram]: Instagram,
   [IconName.Mouse]: Mouse,
   [IconName.Twitter]: Twitter,
+  [IconName.ChevronDown]: BsChevronDown,
 };
 
 interface IconProps extends PropsWithChildren {

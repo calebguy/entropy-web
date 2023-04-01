@@ -41,7 +41,7 @@ export interface Profile {
   id: number;
   handle: string;
   bio: Nullable<string>;
-  profile_image: Nullable<CloudinaryField>;
+  profile_image: { url: any; height_field: number; width_field: number; } | undefined;
   name: Nullable<string>;
   slug: string;
   entropy_score: Nullable<string>;
@@ -138,7 +138,7 @@ export interface GetDashboardResponse {
   userInvitesCount: number;
   curatedPhotosCount: number;
   allPhotosCount: number;
-  acheivements: Acheivement;
+  // acheivements: Acheivement;
 }
 
 export interface GetLeaderboardResponse {

@@ -30,7 +30,7 @@ const DashboardPage = observer(
     curatedPhotosCount,
     allPhotosCount,
     rank,
-    acheivements,
+    // acheivements,
   }: DashboardPageProps) => {
     return (
       <AppLayout>
@@ -73,7 +73,7 @@ const DashboardPage = observer(
                   </Text>
                 </div>
               </Pane>
-              {objectKeys(acheivements).length > 0 && (
+              {/* {objectKeys(acheivements).length > 0 && (
                 <div
                   className={css("flex", "items-center", "gap-2", "flex-wrap")}
                 >
@@ -86,7 +86,7 @@ const DashboardPage = observer(
                       />
                     ))}
                 </div>
-              )}
+              )} */}
             </div>
           </Pane>
           <div className={css("flex", "items-stretch", "gap-2")}>
@@ -123,7 +123,7 @@ const DashboardPage = observer(
             <div className={css("my-2")}>
               <Text size={TextSize.Lg}>Images you may like...</Text>
             </div>
-            {/* <Pane size={PaneSize.Lg} block>
+            <Pane size={PaneSize.Lg} block>
               <div className={css("flex", "flex-wrap", "gap-2")}>
                 {suggestedPhotos.map((photo, index) => (
                   // @next -- where should this link to
@@ -150,7 +150,7 @@ const DashboardPage = observer(
                   explore
                 </Button>
               </Link>
-            </Pane> */}
+            </Pane>
           </div>
           <div>
             <div className={css("my-2")}>

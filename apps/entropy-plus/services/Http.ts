@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import React, { useContext } from 'react';
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import { LoginDto, PostLoginResponse, Profile, GetLeaderboardResponse } from "../interfaces";
+import { LoginDto, PostLoginResponse, Profile, GetLeaderboardResponse, Photo } from "../interfaces";
 import { AuthTokens } from "./../interfaces/index";
 import {
   GET_MOCK_DASHBAORD_RESPONSE,
@@ -54,7 +54,9 @@ class EntropyHttp {
   postImage(image: File, imageSource: string) {
     const formData = new FormData();
     // get the image file from the input
-    formData.append("picture", image[0]);
+    formData.append("picture", image);
+    console.log(image)
+
 
     formData.append("image_source", imageSource);
     return this.http.post("/api/upload/image/", formData);
@@ -110,8 +112,6 @@ class EntropyHttp {
     // return this.http.get<GetSortResponse>("/sort");
   }
   async approveImage() {
-    const httpServer = new _HttpForServer(); // create instance of _HttpForServer
-    await httpServer.updateInterceptor(); // Set up interceptor before making request
 
     try {
       const profile = await this.getProfile("brian");
@@ -127,8 +127,6 @@ class EntropyHttp {
   }
 
   async declineImage() {
-    const httpServer = new _HttpForServer(); // create instance of _HttpForServer
-    await httpServer.updateInterceptor(); // Set up interceptor before making request
 
     try {
       const profile = await this.getProfile("brian");
@@ -149,23 +147,26 @@ class EntropyHttp {
   }
 
   async getDashboard() {
-    try {
-      const me = await this.getProfile("brian");
-      const slug = me.data.profile.slug;
-      const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
+    const me = await this.getProfile("brian");
+    const slug = me.data.profile.slug;
+    const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
 
-      // leaderboard data
-      const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-      const leaderboardResponse = await fetch(leaderboardUrl);
-      const leaderboardResponseData = await leaderboardResponse.json();
+    // leaderboard data
+    const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+    const leaderboardResponse = await fetch(leaderboardUrl);
+    const leaderboardResponseData = await leaderboardResponse.json();
 
-      const topThreeCurators = leaderboardResponseData.slice(0, 3).map((curator) => {
+    let topThreeCurators: Profile[] = [];
+    if (Array.isArray(leaderboardResponseData) && leaderboardResponseData.length > 0) {
+      topThreeCurators = leaderboardResponseData.slice(0, 3).map((curator: any) => {
         const profile = {
           profile_image: {
             url: curator.profile_image,
             height_field: 100,
             width_field: 100,
           },
+          id: curator.id,
+          bio: curator.bio,
           name: curator.name,
           handle: curator.handle,
           twitter_handle: curator.twitter_handle,
@@ -183,24 +184,44 @@ class EntropyHttp {
         };
         return profile;
       });
-
-      console.log(topThreeCurators)
-
-
-      const response = await fetch(url);
-      const responseData = await response.json();
-      const profile = { profile_image: { url: responseData.profile_image, height_field: 100, width_field: 100 }, name: responseData.name, handle: responseData.handle, twitter_handle: responseData.twitter_handle, ig_handle: responseData.ig_handle, website: responseData.website, slug: responseData.slug, admin_approved: responseData.admin_approved, profile_views: responseData.profile_views, seen_feed_images: responseData.seen_feed_images, linked_feed_images: responseData.liked_feed_images, entropy_score: responseData.entropy_score, total_feed_impressions: responseData.total_feed_impressions, profile_awards: responseData.profile_awards, wallet_address: responseData.wallet_address }
-
-      const data = {
-        profile: profile, rankedCurators: topThreeCurators, rank: 10, userInvitesCount: 4, curatedPhotosCount: 103, allPhotosCount: responseData.seen_feed_images, acheivements: { isCoreCurator: true, isTopFivePercent: true, isJuiced: true, isArchivist: true, }
-      }
-      return { data: data };
-    } catch (error) {
-      console.error(error);
     }
+
+
+    const response = await fetch(url);
+    const responseData = await response.json();
+    const rankIndex = leaderboardResponseData.findIndex((profile: any) => profile.handle === "brian");
+
+
+    const suggestedResponse = await fetch('http://localhost:8000/api/suggested-photos/');
+    const suggestedData = await suggestedResponse.json();
+    const suggestedPhotos: Photo[] = [];
+
+
+
+    const profile = {
+      profile_image: { url: responseData.profile_image, height_field: 100, width_field: 100 },
+      name: responseData.name,
+      id: responseData.id,
+      bio: responseData.bio,
+      handle: responseData.handle,
+      twitter_handle: responseData.twitter_handle,
+      ig_handle: responseData.ig_handle,
+      website: responseData.website,
+      slug: responseData.slug,
+      admin_approved: responseData.admin_approved,
+      profile_views: responseData.profile_views,
+      seen_feed_images: responseData.seen_feed_images,
+      linked_feed_images: responseData.liked_feed_images,
+      entropy_score: responseData.entropy_score,
+      total_feed_impressions: responseData.total_feed_impressions,
+      profile_awards: responseData.profile_awards,
+      wallet_address: responseData.wallet_address
+    }
+    const data = {
+      profile: profile, rankedCurators: topThreeCurators, suggestedPhotos: suggestedPhotos, rank: rankIndex, userInvitesCount: 4, curatedPhotosCount: responseData.liked_feed_images, allPhotosCount: responseData.seen_feed_images, acheivements: { isCoreCurator: true, isTopFivePercent: true, isJuiced: true, isArchivist: true, }
+    };
     return { data: data };
   }
-
 
   async getLeaderboard() {
     const url = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
@@ -213,6 +234,8 @@ class EntropyHttp {
       const profile = {
         profile_image: { url: data.profile_image, height_field: 100, width_field: 100 },
         name: data.name,
+        bio: data.bio,
+        id: data.id,
         handle: data.handle,
         twitter_handle: data.twitter_handle,
         ig_handle: data.ig_handle,

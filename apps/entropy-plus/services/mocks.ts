@@ -55,6 +55,7 @@ export const MOCK_PROFILE: Profile = {
     width_field: 100,
   },
   name: "brian",
+  id: 1,
   bio: "feel-my-inter-connectedness",
   handle: "superuser",
   twitter_handle: "https://twitter.com/superduper",
@@ -200,12 +201,12 @@ export const GET_MOCK_DASHBAORD_RESPONSE = (): GetDashboardResponse => ({
   userInvitesCount: 4,
   curatedPhotosCount: 103,
   allPhotosCount: 3982,
-  acheivements: {
-    isCoreCurator: true,
-    isTopFivePercent: true,
-    isJuiced: true,
-    isArchivist: true,
-  },
+  // acheivements: {
+  //   isCoreCurator: true,
+  //   isTopFivePercent: true,
+  //   isJuiced: true,
+  //   isArchivist: true,
+  // },
 });
 
 export const GET_MOCK_LEADERBOARD_RESPONSE = (): GetLeaderboardResponse => ({

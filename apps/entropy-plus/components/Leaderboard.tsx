@@ -24,6 +24,7 @@ const Leaderboard = ({ curators }: LeaderboardProps) => {
       </div>
       <div className={css("flex", "flex-col", "gap-2")}>
         {curators.map((curator, index) => {
+          let newIndex = index + 1;
           let scoreTextSize;
           if (index === 0) {
             scoreTextSize = TextSize.Xl;
@@ -36,13 +37,13 @@ const Leaderboard = ({ curators }: LeaderboardProps) => {
             <Pane size={PaneSize.Lg} block>
               <div className={css("grid", "grid-cols-6", "gap-2")}>
                 <div className={css("flex", "items-center", "col-span-1")}>
-                  <RankEmblem rank={index} />
+                  <RankEmblem rank={newIndex} />
                 </div>
                 <div
                   className={css("flex", "items-center", "gap-2", "col-span-3")}
                 >
                   <ProfileIcon profile={curator} />
-                  <Text>@{curator.name}</Text>
+                  <Text>@{curator.handle}</Text>
                 </div>
                 {curator.entropy_score && (
                   <div className={css("flex", "items-center", "col-span-2")}>

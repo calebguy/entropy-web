@@ -19,7 +19,7 @@ import { GetDashboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
 
-interface DashboardPageProps extends GetDashboardResponse {}
+interface DashboardPageProps extends GetDashboardResponse { }
 
 const DashboardPage = observer(
   ({
@@ -123,7 +123,7 @@ const DashboardPage = observer(
             <div className={css("my-2")}>
               <Text size={TextSize.Lg}>Images you may like...</Text>
             </div>
-            <Pane size={PaneSize.Lg} block>
+            {/* <Pane size={PaneSize.Lg} block>
               <div className={css("flex", "flex-wrap", "gap-2")}>
                 {suggestedPhotos.map((photo, index) => (
                   // @next -- where should this link to
@@ -150,7 +150,7 @@ const DashboardPage = observer(
                   explore
                 </Button>
               </Link>
-            </Pane>
+            </Pane> */}
           </div>
           <div>
             <div className={css("my-2")}>

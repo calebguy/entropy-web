@@ -19,10 +19,18 @@ import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
 
+
 interface SortPageProps {
   image: Photo;
   twitterChannels: TwitterChannel[];
   currentChannel: TwitterChannel;
+}
+async function handleClick() {
+  const data = await HttpForServer.approveImage();
+}
+
+async function handleDecline() {
+  const data = await HttpForServer.declineImage();
 }
 
 const SortPage = ({
@@ -48,7 +56,7 @@ const SortPage = ({
         >
           {image.curator && <UserPreview profile={image.curator} />}
           <AspectRatio
-            ratio={`${image.image?.width_field}/${image.image?.height_field}`}
+            ratio={"1/1"}
             className={css(
               "mx-auto",
               "w-full",
@@ -69,10 +77,10 @@ const SortPage = ({
           </div>
         </div>
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
-          <Button size={ButtonSize.Lg} block>
+          <Button onClick={handleDecline} size={ButtonSize.Lg} block>
             <Icon name={IconName.Close} />
           </Button>
-          <Button size={ButtonSize.Lg} block>
+          <Button onClick={handleClick} size={ButtonSize.Lg} block>
             <Icon name={IconName.Heart} />
           </Button>
         </div>

@@ -49,13 +49,13 @@ export interface Profile {
   ig_handle: Nullable<string>;
   website: Nullable<string>;
 
-  // admin_approved: boolean;
-  // profile_views: Nullable<string>;
-  // seen_feed_images: Nullable<string>;
-  // linked_feed_images: Nullable<string>;
-  // total_feed_impressions: Nullable<string>;
-  // profile_awards: Nullable<string>;
-  // wallet_address: Nullable<string>;
+  admin_approved: boolean;
+  profile_views: Nullable<string>;
+  seen_feed_images: Nullable<string>;
+  linked_feed_images: Nullable<string>;
+  total_feed_impressions: Nullable<string>;
+  profile_awards: Nullable<string>;
+  wallet_address: Nullable<string>;
 }
 
 interface User {
@@ -94,7 +94,7 @@ export interface AuthTokens {
   detail?: string;
 }
 
-export interface ContentSource {}
+export interface ContentSource { }
 
 export interface LoginDto {
   username: string;

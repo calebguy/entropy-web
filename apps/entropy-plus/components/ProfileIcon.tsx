@@ -8,15 +8,15 @@ interface ProfileIconProps {
 }
 
 const ProfileIcon = ({ profile }: ProfileIconProps) => {
-  const imageUrl = profile?.profile_image?.url;
+  const imageUrl = "https://res.cloudinary.com/dpooqlfdf/" + profile?.profile_image?.url;
   return (
     <Link href={`/curator/${profile.slug}`}>
       <AspectRatio
         style={
           imageUrl
             ? {
-                backgroundImage: `url(${imageUrl})`,
-              }
+              backgroundImage: `url(${imageUrl})`,
+            }
             : undefined
         }
         className={css(

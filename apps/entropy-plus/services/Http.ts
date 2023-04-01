@@ -82,7 +82,7 @@ class EntropyHttp {
 
 
     // get images from local host api/${slug}/images
-    const url2 = `http://localhost:8000/api/${slug}/photos/`;
+    const url2 = `https://entropy-plus.herokuapp.com/api/${slug}/photos/`;
     const response2 = await fetch(url2);
     const imageData = await response2.json();
 

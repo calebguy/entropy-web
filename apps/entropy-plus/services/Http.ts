@@ -14,6 +14,9 @@ import {
 import AppStore from "../store/App.store";
 import { Console } from "console";
 
+console.log(env.api.baseUrl);
+
+
 interface MeProps {
   me: Profile;
 }

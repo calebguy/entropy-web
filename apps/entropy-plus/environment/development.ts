@@ -1,11 +1,11 @@
 import { Env } from ".";
 
-const proxyUrl = "https://entropy-plus.herokuapp.com";
+// const proxyUrl = "https://entropyplus.xyz/";
 const proxyUrl = null;
 
 const env: Env = {
   app: { name: "[LOCAL] E+" },
-  api: { baseUrl: "https://entropy-plus.herokuapp.com" },
+  api: { baseUrl: "http://localhost:8000" },
 };
 
 if (proxyUrl) {

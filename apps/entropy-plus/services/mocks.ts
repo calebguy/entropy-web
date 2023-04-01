@@ -175,12 +175,12 @@ export const GET_MOCK_GET_SORT_RESPONSE = (): GetSortResponse => ({
 export const GET_MOCK_PROFILE_RESPONSE = (): GetProfileResponse => ({
   profile: MOCK_PROFILE,
   images: MOCK_IMAGES,
-  acheivements: {
-    isCoreCurator: true,
-    isTopFivePercent: true,
-    isJuiced: true,
-    isArchivist: true,
-  },
+  // acheivements: {
+  //   isCoreCurator: true,
+  //   isTopFivePercent: true,
+  //   isJuiced: true,
+  //   isArchivist: true,
+  // },
 });
 
 export const GET_MOCK_GET_CURATOR_IMAGE_RESPONSE = (

@@ -13,6 +13,8 @@ import {
 } from "./mocks";
 import AppStore from "../store/App.store";
 import { Console } from "console";
+import { GetProfileResponse } from "./../interfaces/index";
+
 
 console.log(env.api.baseUrl);
 
@@ -69,20 +71,33 @@ class EntropyHttp {
     return this.http.post("/api/waitlist/", { email });
   }
 
-  async getProfileSlug() {
-    const me = await this.getProfile("brian");
-    const profile = me.data.profile.slug;
-    const url = `https://entropy-plus.herokuapp.com/api/profiles/${profile}/`;
-    const response = await fetch(url);
-    const profileData = await response.json();
-    const data = profileData[0]
-    console.log("data", data)
-    return data;
-  }
-
 
   async getProfile(slug: string) {
+    const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
+    const response = await fetch(url);
+    const profileData = await response.json();
+    const curatorData = profileData.data
+
+
+
+
+    // get images from local host api/${slug}/images
+    const url2 = `http://localhost:8000/api/${slug}/photos/`;
+    const response2 = await fetch(url2);
+    const imageData = await response2.json();
+
+    let curatorImages = [];
+
+    for (let i = 0; i < imageData.length; i++) {
+      curatorImages.push(imageData[i]);
+    }
+    const data = (): GetProfileResponse => ({
+      profile: profileData,
+      images: imageData,
+    });
     return { data: GET_MOCK_PROFILE_RESPONSE() };
+
+
   }
 
   async getCurrentProfile() {

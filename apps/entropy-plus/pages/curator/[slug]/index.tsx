@@ -23,14 +23,14 @@ import { HttpForServer } from "../../../services/Http";
 interface CuratorPageProps {
   profile: Profile;
   photos: Photo[];
-  acheivements: Acheivement;
+  // acheivements: Acheivement;
 }
 
-const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
+const CuratorPage = ({ profile, photos }: CuratorPageProps) => {
   const {
     query: { slug },
   } = useRouter();
-  const acheivmentKeys = objectKeys(acheivements);
+  // const acheivmentKeys = objectKeys(acheivements);
   const hasLinks =
     !!profile.twitter_handle || !!profile.ig_handle || !!profile.website;
   return (
@@ -63,7 +63,7 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
                   </div>
                 )}
               </div>
-              {acheivmentKeys.length > 0 && (
+              {/* {acheivmentKeys.length > 0 && (
                 <div
                   className={css("flex", "items-center", "gap-1", "flex-wrap")}
                 >
@@ -76,7 +76,7 @@ const CuratorPage = ({ profile, photos, acheivements }: CuratorPageProps) => {
                       />
                     ))}
                 </div>
-              )}
+              )} */}
             </div>
           </Pane>
         </div>
@@ -162,13 +162,13 @@ export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
 ) => {
   const { slug } = context.query;
   const {
-    data: { profile, images, acheivements },
+    data: { profile, images },
   } = await HttpForServer.getProfile(slug as string);
   return {
     props: {
       profile,
       photos: images,
-      acheivements,
+      // acheivements,
     },
   };
 };

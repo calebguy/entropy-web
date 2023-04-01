@@ -122,7 +122,7 @@ export interface GetSortResponse {
 export interface GetProfileResponse {
   profile: Profile;
   images: Photo[];
-  acheivements: Acheivement;
+  // acheivements: Acheivement;
 }
 
 export interface GetCuratorImageResponse {

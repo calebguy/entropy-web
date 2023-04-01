@@ -192,7 +192,7 @@ class EntropyHttp {
     const rankIndex = leaderboardResponseData.findIndex((profile: any) => profile.handle === "brian");
 
 
-    const suggestedResponse = await fetch('http://localhost:8000/api/suggested-photos/');
+    const suggestedResponse = await fetch('https://entropyplus.xyz/api/suggested-photos/');
     const suggestedData = await suggestedResponse.json();
     const suggestedPhotos: Photo[] = [];
 

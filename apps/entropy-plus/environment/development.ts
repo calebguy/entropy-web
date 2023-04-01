@@ -5,7 +5,7 @@ const proxyUrl = "https://entropyplus.xyz/";
 
 const env: Env = {
   app: { name: "[LOCAL] E+" },
-  api: { baseUrl: "http://localhost:8000" },
+  api: { baseUrl: "https://entropyplus.xyz" },
 };
 
 if (proxyUrl) {

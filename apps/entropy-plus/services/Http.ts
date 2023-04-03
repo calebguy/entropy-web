@@ -1,20 +1,18 @@
 import axios, { AxiosInstance } from "axios";
-import React, { useContext } from 'react';
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import { LoginDto, PostLoginResponse, Profile, GetLeaderboardResponse, Photo } from "../interfaces";
+import {
+  GetLeaderboardResponse,
+  LoginDto,
+  Photo,
+  PostLoginResponse,
+  Profile,
+} from "../interfaces";
 import { AuthTokens } from "./../interfaces/index";
 import {
-  GET_MOCK_DASHBAORD_RESPONSE,
   GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
-  GET_MOCK_GET_SORT_RESPONSE,
-  GET_MOCK_LEADERBOARD_RESPONSE,
   GET_MOCK_PROFILE_RESPONSE,
 } from "./mocks";
-import AppStore from "../store/App.store";
-import { Console } from "console";
-
-
 
 interface MeProps {
   me: Profile;
@@ -58,7 +56,6 @@ class EntropyHttp {
     // get the image file from the input
     formData.append("picture", image);
 
-
     formData.append("image_source", imageSource);
     return this.http.post("/api/upload/image/", formData);
   }
@@ -67,12 +64,11 @@ class EntropyHttp {
     return this.http.post("/api/waitlist/", { email });
   }
 
-
   async getProfile(slug: string) {
     const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
     const response = await fetch(url);
     const profileData = await response.json();
-    const curatorData = profileData.data
+    const curatorData = profileData.data;
 
     // // get images from local host api/${slug}/images
     // const url2 = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/images/`;
@@ -81,11 +77,9 @@ class EntropyHttp {
     // const image = imageData[0]
     // console.log("image", image)
 
-    // iterate through data and push them into an array 
+    // iterate through data and push them into an array
 
-
-
-    const data = { profile: profileData }
+    const data = { profile: profileData };
     // return { data: data };
     return { data: GET_MOCK_PROFILE_RESPONSE() };
   }
@@ -95,31 +89,34 @@ class EntropyHttp {
     // return this.http.get<GetProfileResponse>(`/profile/${slug}`);
   }
 
-
-
   async getImageData() {
     const profile = await this.getProfile("brian");
     const slug = profile.data.profile.slug;
     const url = `https://entropy-plus.herokuapp.com/api/v1/images/?slug=${slug}`;
     const response = await fetch(url);
     const imageData = await response.json();
-    const data = imageData[0]
+    const data = imageData[0];
     return data;
   }
   async getTwitterChannels() {
-    const response = await fetch("https://entropy-plus.herokuapp.com/api/v1/twitter-channels/");
+    const response = await fetch(
+      "https://entropy-plus.herokuapp.com/api/v1/twitter-channels/"
+    );
     const data = await response.json();
     return data;
   }
   async getSort() {
     const imageData = await this.getImageData();
     const twitterChannels = await this.getTwitterChannels();
-    const data = { image: imageData, twitter_channels: twitterChannels, current_channel: twitterChannels[0] }
+    const data = {
+      image: imageData,
+      twitter_channels: twitterChannels,
+      current_channel: twitterChannels[0],
+    };
     return { data: data };
     // return this.http.get<GetSortResponse>("/sort");
   }
   async approveImage() {
-
     try {
       const profile = await this.getProfile("brian");
       const slug = profile.data.profile.slug;
@@ -133,7 +130,6 @@ class EntropyHttp {
   }
 
   async declineImage() {
-
     try {
       const profile = await this.getProfile("brian");
       const slug = profile.data.profile.slug;
@@ -162,42 +158,49 @@ class EntropyHttp {
     const leaderboardResponseData = await leaderboardResponse.json();
 
     let topThreeCurators: Profile[] = [];
-    if (Array.isArray(leaderboardResponseData) && leaderboardResponseData.length > 0) {
-      topThreeCurators = leaderboardResponseData.slice(0, 3).map((curator: any) => {
-        const profile = {
-          profile_image: {
-            url: curator.profile_image,
-            height_field: 100,
-            width_field: 100,
-          },
-          id: curator.id,
-          bio: curator.bio,
-          name: curator.name,
-          handle: curator.handle,
-          twitter_handle: curator.twitter_handle,
-          ig_handle: curator.ig_handle,
-          website: curator.website,
-          slug: curator.slug,
-          admin_approved: curator.admin_approved,
-          profile_views: curator.profile_views,
-          seen_feed_images: curator.seen_feed_images,
-          linked_feed_images: curator.liked_feed_images,
-          entropy_score: curator.entropy_score,
-          total_feed_impressions: curator.total_feed_impressions,
-          profile_awards: curator.profile_awards,
-          wallet_address: curator.wallet_address,
-        };
-        return profile;
-      });
+    if (
+      Array.isArray(leaderboardResponseData) &&
+      leaderboardResponseData.length > 0
+    ) {
+      topThreeCurators = leaderboardResponseData
+        .slice(0, 3)
+        .map((curator: any) => {
+          const profile = {
+            profile_image: {
+              url: curator.profile_image,
+              height_field: 100,
+              width_field: 100,
+            },
+            id: curator.id,
+            bio: curator.bio,
+            name: curator.name,
+            handle: curator.handle,
+            twitter_handle: curator.twitter_handle,
+            ig_handle: curator.ig_handle,
+            website: curator.website,
+            slug: curator.slug,
+            admin_approved: curator.admin_approved,
+            profile_views: curator.profile_views,
+            seen_feed_images: curator.seen_feed_images,
+            linked_feed_images: curator.liked_feed_images,
+            entropy_score: curator.entropy_score,
+            total_feed_impressions: curator.total_feed_impressions,
+            profile_awards: curator.profile_awards,
+            wallet_address: curator.wallet_address,
+          };
+          return profile;
+        });
     }
-
 
     const response = await fetch(url);
     const responseData = await response.json();
-    const rankIndex = leaderboardResponseData.findIndex((profile: any) => profile.handle === "brian");
+    const rankIndex = leaderboardResponseData.findIndex(
+      (profile: any) => profile.handle === "brian"
+    );
 
-
-    const suggestedResponse = await fetch('https://entropyplus.xyz/api/suggested-photos/');
+    const suggestedResponse = await fetch(
+      "https://entropyplus.xyz/api/suggested-photos/"
+    );
     const suggestedData = await suggestedResponse.json();
     const suggestedPhotos: Photo[] = [];
 
@@ -205,9 +208,12 @@ class EntropyHttp {
       suggestedPhotos.push(...suggestedData.slice(0, 10));
     }
 
-
     const profile = {
-      profile_image: { url: responseData.profile_image, height_field: 100, width_field: 100 },
+      profile_image: {
+        url: responseData.profile_image,
+        height_field: 100,
+        width_field: 100,
+      },
       name: responseData.name,
       id: responseData.id,
       bio: responseData.bio,
@@ -223,14 +229,25 @@ class EntropyHttp {
       entropy_score: responseData.entropy_score,
       total_feed_impressions: responseData.total_feed_impressions,
       profile_awards: responseData.profile_awards,
-      wallet_address: responseData.wallet_address
-    }
+      wallet_address: responseData.wallet_address,
+    };
     const data = {
-      profile: profile, rankedCurators: topThreeCurators, suggestedPhotos: suggestedPhotos, rank: rankIndex, userInvitesCount: 4, curatedPhotosCount: responseData.liked_feed_images, allPhotosCount: responseData.seen_feed_images, acheivements: { isCoreCurator: true, isTopFivePercent: true, isJuiced: true, isArchivist: true, }
+      profile: profile,
+      rankedCurators: topThreeCurators,
+      suggestedPhotos: suggestedPhotos,
+      rank: rankIndex,
+      userInvitesCount: 4,
+      curatedPhotosCount: responseData.liked_feed_images,
+      allPhotosCount: responseData.seen_feed_images,
+      acheivements: {
+        isCoreCurator: true,
+        isTopFivePercent: true,
+        isJuiced: true,
+        isArchivist: true,
+      },
     };
     return { data: data };
   }
-
 
   async getLeaderboard() {
     const url = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
@@ -241,7 +258,11 @@ class EntropyHttp {
     // iterate through each object in responseData and push to curators array
     for (const data of responseData) {
       const profile = {
-        profile_image: { url: data.profile_image, height_field: 100, width_field: 100 },
+        profile_image: {
+          url: data.profile_image,
+          height_field: 100,
+          width_field: 100,
+        },
         name: data.name,
         bio: data.bio,
         id: data.id,
@@ -257,13 +278,13 @@ class EntropyHttp {
         entropy_score: data.entropy_score,
         total_feed_impressions: data.total_feed_impressions,
         profile_awards: data.profile_awards,
-        wallet_address: data.wallet_address
-      }
+        wallet_address: data.wallet_address,
+      };
       curators.push(profile);
     }
 
     const GET_MOCK_LEADERBOARD_RESPONSE = (): GetLeaderboardResponse => ({
-      curators: curators // set the array as the value for curators property
+      curators: curators, // set the array as the value for curators property
     });
 
     return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
@@ -316,7 +337,7 @@ class _HttpForServer extends EntropyHttp {
 
 class _HttpForClient extends EntropyHttp {
   constructor() {
-    super(PROXY_PREFIX);
+    super(env.api.baseUrl + PROXY_PREFIX);
     this.http.interceptors.response.use(
       (response) => response,
       async (error) => {

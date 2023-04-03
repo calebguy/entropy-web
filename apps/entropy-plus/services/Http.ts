@@ -14,7 +14,6 @@ import {
 import AppStore from "../store/App.store";
 import { Console } from "console";
 
-console.log(env.api.baseUrl);
 
 
 interface MeProps {
@@ -58,7 +57,6 @@ class EntropyHttp {
     const formData = new FormData();
     // get the image file from the input
     formData.append("picture", image);
-    console.log(image)
 
 
     formData.append("image_source", imageSource);
@@ -71,8 +69,6 @@ class EntropyHttp {
 
 
   async getProfile(slug: string) {
-    console.log(GET_MOCK_PROFILE_RESPONSE())
-    console.log(slug, "slug")
     const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
     const response = await fetch(url);
     const profileData = await response.json();
@@ -108,7 +104,6 @@ class EntropyHttp {
     const response = await fetch(url);
     const imageData = await response.json();
     const data = imageData[0]
-    console.log("data", data)
     return data;
   }
   async getTwitterChannels() {
@@ -132,7 +127,6 @@ class EntropyHttp {
       const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
 
       const response = await this.http.patch(url);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -147,7 +141,6 @@ class EntropyHttp {
       const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
 
       const response = await this.http.patch(url);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -208,6 +201,9 @@ class EntropyHttp {
     const suggestedData = await suggestedResponse.json();
     const suggestedPhotos: Photo[] = [];
 
+    if (Array.isArray(suggestedData) && suggestedData.length > 0) {
+      suggestedPhotos.push(...suggestedData.slice(0, 10));
+    }
 
 
     const profile = {
@@ -234,6 +230,7 @@ class EntropyHttp {
     };
     return { data: data };
   }
+
 
   async getLeaderboard() {
     const url = `https://entropy-plus.herokuapp.com/api/leaderboard/`;

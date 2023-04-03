@@ -140,7 +140,7 @@ const DashboardPage = observer(
                         "bg-no-repeat",
                         "rounded-md"
                       )}
-                      style={{ backgroundImage: `url(${photo.image?.url})` }}
+                      style={{ backgroundImage: `url(${photo.url})` }}
                     />
                   </Link>
                 ))}

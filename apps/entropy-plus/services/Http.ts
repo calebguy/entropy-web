@@ -337,7 +337,7 @@ class _HttpForServer extends EntropyHttp {
 
 class _HttpForClient extends EntropyHttp {
   constructor() {
-    super(env.api.baseUrl + PROXY_PREFIX);
+    super(PROXY_PREFIX);
     this.http.interceptors.response.use(
       (response) => response,
       async (error) => {

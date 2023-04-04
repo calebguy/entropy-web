@@ -3,20 +3,22 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { css, jsonify } from "utils";
 import sleep from "utils/sleep";
-import withAuth from "../helpers/auth";
-import { Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForClient, HttpForServer } from "../services/Http";
+import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
 
 interface MeProps {
-  me: Profile;
+  // me: Profile;
 }
 
-const MePage = observer(({ me }: MeProps) => {
+const MePage = observer(() => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    AppStore.auth.profile = me;
+    if (!AppStore.auth.profile) {
+      HttpForClient.getMe().then(({ data }) => {
+        AppStore.auth.profile = data;
+      });
+    }
   }, []);
   return (
     <AppLayout>
@@ -30,7 +32,10 @@ const MePage = observer(({ me }: MeProps) => {
             setIsLoading(true);
             await sleep(0.5);
             HttpForClient.getMe()
-              .then(({ data }) => console.log("refreshed me data", data))
+              .then(({ data }) => {
+                console.log("refreshed me data", data);
+                AppStore.auth.profile = data;
+              })
               .finally(() => setIsLoading(false));
           }}
           loading={isLoading}
@@ -42,11 +47,11 @@ const MePage = observer(({ me }: MeProps) => {
   );
 });
 
-export const getServerSideProps = withAuth<MeProps>(async () => {
-  const { data: me } = await HttpForServer.getMe();
-  return {
-    props: { me },
-  };
-});
+// export const getServerSideProps = withAuth<MeProps>(async () => {
+//   const { data: me } = await HttpForServer.getMe();
+//   return {
+//     props: { me },
+//   };
+// });
 
 export default MePage;

@@ -1,5 +1,6 @@
 import { ButtonIntent, Form, Icon, IconName, Submit, TextInput } from "dsl";
 import { observer } from "mobx-react-lite";
+import Router from "next/router";
 import { css } from "utils";
 import { LoginDto } from "../interfaces";
 import AppStore from "../store/App.store";
@@ -21,7 +22,9 @@ const Login = observer(() => {
       <Form
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
         onSubmit={({ username, password }: LoginDto) =>
-          AppStore.auth.login({ username, password })
+          AppStore.auth.login({ username, password }).then(() => {
+            return Router.push("/me");
+          })
         }
       >
         <TextInput

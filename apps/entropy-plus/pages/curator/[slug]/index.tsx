@@ -10,15 +10,16 @@ import {
   TextIntent,
   TextSize,
 } from "dsl";
+import { observer } from "mobx-react-lite";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { css, formatWithThousandsSeparators, objectKeys } from "utils";
-import AcheivementPill from "../../../components/AcheivementPill";
+import { css, formatWithThousandsSeparators, jsonify } from "utils";
 import ProfileIcon from "../../../components/ProfileIcon";
-import { Acheivement, Photo, Profile } from "../../../interfaces";
+import { Photo, Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
 import { HttpForServer } from "../../../services/Http";
+import AppStore from "../../../store/App.store";
 
 interface CuratorPageProps {
   profile: Profile;
@@ -26,7 +27,7 @@ interface CuratorPageProps {
   // acheivements: Acheivement;
 }
 
-const CuratorPage = ({ profile, photos }: CuratorPageProps) => {
+const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
   const {
     query: { slug },
   } = useRouter();
@@ -61,6 +62,9 @@ const CuratorPage = ({ profile, photos }: CuratorPageProps) => {
                   <div className={css("break-words")}>
                     <Text intent={TextIntent.Gray}>{profile.bio}</Text>
                   </div>
+                )}
+                {AppStore.auth.profile && (
+                  <Text>{jsonify(AppStore.auth.profile)}</Text>
                 )}
               </div>
               {/* {acheivmentKeys.length > 0 && (
@@ -155,7 +159,7 @@ const CuratorPage = ({ profile, photos }: CuratorPageProps) => {
       )}
     </AppLayout>
   );
-};
+});
 
 export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   context

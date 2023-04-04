@@ -25,9 +25,7 @@ class AuthStore {
     return HttpForClient.login({ username, password })
       .then(() => {
         this.isLoggedIn = true;
-        this.getProfile().then(() => {
-          Router.push("/me");
-        });
+        return this.getProfile();
       })
       .catch((e) => {
         this.isLoggedIn = false;

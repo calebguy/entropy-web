@@ -34,6 +34,7 @@ const DashboardPage = observer(
   }: DashboardPageProps) => {
     return (
       <AppLayout profile={profile}>
+
         <div className={css("flex", "flex-col", "gap-2")}>
           {!!userInvitesCount && (
             <Pane size={PaneSize.Lg} block>
@@ -109,7 +110,7 @@ const DashboardPage = observer(
                 <Text>Images curated</Text>
                 <div className={css("text-center")}>
                   {AppStore.auth.profile?.seen_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images} images</Text> :
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images}</Text> :
                     <Text>Loading...</Text>
                   }
                 </div>

@@ -148,10 +148,11 @@ class EntropyHttp {
       image: imageData,
       twitterChannels: twitterChannels,
       currentChannel: image_twitter_channel,
-      profile: imageData.profile,
+      profile: AppStore.auth.profile,
     };
     return { data: data };
   }
+
   async approveImage(imageData: ImageData) {
     try {
       const getMe = AppStore.auth.profile?.handle;
@@ -239,6 +240,7 @@ class EntropyHttp {
   }
 
   async getDashboard() {
+    console.log(AppStore.auth.isLoggedIn, "auth")
     const me = await this.getProfile("brian");
     const slug = me.data.profile.slug;
     const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
@@ -379,7 +381,6 @@ class EntropyHttp {
 
     const CREATE_LEADERBOARD_DATA = (): GetLeaderboardResponse => ({
       curators: curators,
-      profile: getMe,
     });
 
     return { data: CREATE_LEADERBOARD_DATA() };

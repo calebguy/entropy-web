@@ -154,5 +154,4 @@ export interface GetDashboardResponse {
 
 export interface GetLeaderboardResponse {
   curators: Profile[];
-  profile: Profile;
 }

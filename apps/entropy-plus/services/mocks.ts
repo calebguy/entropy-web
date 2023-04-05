@@ -49,19 +49,19 @@ const twitterChannels = [
 ];
 
 export const MOCK_PROFILE: Profile = {
+  id: 1,
   profile_image: {
     url: "https://res.cloudinary.com/dpooqlfdf/image/upload/v1667501807/qy4stehdletuhpewxdud.png",
     height_field: 100,
     width_field: 100,
   },
-  name: "brian",
-  id: 1,
+  name: "superuser",
   bio: "feel-my-inter-connectedness",
   handle: "superuser",
   twitter_handle: "https://twitter.com/superduper",
   ig_handle: "https://google.com",
   website: "https://super.xyz",
-  slug: "brian",
+  slug: "superuser",
   admin_approved: true,
   profile_views: null,
   seen_feed_images: null,
@@ -166,12 +166,6 @@ export const MOCK_IMAGES = [
   }),
 ].concat(brianImages.map((image) => GET_MOCK_IMAGE(image)));
 
-export const GET_MOCK_GET_SORT_RESPONSE = (): GetSortResponse => ({
-  image: MOCK_IMAGES[getRandomIntInclusive(0, MOCK_IMAGES.length - 1)],
-  twitter_channels: twitterChannels,
-  current_channel: twitterChannels[0],
-});
-
 export const GET_MOCK_PROFILE_RESPONSE = (): GetProfileResponse => ({
   profile: MOCK_PROFILE,
   images: MOCK_IMAGES,
@@ -201,14 +195,4 @@ export const GET_MOCK_DASHBAORD_RESPONSE = (): GetDashboardResponse => ({
   userInvitesCount: 4,
   curatedPhotosCount: 103,
   allPhotosCount: 3982,
-  // acheivements: {
-  //   isCoreCurator: true,
-  //   isTopFivePercent: true,
-  //   isJuiced: true,
-  //   isArchivist: true,
-  // },
-});
-
-export const GET_MOCK_LEADERBOARD_RESPONSE = (): GetLeaderboardResponse => ({
-  curators: [MOCK_PROFILE, MOCK_PROFILE, MOCK_PROFILE],
 });

@@ -5,7 +5,7 @@ export interface Photo {
   id: number;
   title: string;
   created: Datetime;
-  image: Nullable<CloudinaryField>;
+  image: { url: any; height_field: number; width_field: number; } | undefined;
   url: string;
   thumb_url: Nullable<string>;
   square_url: Nullable<string>;
@@ -36,6 +36,7 @@ export interface Photo {
   curator: Nullable<Profile>;
   content_source: Nullable<ContentSource>;
 }
+
 
 export interface Profile {
   id: number;
@@ -124,7 +125,10 @@ export interface GetSortResponse {
   image: Photo;
   twitter_channels: TwitterChannel[];
   current_channel: TwitterChannel;
+  profile: Profile;
 }
+
+
 
 export interface GetProfileResponse {
   profile: Profile;
@@ -150,4 +154,5 @@ export interface GetDashboardResponse {
 
 export interface GetLeaderboardResponse {
   curators: Profile[];
+  profile: Profile;
 }

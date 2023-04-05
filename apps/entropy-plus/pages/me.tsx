@@ -6,12 +6,12 @@ import sleep from "utils/sleep";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
-
+import { Profile } from "../interfaces";
 interface MeProps {
-  // me: Profile;
+  me: Profile;
 }
 
-const MePage = observer(() => {
+const MePage = observer(({ me }: MeProps) => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (!AppStore.auth.profile) {
@@ -21,7 +21,7 @@ const MePage = observer(() => {
     }
   }, []);
   return (
-    <AppLayout>
+    <AppLayout profile={me}>
       <Text>{jsonify(AppStore.auth.profile)}</Text>
       <div className={css("flex", "flex-col", "h-full", "gap-4", "mt-4")}>
         <Button

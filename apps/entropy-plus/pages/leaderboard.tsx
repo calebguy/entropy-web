@@ -4,23 +4,27 @@ import { css } from "utils";
 import Leaderboard from "../components/Leaderboard";
 import { GetLeaderboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
+import { observer } from "mobx-react-lite";
 import { HttpForServer } from "../services/Http";
+import { Profile } from "../interfaces";
 
-interface LeaderboardPageProps extends GetLeaderboardResponse { }
 
-const LeaderboardPage = ({ curators }: LeaderboardPageProps) => {
+interface LeaderboardPageProps extends GetLeaderboardResponse {
+  profile: Profile;
+}
+
+const LeaderboardPage = observer(({ curators, profile }: LeaderboardPageProps) => {
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div className={css("mb-2")}>
-        <Text size={TextSize.Lg}>Leaderboard</Text>
+        <Text size={TextSize.Lg}>Daily Leaderboard</Text>
       </div>
       <Pane size={PaneSize.Lg} block>
         <Leaderboard curators={curators} />
       </Pane>
     </AppLayout>
   );
-};
-
+});
 export const getServerSideProps: GetServerSideProps<
   LeaderboardPageProps
 > = async () => {

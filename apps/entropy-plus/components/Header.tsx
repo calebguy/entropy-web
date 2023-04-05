@@ -8,6 +8,7 @@ import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
 import ProfileIcon from "./ProfileIcon";
 import { Profile } from "../interfaces";
+import Image from "next/image";
 
 
 interface HeaderProps {
@@ -55,7 +56,7 @@ const Header = observer(({ profile }: HeaderProps) => {
               <Icon name={IconName.FourSquare} size={29} />
             </Link>
             {AppStore.auth.profile && (
-              <img src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
+              <Image width={100} height={100} src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
             )}
           </div>
         </>

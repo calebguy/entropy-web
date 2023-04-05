@@ -33,7 +33,7 @@ const DashboardPage = observer(
     // acheivements,
   }: DashboardPageProps) => {
     return (
-      <AppLayout>
+      <AppLayout profile={profile}>
         <div className={css("flex", "flex-col", "gap-2")}>
           {!!userInvitesCount && (
             <Pane size={PaneSize.Lg} block>
@@ -71,7 +71,7 @@ const DashboardPage = observer(
                     )}
                   </div>
                   {AppStore.auth.profile?.seen_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.entropy_score} images</Text> :
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.entropy_score}</Text> :
                     <Text>Loading...</Text>
                   }
                 </div>
@@ -116,7 +116,7 @@ const DashboardPage = observer(
               </div>
             </Pane>
           </div>
-          <div className={css("flex", "gap-2")}>
+          {/* <div className={css("flex", "gap-2")}>
             <Pane size={PaneSize.Lg} block>
               <div className={css("text-center")}>
                 <Text>Your upcoming tweets</Text>
@@ -127,7 +127,7 @@ const DashboardPage = observer(
                 <Text>Queue</Text>
               </div>
             </Pane>
-          </div>
+          </div> */}
           <div>
             <div className={css("my-2")}>
               <Text size={TextSize.Lg}>Images you may like...</Text>
@@ -156,7 +156,7 @@ const DashboardPage = observer(
               </div>
               <Link href={"/sort"} className={css("mt-2", "inline-block")}>
                 <Button intent={ButtonIntent.Secondary} round>
-                  explore
+                  Explore
                 </Button>
               </Link>
             </Pane>
@@ -171,13 +171,22 @@ const DashboardPage = observer(
                 <div className={css("mt-2", "flex", "justify-center")}>
                   <Link href={"/leaderboard"}>
                     <Button intent={ButtonIntent.Secondary} round>
-                      view leaderboard
+                      View leaderboard
                     </Button>
                   </Link>
                 </div>
               </div>
             </Pane>
           </div>
+          <Pane size={PaneSize.Lg} block>
+            <div className={css("mt-2", "flex", "justify-center")}>
+              <Link href={"/upload"}>
+                <Button intent={ButtonIntent.Secondary} round>
+                  Upload images
+                </Button>
+              </Link>
+            </div>
+          </Pane>
         </div>
       </AppLayout>
     );

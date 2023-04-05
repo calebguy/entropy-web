@@ -36,7 +36,7 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
   const hasLinks =
     !!profile.twitter_handle || !!profile.ig_handle || !!profile.website;
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div className={css("flex", "flex-col", "md:flex-row", "gap-2")}>
         <div className={css("grow")}>
           <Pane size={PaneSize.Lg} block>
@@ -155,17 +155,6 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
                 style={{ backgroundImage: `url(${photo.url})` }}
               />
             </Link>
-            // <Link
-            //   key={`curator-image-${photo.url}-${index}`}
-            //   href={`${profile.slug}/image/${photo.id}`}
-            // >
-            //   <img
-            //     className={css("rounded-md")}
-            //     src={photo.url}
-            //     height="auto"
-            //     width="auto"
-            //   />
-            // </Link>
           ))}
         </div>
       )}

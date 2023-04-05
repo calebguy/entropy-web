@@ -20,29 +20,22 @@ import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
 import { observer } from "mobx-react-lite";
 import AppStore from "../store/App.store";
-
-
+import { GetSortResponse } from "../interfaces";
 
 interface SortPageProps {
   profile: Profile;
   image: Photo;
   twitterChannels: TwitterChannel[];
   currentChannel: TwitterChannel;
-  imageTwitterChannel: any;
 }
+
+
 interface ImageData {
   id: number;
 }
 
-async function handleClick() {
-  // const data = await HttpForServer.approveImage();
-}
 
-async function handleDecline() {
-  const data = await HttpForServer.declineImage();
-}
-
-const SortPage = observer(({ profile, twitterChannels, currentChannel, image, imageTwitterChannel }: SortPageProps) => {
+const SortPage = observer(({ profile, twitterChannels, currentChannel, image }: SortPageProps) => {
   const handleApproveImage = async () => {
     try {
       const imageData: ImageData = { id: image.id };
@@ -60,7 +53,7 @@ const SortPage = observer(({ profile, twitterChannels, currentChannel, image, im
     }
   };
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
         <div
           className={css(
@@ -207,13 +200,11 @@ export const getServerSideProps: GetServerSideProps<SortPageProps> = async ({
   res,
 }) => {
   const {
-    data: { image, twitter_channels, current_channel },
+    data
   } = await HttpForServer.getSort();
   return {
     props: {
-      image,
-      currentChannel: current_channel,
-      twitterChannels: twitter_channels,
+      ...data
     },
   };
 };

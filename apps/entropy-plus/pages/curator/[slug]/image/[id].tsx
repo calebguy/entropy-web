@@ -22,7 +22,7 @@ interface ImageByIdProps {
 
 const ImageById = ({ profile, image }: ImageByIdProps) => {
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div
         className={css(
           "h-full",

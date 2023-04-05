@@ -1,3 +1,4 @@
+
 import {
   AspectRatio,
   Button,
@@ -43,9 +44,9 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
               <div className={css("flex", "items-center", "justify-between")}>
                 <div className={css("flex", "items-center", "gap-2")}>
                   <ProfileIcon profile={profile} />
-                  <Button intent={ButtonIntent.DeepBlue} round>
+                  {/* <Button intent={ButtonIntent.DeepBlue} round>
                     Edit Profile
-                  </Button>
+                  </Button> */}
                 </div>
                 <div className={css("flex", "flex-col", "items-end")}>
                   <Text size={TextSize.Xxl} bold>
@@ -57,15 +58,15 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
                 </div>
               </div>
               <div className={css("flex", "gap-1", "flex-col", "sm:flex-row")}>
-                <Text size={TextSize.Lg}>@{profile.name}</Text>
+                <Text size={TextSize.Lg}>@{profile.handle}</Text>
                 {profile.bio && (
                   <div className={css("break-words")}>
                     <Text intent={TextIntent.Gray}>{profile.bio}</Text>
                   </div>
                 )}
-                {AppStore.auth.profile && (
+                {/* {AppStore.auth.profile && (
                   <Text>{jsonify(AppStore.auth.profile)}</Text>
-                )}
+                )} */}
               </div>
               {/* {acheivmentKeys.length > 0 && (
                 <div
@@ -151,9 +152,20 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
                   "rounded-md"
                 )}
                 ratio={`1/1`}
-                style={{ backgroundImage: `url(${photo.image?.url})` }}
+                style={{ backgroundImage: `url(${photo.url})` }}
               />
             </Link>
+            // <Link
+            //   key={`curator-image-${photo.url}-${index}`}
+            //   href={`${profile.slug}/image/${photo.id}`}
+            // >
+            //   <img
+            //     className={css("rounded-md")}
+            //     src={photo.url}
+            //     height="auto"
+            //     width="auto"
+            //   />
+            // </Link>
           ))}
         </div>
       )}

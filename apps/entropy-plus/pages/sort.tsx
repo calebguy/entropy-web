@@ -18,26 +18,47 @@ import ProfileIcon from "../components/ProfileIcon";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
+import { observer } from "mobx-react-lite";
+import AppStore from "../store/App.store";
+
 
 
 interface SortPageProps {
+  profile: Profile;
   image: Photo;
   twitterChannels: TwitterChannel[];
   currentChannel: TwitterChannel;
+  imageTwitterChannel: any;
 }
+interface ImageData {
+  id: number;
+}
+
 async function handleClick() {
-  const data = await HttpForServer.approveImage();
+  // const data = await HttpForServer.approveImage();
 }
 
 async function handleDecline() {
   const data = await HttpForServer.declineImage();
 }
 
-const SortPage = ({
-  twitterChannels,
-  currentChannel,
-  image,
-}: SortPageProps) => {
+const SortPage = observer(({ profile, twitterChannels, currentChannel, image, imageTwitterChannel }: SortPageProps) => {
+  const handleApproveImage = async () => {
+    try {
+      const imageData: ImageData = { id: image.id };
+      await HttpForServer.approveImage(imageData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleDeclineImage = async () => {
+    try {
+      const imageData: ImageData = { id: image.id };
+      await HttpForServer.declineImage(imageData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <AppLayout>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -77,17 +98,21 @@ const SortPage = ({
           </div>
         </div>
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
-          <Button onClick={handleDecline} size={ButtonSize.Lg} block>
-            <Icon name={IconName.Close} />
-          </Button>
-          <Button onClick={handleClick} size={ButtonSize.Lg} block>
-            <Icon name={IconName.Heart} />
-          </Button>
+          {AppStore.auth.profile && (
+            <Button onClick={handleDeclineImage} size={ButtonSize.Lg} block>
+              <Icon name={IconName.Close} />
+            </Button>
+          )}
+          {AppStore.auth.profile && (
+            <Button onClick={handleApproveImage} size={ButtonSize.Lg} block>
+              <Icon name={IconName.Heart} />
+            </Button>
+          )}
         </div>
       </div>
     </AppLayout>
   );
-};
+});
 
 const TwitterChannelIcon = ({ imageUrl }: { imageUrl: string }) => {
   return (
@@ -133,7 +158,7 @@ const TwitterProfileSelector = ({
       <button onClick={() => setShow(!show)} className={css()}>
         <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
       </button>
-      {show && (
+      {/* {show && (
         <>
           {channels
             .filter(
@@ -150,7 +175,7 @@ const TwitterProfileSelector = ({
               </Link>
             ))}
         </>
-      )}
+      )} */}
     </div>
   );
 };

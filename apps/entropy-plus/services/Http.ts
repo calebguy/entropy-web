@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
+import AppStore from "../store/App.store";
 import {
   GetLeaderboardResponse,
   LoginDto,
@@ -16,6 +17,17 @@ import {
 
 interface MeProps {
   me: Profile;
+}
+
+interface ImageData {
+  id: number;
+}
+
+interface ProfileData {
+  slug: string;
+}
+interface ImageData {
+  id: number;
 }
 
 class EntropyHttp {
@@ -65,34 +77,46 @@ class EntropyHttp {
   }
 
   async getProfile(slug: string) {
-    const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
-    const response = await fetch(url);
-    const profileData = await response.json();
-    const curatorData = profileData.data;
+    const profileUrl = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
+    const profileResponse = await fetch(profileUrl);
+    const profileData = await profileResponse.json();
+    const photoUrl = `https://entropy-plus.herokuapp.com/api/${slug}/photos/`;
+    const photoResponse = await fetch(photoUrl);
+    const photoData = await photoResponse.json();
 
-    // // get images from local host api/${slug}/images
-    // const url2 = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/images/`;
-    // const response2 = await fetch(url2);
-    // const imageData = await response2.json();
-    // const image = imageData[0]
-    // console.log("image", image)
+    const profileImages: Photo[] = [];
+    for (let i = 0; i < 30 && i < photoData.length; i++) {
+      profileImages.push(photoData[i]);
+    }
 
-    // iterate through data and push them into an array
 
-    const data = { profile: profileData };
-    // return { data: data };
-    return { data: GET_MOCK_PROFILE_RESPONSE() };
-  }
 
-  async getCurrentProfile() {
-    return { data: GET_MOCK_PROFILE_RESPONSE() };
-    // return this.http.get<GetProfileResponse>(`/profile/${slug}`);
+    const profile = {
+      profile_image: {
+        url: profileData.profile_image,
+        height_field: 100,
+        width_field: 100,
+      },
+      id: profileData.id,
+      bio: profileData.bio,
+      name: profileData.name,
+      handle: profileData.handle,
+      twitter_handle: profileData.twitter_handle,
+      ig_handle: profileData.ig_handle,
+      website: profileData.website,
+      slug: profileData.slug,
+      entropy_score: profileData.entropy_score,
+    };
+
+
+    const data = { profile: profile, images: profileImages }
+    return { data: data };
   }
 
   async getImageData() {
     const profile = await this.getProfile("brian");
     const slug = profile.data.profile.slug;
-    const url = `https://entropy-plus.herokuapp.com/api/v1/images/?slug=${slug}`;
+    const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${slug}`;
     const response = await fetch(url);
     const imageData = await response.json();
     const data = imageData[0];
@@ -108,41 +132,93 @@ class EntropyHttp {
   async getSort() {
     const imageData = await this.getImageData();
     const twitterChannels = await this.getTwitterChannels();
+    const image_channel = imageData.twitter_channel;
+    const response = await fetch(
+      `https://entropy-plus.herokuapp.com/api/twitter-channels/${image_channel}`
+    );
+
+    const image_twitter_channel = await response.json();
+
     const data = {
       image: imageData,
       twitter_channels: twitterChannels,
-      current_channel: twitterChannels[0],
+      current_channel: image_twitter_channel,
+      image_twitter_channel: image_twitter_channel,
     };
     return { data: data };
-    // return this.http.get<GetSortResponse>("/sort");
   }
-  async approveImage() {
+  async approveImage(imageData: ImageData) {
     try {
-      const profile = await this.getProfile("brian");
+      const getMe = AppStore.auth.profile?.handle;
+      if (!getMe) {
+        throw new Error("Profile handle is not defined.");
+      }
+      const profile = await this.getProfile(getMe);
       const slug = profile.data.profile.slug;
-      const imageData = await this.getImageData();
       const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
-
       const response = await this.http.patch(url);
+      console.log(response, "approve")
+      if (response.status === 200) {
+        window.location.reload();
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
-  async declineImage() {
-    try {
-      const profile = await this.getProfile("brian");
-      const slug = profile.data.profile.slug;
-      const imageData = await this.getImageData();
-      const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
 
+  async declineImage(imageData: ImageData) {
+    try {
+      const getMe = AppStore.auth.profile?.handle;
+      if (!getMe) {
+        throw new Error("Profile handle is not defined.");
+      }
+      const profile = await this.getProfile(getMe);
+      const slug = profile.data.profile.slug;
+      const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
       const response = await this.http.patch(url);
+      console.log(response, "decline")
+      if (response.status === 200) {
+        window.location.reload();
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
   async getCuratorImage(curatorSlug: string, id: string) {
+    const photoURL = `https://entropy-plus.herokuapp.com/api/brian/photos/1842/`
+    const response = await fetch(photoURL);
+    const responseData = await response.json();
+
+    const profileUrl = `https://entropy-plus.herokuapp.com/api/profiles/brian/`;
+    const profileResponse = await fetch(profileUrl);
+    const profileData = await profileResponse.json();
+
+    const profile = {
+      profile_image: {
+        url: profileData.profile_image,
+        height_field: 100,
+        width_field: 100,
+      },
+      id: profileData.id,
+      bio: profileData.bio,
+      name: profileData.name,
+      handle: profileData.handle,
+      twitter_handle: profileData.twitter_handle,
+      ig_handle: profileData.ig_handle,
+      website: profileData.website,
+      slug: profileData.slug,
+      entropy_score: profileData.entropy_score,
+    };
+
+    const data = {
+      image: responseData,
+      profile: profile,
+    };
+
+
+    return { data: data };
     return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
     // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
   }
@@ -151,8 +227,6 @@ class EntropyHttp {
     const me = await this.getProfile("brian");
     const slug = me.data.profile.slug;
     const url = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
-
-    // leaderboard data
     const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
     const leaderboardResponse = await fetch(leaderboardUrl);
     const leaderboardResponseData = await leaderboardResponse.json();
@@ -283,11 +357,11 @@ class EntropyHttp {
       curators.push(profile);
     }
 
-    const GET_MOCK_LEADERBOARD_RESPONSE = (): GetLeaderboardResponse => ({
+    const CREATE_LEADERBOARD_DATA = (): GetLeaderboardResponse => ({
       curators: curators, // set the array as the value for curators property
     });
 
-    return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
+    return { data: CREATE_LEADERBOARD_DATA() };
 
     // return this.http.get<GetLeaderboardResponse>("/leaderboard");
   }
@@ -333,6 +407,7 @@ class _HttpForServer extends EntropyHttp {
       (e) => Promise.reject(e)
     );
   }
+
 }
 
 class _HttpForClient extends EntropyHttp {

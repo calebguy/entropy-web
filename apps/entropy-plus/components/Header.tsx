@@ -7,8 +7,14 @@ import Dev from "../environment/Dev";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
 import ProfileIcon from "./ProfileIcon";
+import { Profile } from "../interfaces";
 
-const Header = observer(() => {
+
+interface HeaderProps {
+  profile: Profile;
+}
+
+const Header = observer(({ profile }: HeaderProps) => {
   return (
     <div className={css("flex", "justify-between", "items-center")}>
       {AppStore.auth.isLoggedIn && (
@@ -17,7 +23,7 @@ const Header = observer(() => {
             <Link href={AppStore.auth.isLoggedIn ? "/sort" : "/"}>
               <Icon name={IconName.Logo} size={41} />
             </Link>
-            <Dev>
+            {/* <Dev>
               <div
                 className={css(
                   "border-[1px]",
@@ -39,7 +45,7 @@ const Header = observer(() => {
                   <Text>logout</Text>
                 </button>
               </div>
-            </Dev>
+            </Dev> */}
           </div>
           <div className={css("flex", "items-center", "gap-6")}>
             <Link href={"/upload"}>
@@ -49,7 +55,7 @@ const Header = observer(() => {
               <Icon name={IconName.FourSquare} size={29} />
             </Link>
             {AppStore.auth.profile && (
-              <ProfileIcon profile={AppStore.auth.profile} />
+              <img src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
             )}
           </div>
         </>

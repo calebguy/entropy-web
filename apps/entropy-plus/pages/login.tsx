@@ -23,7 +23,7 @@ const Login = observer(() => {
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
         onSubmit={({ username, password }: LoginDto) =>
           AppStore.auth.login({ username, password }).then(() => {
-            return Router.push("/me");
+            return Router.push("/sort");
           })
         }
       >

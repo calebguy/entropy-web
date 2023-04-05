@@ -53,7 +53,7 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
               <Link href={"/"} className={css("w-full")}>
                 <Pane size={PaneSize.Lg} block>
                   <div className={css("text-center")}>
-                    <Text>Sourced from: TEST</Text>
+                    <Text>Source</Text>
                   </div>
                 </Pane>
               </Link>
@@ -69,7 +69,7 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
         </div>
         <div className={css("flex", "items-center", "order-1", "md:order-2")}>
           <AspectRatio
-            ratio={`${image.image?.width_field}/${image.image?.height_field}`}
+            ratio={`1/1`}
             className={css(
               "bg-contain",
               "bg-center",

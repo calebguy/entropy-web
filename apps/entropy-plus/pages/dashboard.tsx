@@ -10,7 +10,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { css, formatWithThousandsSeparators, objectKeys } from "utils";
+import { css, formatWithThousandsSeparators, objectKeys, jsonify } from "utils";
 import AcheivementPill from "../components/AcheivementPill";
 import Leaderboard from "../components/Leaderboard";
 import ProfileIcon from "../components/ProfileIcon";
@@ -18,7 +18,7 @@ import RankEmblem from "../components/RankEmblem";
 import { GetDashboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
-
+import AppStore from "../store/App.store";
 interface DashboardPageProps extends GetDashboardResponse { }
 
 const DashboardPage = observer(
@@ -46,7 +46,7 @@ const DashboardPage = observer(
                 )}
               >
                 <Text>Invite {userInvitesCount} friends to join entropy+</Text>
-                <Link href={"/users/invite"}>
+                <Link href={"https://entropyplus.xyz/users/invite"}>
                   <Button intent={ButtonIntent.Orange} round>
                     invite
                   </Button>
@@ -57,6 +57,7 @@ const DashboardPage = observer(
           <Pane size={PaneSize.Lg} block>
             <div className={css("flex", "flex-col", "gap-2")}>
               <div className={css("flex", "justify-between")}>
+
                 <Text>rank</Text>
                 <Text>Entropy Score</Text>
               </div>
@@ -65,12 +66,14 @@ const DashboardPage = observer(
                   <div className={css("flex", "items-center", "gap-2")}>
                     <RankEmblem rank={rank} />
                     <ProfileIcon profile={profile} />
-                    <Text>@{profile.name}</Text>
+                    {AppStore.auth.profile && (
+                      <Text>@{AppStore.auth.profile?.handle}</Text>
+                    )}
                   </div>
-                  <Text size={TextSize.Xl} bold>
-                    {profile.entropy_score &&
-                      formatWithThousandsSeparators(profile.entropy_score)}
-                  </Text>
+                  {AppStore.auth.profile?.seen_feed_images ?
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.entropy_score} images</Text> :
+                    <Text>Loading...</Text>
+                  }
                 </div>
               </Pane>
               {/* {objectKeys(acheivements).length > 0 && (
@@ -94,7 +97,10 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>You have seen</Text>
                 <div className={css("text-center")}>
-                  <Text size={TextSize.Xl}>{allPhotosCount} images</Text>
+                  {AppStore.auth.profile?.seen_feed_images ?
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.seen_feed_images} images</Text> :
+                    <Text>No images have been seen yet.</Text>
+                  }
                 </div>
               </div>
             </Pane>
@@ -102,7 +108,10 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>Images curated</Text>
                 <div className={css("text-center")}>
-                  <Text size={TextSize.Xl}>{curatedPhotosCount}</Text>
+                  {AppStore.auth.profile?.seen_feed_images ?
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images} images</Text> :
+                    <Text>Loading...</Text>
+                  }
                 </div>
               </div>
             </Pane>

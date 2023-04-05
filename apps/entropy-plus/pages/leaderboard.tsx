@@ -6,13 +6,13 @@ import { GetLeaderboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
 
-interface LeaderboardPageProps extends GetLeaderboardResponse {}
+interface LeaderboardPageProps extends GetLeaderboardResponse { }
 
 const LeaderboardPage = ({ curators }: LeaderboardPageProps) => {
   return (
     <AppLayout>
       <div className={css("mb-2")}>
-        <Text size={TextSize.Lg}>Daily Leaderboard</Text>
+        <Text size={TextSize.Lg}>Leaderboard</Text>
       </div>
       <Pane size={PaneSize.Lg} block>
         <Leaderboard curators={curators} />

@@ -19,7 +19,6 @@ export const config = {
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return new Promise((resolve, reject) => {
-    console.log("req.url", req.url);
     const pathname = url.parse(req.url as string).pathname;
     const isLogin = pathname === PROXY_PREFIX + "/api/login/token";
     const isRefresh = pathname === PROXY_PREFIX + "/api/login/token/refresh";
@@ -32,9 +31,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
     // rewrite the url & add a trailing slash to make django happy
     req.url = req.url?.replace(PROXY_PREFIX, "") + "/";
-
-    console.log(env.api.baseUrl + req.url);
-
     proxy
       .once("proxyRes", (proxyRes, req: any, res: any) => {
         if (isLogin || isRefresh) {
@@ -45,8 +41,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
 
           proxyRes.on("end", () => {
             try {
-              console.log(responseBody);
-              console.log("responseBody", responseBody);
               const authData = JSON.parse(responseBody) as AuthTokens;
               const { detail, access } = authData;
               // detail is only returned on invalid credentials

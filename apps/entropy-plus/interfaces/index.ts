@@ -58,6 +58,13 @@ export interface Profile {
   wallet_address: Nullable<string>;
 }
 
+export interface HeaderProfile {
+  id: number;
+  handle: string;
+  bio: Nullable<string>;
+  profile_image: { url: any; height_field: number; width_field: number; } | undefined;
+}
+
 interface User {
   username: string;
   first_name: Nullable<string>;

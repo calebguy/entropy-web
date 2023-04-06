@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 import { Profile } from "../interfaces";
 import { useState, useEffect } from 'react'
 import AppStore from "../store/App.store";
-import { HttpForServer, getDashboardData, getSuggestedPhotos, getDashboardLeaderboard, getRank } from "../services/Http";
+import { HttpForServer, getDashboardData, getFullDashboardLeaderboard, getRank } from "../services/Http";
 
 
 
@@ -46,5 +46,16 @@ const LeaderboardPage = observer(({ curators }: LeaderboardPageProps) => {
     </AppLayout>
   );
 });
+
+
+export async function getServerSideProps() {
+  const curators = await getFullDashboardLeaderboard();
+  return {
+    props: {
+      curators,
+    },
+  };
+}
+
 
 export default LeaderboardPage;

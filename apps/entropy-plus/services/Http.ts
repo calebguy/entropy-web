@@ -290,6 +290,8 @@ class EntropyHttp {
       curators.push(profile);
     }
 
+    console.log(curators)
+
     const CREATE_LEADERBOARD_DATA = (): GetLeaderboardResponse => ({
       curators: curators,
     });
@@ -495,6 +497,53 @@ export async function getDashboardLeaderboard() {
   ) {
     topThreeCurators = leaderboardResponseData
       .slice(0, 3)
+      .map((curator: any) => {
+        const profile = {
+          profile_image: {
+            url: curator.profile_image,
+            height_field: 100,
+            width_field: 100,
+          },
+          id: curator.id,
+          bio: curator.bio,
+          name: curator.name,
+          handle: curator.handle,
+          twitter_handle: curator.twitter_handle,
+          ig_handle: curator.ig_handle,
+          website: curator.website,
+          slug: curator.slug,
+          admin_approved: curator.admin_approved,
+          profile_views: curator.profile_views,
+          seen_feed_images: curator.seen_feed_images,
+          linked_feed_images: curator.liked_feed_images,
+          entropy_score: curator.entropy_score,
+          total_feed_impressions: curator.total_feed_impressions,
+          profile_awards: curator.profile_awards,
+          wallet_address: curator.wallet_address,
+        };
+        return profile;
+      });
+  }
+  const data = {
+    rankedCurators: topThreeCurators,
+  };
+
+  return topThreeCurators;
+}
+
+
+export async function getFullDashboardLeaderboard() {
+  const entropyHttp = new EntropyHttp('https://entropy-plus.herokuapp.com/api/');
+  const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+  const leaderboardResponse = await fetch(leaderboardUrl);
+  const leaderboardResponseData = await leaderboardResponse.json();
+
+  let topThreeCurators: Profile[] = [];
+  if (
+    Array.isArray(leaderboardResponseData) &&
+    leaderboardResponseData.length > 0
+  ) {
+    topThreeCurators = leaderboardResponseData
       .map((curator: any) => {
         const profile = {
           profile_image: {

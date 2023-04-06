@@ -56,7 +56,11 @@ const Header = observer(({ profile }: HeaderProps) => {
               <Icon name={IconName.FourSquare} size={29} />
             </Link>
             {AppStore.auth.profile && (
-              <Image width={100} height={100} src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
+              <Link href={`/curator/${AppStore.auth.profile.handle}`}>
+                {AppStore.auth.profile && (
+                  <Image width={100} height={100} src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
+                )}
+              </Link>
             )}
           </div>
         </>

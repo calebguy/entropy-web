@@ -5,17 +5,38 @@ import Leaderboard from "../components/Leaderboard";
 import { GetLeaderboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { observer } from "mobx-react-lite";
-import { HttpForServer } from "../services/Http";
 import { Profile } from "../interfaces";
+import { useState, useEffect } from 'react'
+import AppStore from "../store/App.store";
+import { HttpForServer, getDashboardData, getSuggestedPhotos, getDashboardLeaderboard, getRank } from "../services/Http";
+
 
 
 interface LeaderboardPageProps extends GetLeaderboardResponse {
   profile: Profile;
+
 }
 
-const LeaderboardPage = observer(({ curators, profile }: LeaderboardPageProps) => {
+const LeaderboardPage = observer(({ curators }: LeaderboardPageProps) => {
+  const [dashboardData, setDashboardData] = useState({})
+  const [profile, setProfile] = useState(AppStore.auth.profile);
+  const [rank, setRank] = useState(null);
+  const imgURL = "https://res.cloudinary.com/dpooqlfdf/" + AppStore.auth.profile?.profile_image;
+  useEffect(() => {
+    // Fetch data on the client side using an API call
+    const fetchData = async () => {
+      if (AppStore.auth.profile) {
+        const data = await getDashboardData(AppStore.auth.profile.handle);
+        const rankData = await getRank(AppStore.auth.profile.handle);
+        setDashboardData(data);
+        setRank(rankData?.data?.rank);
+        setProfile(AppStore.auth.profile);
+      }
+    }
+    fetchData()
+  }, [])
   return (
-    <AppLayout profile={profile}>
+    <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("mb-2")}>
         <Text size={TextSize.Lg}>Daily Leaderboard</Text>
       </div>
@@ -25,15 +46,5 @@ const LeaderboardPage = observer(({ curators, profile }: LeaderboardPageProps) =
     </AppLayout>
   );
 });
-export const getServerSideProps: GetServerSideProps<
-  LeaderboardPageProps
-> = async () => {
-  const { data } = await HttpForServer.getLeaderboard();
-  return {
-    props: {
-      ...data,
-    },
-  };
-};
 
 export default LeaderboardPage;

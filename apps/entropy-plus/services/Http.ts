@@ -291,11 +291,6 @@ class EntropyHttp {
       curators.push(profile);
     }
 
-    const getMe = AppStore.auth.profile;
-    if (!getMe) {
-      throw new Error("Profile handle is not defined.");
-    };
-
     const CREATE_LEADERBOARD_DATA = (): GetLeaderboardResponse => ({
       curators: curators,
     });

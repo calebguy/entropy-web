@@ -21,7 +21,7 @@ const Header = observer(({ profile }: HeaderProps) => {
       {AppStore.auth.isLoggedIn && (
         <>
           <div className={css("flex", "items-center", "gap-4")}>
-            <Link href={AppStore.auth.isLoggedIn ? "/sort" : "/"}>
+            <Link href={"/sort"}>
               <Icon name={IconName.Logo} size={41} />
             </Link>
             {/* <Dev>

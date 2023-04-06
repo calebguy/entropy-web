@@ -155,8 +155,8 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>Images curated</Text>
                 <div className={css("text-center")}>
-                  {AppStore.auth.profile?.linked_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images} images</Text> :
+                  {AppStore.auth.profile?.liked_feed_images ?
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.liked_feed_images} images</Text> :
                     <Text>Loading...</Text>
                   }
                 </div>

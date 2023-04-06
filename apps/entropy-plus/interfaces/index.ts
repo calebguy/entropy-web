@@ -53,7 +53,7 @@ export interface Profile {
   admin_approved: boolean;
   profile_views: Nullable<string>;
   seen_feed_images: Nullable<string>;
-  linked_feed_images: Nullable<string>;
+  liked_feed_images: Nullable<string>;
   total_feed_impressions: Nullable<string>;
   profile_awards: Nullable<string>;
   wallet_address: Nullable<string>;

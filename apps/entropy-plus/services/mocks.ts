@@ -65,7 +65,7 @@ export const MOCK_PROFILE: Profile = {
   admin_approved: true,
   profile_views: null,
   seen_feed_images: null,
-  linked_feed_images: null,
+  liked_feed_images: null,
   entropy_score: "1040360",
   total_feed_impressions: "12",
   profile_awards: null,

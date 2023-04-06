@@ -21,11 +21,14 @@ const Login = observer(() => {
       <Icon name={IconName.Logo} />
       <Form
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
-        onSubmit={({ username, password }: LoginDto) =>
-          AppStore.auth.login({ username, password }).then(() => {
-            return Router.push("/sort");
-          })
-        }
+        onSubmit={({ username, password }: LoginDto) => {
+          const lowercaseUsername = username.toLowerCase();
+          return AppStore.auth
+            .login({ username: lowercaseUsername, password })
+            .then(() => {
+              return Router.push("/sort");
+            });
+        }}
       >
         <TextInput
           name={"username"}

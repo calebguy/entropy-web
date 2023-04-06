@@ -23,6 +23,7 @@ const Login = observer(() => {
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
         onSubmit={({ username, password }: LoginDto) => {
           const lowercaseUsername = username.toLowerCase();
+          // we'll probably have to change this and check if lowercase is the correct format
           return AppStore.auth
             .login({ username: lowercaseUsername, password })
             .then(() => {

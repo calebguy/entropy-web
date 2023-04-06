@@ -17,23 +17,45 @@ import ProfileIcon from "../components/ProfileIcon";
 import RankEmblem from "../components/RankEmblem";
 import { GetDashboardResponse } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer } from "../services/Http";
+import { HttpForServer, getDashboardData, getSuggestedPhotos, getDashboardLeaderboard, getRank } from "../services/Http";
 import AppStore from "../store/App.store";
+import { useState, useEffect } from 'react'
+import { json } from "stream/consumers";
+
+
 interface DashboardPageProps extends GetDashboardResponse { }
 
 const DashboardPage = observer(
   ({
-    profile,
-    rankedCurators,
     suggestedPhotos,
     userInvitesCount,
+    rankedCurators,
     curatedPhotosCount,
     allPhotosCount,
-    rank,
     // acheivements,
   }: DashboardPageProps) => {
+    const [dashboardData, setDashboardData] = useState({})
+    const [profile, setProfile] = useState(AppStore.auth.profile);
+    const [rank, setRank] = useState(null);
+    const imgURL = "https://res.cloudinary.com/dpooqlfdf/" + AppStore.auth.profile?.profile_image;
+
+
+
+    useEffect(() => {
+      // Fetch data on the client side using an API call
+      const fetchData = async () => {
+        if (AppStore.auth.profile) {
+          const data = await getDashboardData(AppStore.auth.profile.handle);
+          const rankData = await getRank(AppStore.auth.profile.handle);
+          setDashboardData(data);
+          setRank(rankData?.data?.rank);
+          setProfile(AppStore.auth.profile);
+        }
+      }
+      fetchData()
+    }, [])
     return (
-      <AppLayout profile={profile}>
+      <AppLayout profile={AppStore.auth.profile!}>
 
         <div className={css("flex", "flex-col", "gap-2")}>
           {!!userInvitesCount && (
@@ -65,10 +87,34 @@ const DashboardPage = observer(
               <Pane size={PaneSize.Lg} block>
                 <div className={css("flex", "items-center", "justify-between")}>
                   <div className={css("flex", "items-center", "gap-2")}>
-                    <RankEmblem rank={rank} />
-                    <ProfileIcon profile={profile} />
-                    {AppStore.auth.profile && (
+                    {rank !== null && <RankEmblem rank={rank} />}
+                    {profile && (
+                      <Link href={`/curator/${profile.slug}`}>
+                        <AspectRatio
+                          style={
+                            imgURL
+                              ? {
+                                backgroundImage: `url(${imgURL})`,
+                              }
+                              : undefined
+                          }
+                          className={css(
+                            "w-[35px]",
+                            "border-[1px]",
+                            "border-solid",
+                            "border-black",
+                            "rounded-full",
+                            "bg-cover",
+                            { "bg-brand": !imgURL }
+                          )}
+                          ratio={"1/1"}
+                        />
+                      </Link>
+                    )}
+                    {AppStore.auth.profile?.handle ? (
                       <Text>@{AppStore.auth.profile?.handle}</Text>
+                    ) : (
+                      <Text>Loading...</Text>
                     )}
                   </div>
                   {AppStore.auth.profile?.seen_feed_images ?
@@ -109,8 +155,8 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>Images curated</Text>
                 <div className={css("text-center")}>
-                  {AppStore.auth.profile?.seen_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images}</Text> :
+                  {AppStore.auth.profile?.linked_feed_images ?
+                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.linked_feed_images} images</Text> :
                     <Text>Loading...</Text>
                   }
                 </div>
@@ -134,27 +180,35 @@ const DashboardPage = observer(
               <Text size={TextSize.Lg}>Images you may like...</Text>
             </div>
             <Pane size={PaneSize.Lg} block>
-              <div className={css("flex", "flex-wrap", "gap-2")}>
-                {suggestedPhotos.map((photo, index) => (
-                  // @next -- where should this link to
-                  <Link
-                    key={`${photo.image?.url}-${index}`}
-                    href={`/sort`}
-                    className={css("inline-block", "max-w-[150px]", "w-full")}
-                  >
-                    <AspectRatio
-                      ratio={"1/1"}
-                      className={css(
-                        "bg-cover",
-                        "bg-center",
-                        "bg-no-repeat",
-                        "rounded-md"
-                      )}
-                      style={{ backgroundImage: `url(${photo.url})` }}
-                    />
-                  </Link>
-                ))}
-              </div>
+              {suggestedPhotos ? (
+                <div className={css("flex", "flex-wrap", "gap-2")}>
+                  {
+                    suggestedPhotos.map((photo, index) => (
+                      // @next -- where should this link to
+                      <Link
+                        key={`${photo.image?.url}-${index}`}
+                        href={`/sort`}
+                        className={css("inline-block", "max-w-[150px]", "w-full")}
+                      >
+                        <AspectRatio
+                          ratio={"1/1"}
+                          className={css(
+                            "bg-cover",
+                            "bg-center",
+                            "bg-no-repeat",
+                            "rounded-md"
+                          )}
+                          style={{ backgroundImage: `url(${photo.url})` }}
+                        />
+                      </Link>
+                    ))
+                  }
+
+                </div>
+              ) : (
+                <Text>Loading...</Text>
+              )
+              }
               <Link href={"/sort"} className={css("mt-2", "inline-block")}>
                 <Button intent={ButtonIntent.Secondary} round>
                   Explore
@@ -194,15 +248,25 @@ const DashboardPage = observer(
   }
 );
 
-export const getServerSideProps: GetServerSideProps<
-  DashboardPageProps
-> = async () => {
-  const { data } = await HttpForServer.getDashboard();
+export async function getServerSideProps() {
+  const { data: suggestedPhotos } = await getSuggestedPhotos();
+  const rankedCurators = await getDashboardLeaderboard();
+
+  let rank = null;
+  if (AppStore.auth.profile?.handle) {
+    const { data: rankData } = await getRank(AppStore.auth.profile.handle);
+    rank = rankData.rank;
+  }
+
+
   return {
     props: {
-      ...data,
+      suggestedPhotos,
+      rankedCurators,
+      rank,
     },
   };
-};
+}
+
 
 export default DashboardPage;

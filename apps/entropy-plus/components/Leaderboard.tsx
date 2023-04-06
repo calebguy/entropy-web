@@ -23,39 +23,46 @@ const Leaderboard = ({ curators }: LeaderboardProps) => {
         </div>
       </div>
       <div className={css("flex", "flex-col", "gap-2")}>
-        {curators.map((curator, index) => {
-          let newIndex = index + 1;
-          let scoreTextSize;
-          if (index === 0) {
-            scoreTextSize = TextSize.Xl;
-          } else if (index === 1) {
-            scoreTextSize = TextSize.Lg;
-          } else {
-            scoreTextSize = TextSize.Md;
-          }
-          return (
-            <Pane size={PaneSize.Lg} block>
-              <div className={css("grid", "grid-cols-6", "gap-2")}>
-                <div className={css("flex", "items-center", "col-span-1")}>
-                  <RankEmblem rank={newIndex} />
-                </div>
-                <div
-                  className={css("flex", "items-center", "gap-2", "col-span-3")}
-                >
-                  <ProfileIcon profile={curator} />
-                  <Text>@{curator.handle}</Text>
-                </div>
-                {curator.entropy_score && (
-                  <div className={css("flex", "items-center", "col-span-2")}>
-                    <Text size={scoreTextSize}>
-                      {formatWithThousandsSeparators(curator.entropy_score)}
-                    </Text>
+        {curators ? (
+
+          curators.map((curator, index) => {
+            let newIndex = index + 1;
+            let scoreTextSize;
+            if (index === 0) {
+              scoreTextSize = TextSize.Xl;
+            } else if (index === 1) {
+              scoreTextSize = TextSize.Lg;
+            } else {
+              scoreTextSize = TextSize.Md;
+            }
+            return (
+              <Pane size={PaneSize.Lg} block>
+                <div className={css("grid", "grid-cols-6", "gap-2")}>
+                  <div className={css("flex", "items-center", "col-span-1")}>
+                    <RankEmblem rank={newIndex} />
                   </div>
-                )}
-              </div>
-            </Pane>
-          );
-        })}
+                  <div
+                    className={css("flex", "items-center", "gap-2", "col-span-3")}
+                  >
+                    <ProfileIcon profile={curator} />
+                    <Text>@{curator.handle}</Text>
+                  </div>
+                  {curator.entropy_score && (
+                    <div className={css("flex", "items-center", "col-span-2")}>
+                      <Text size={scoreTextSize}>
+                        {formatWithThousandsSeparators(curator.entropy_score)}
+                      </Text>
+                    </div>
+                  )}
+                </div>
+              </Pane>
+            );
+          })
+        ) : (
+          <div className={css("flex", "items-center", "justify-center")}>
+            <Text>Unable to load leaderboard.</Text>
+          </div>
+        )}
       </div>
     </div>
   );

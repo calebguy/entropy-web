@@ -9,6 +9,9 @@ interface ProfileIconProps {
 
 const ProfileIcon = ({ profile }: ProfileIconProps) => {
   const imageUrl = "https://res.cloudinary.com/dpooqlfdf/" + profile?.profile_image?.url;
+  if (!profile) {
+    return null; // Return null if the profile prop is null or undefined
+  }
   return (
     <Link href={`/curator/${profile.slug}`}>
       <AspectRatio

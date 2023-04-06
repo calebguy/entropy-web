@@ -10,8 +10,7 @@ import {
   Profile,
 } from "../interfaces";
 import { AuthTokens } from "./../interfaces/index";
-import { useSession } from "next-auth/react"
-  ;
+;
 
 
 import App from "next/app";

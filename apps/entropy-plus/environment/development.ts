@@ -1,6 +1,6 @@
 import { Env } from ".";
 
-const proxyUrl = "https://entropy-plus.herokuapp.com/";
+const proxyUrl = "https://api.entropyplus.xyz";
 // const proxyUrl = null;
 
 const env: Env = {

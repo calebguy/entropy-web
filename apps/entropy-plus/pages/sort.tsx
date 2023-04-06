@@ -98,12 +98,12 @@ const SortPage = observer(({ image, twitterChannels, currentChannel }: SortPageP
             )}
             style={{ backgroundImage: `url(${image.url})` }}
           />
-          {/* <div className={css("self-start", "-my-1")}>
+          <div className={css("self-start", "-my-1")}>
             <TwitterProfileSelector
               channels={twitterChannels}
               currentChannel={currentChannel}
             />
-          </div> */}
+          </div>
         </div>
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
           {AppStore.auth.profile && (
@@ -141,52 +141,52 @@ const TwitterChannelIcon = ({ imageUrl }: { imageUrl: string }) => {
   );
 };
 
-// interface TwitterProfileSelectorProps {
-//   channels: TwitterChannel[];
-//   currentChannel: TwitterChannel;
-// }
+interface TwitterProfileSelectorProps {
+  channels: TwitterChannel[];
+  currentChannel: TwitterChannel;
+}
 
-// const TwitterProfileSelector = ({
-//   channels,
-//   currentChannel,
-// }: TwitterProfileSelectorProps) => {
-//   const [show, setShow] = useState(false);
-//   return (
-//     <div
-//       className={css(
-//         "flex",
-//         "items-center",
-//         "gap-1",
-//         "border-[1px]",
-//         "p-1",
-//         "rounded-sm",
-//         { "border-black": show, "border-transparent": !show }
-//       )}
-//     >
-//       <button onClick={() => setShow(!show)} className={css()}>
-//         <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
-//       </button>
-//       {/* {show && (
-//         <>
-//           {channels
-//             .filter(
-//               (channel) => channel.screen_name !== currentChannel.screen_name
-//             )
-//             .map((channel) => (
-//               <Link
-//                 className={css("hover:scale-105")}
-//                 key={`twitter-channel-selector-${channel.profile_image_url}`}
-//                 // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
-//                 href={"/sort"}
-//               >
-//                 <TwitterChannelIcon imageUrl={channel.profile_image_url} />
-//               </Link>
-//             ))}
-//         </>
-//       )} */}
-//     </div>
-//   );
-// };
+const TwitterProfileSelector = ({
+  channels,
+  currentChannel,
+}: TwitterProfileSelectorProps) => {
+  const [show, setShow] = useState(false);
+  return (
+    <div
+      className={css(
+        "flex",
+        "items-center",
+        "gap-1",
+        "border-[1px]",
+        "p-1",
+        "rounded-sm",
+        { "border-black": show, "border-transparent": !show }
+      )}
+    >
+      <button onClick={() => setShow(!show)} className={css()}>
+        <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
+      </button>
+      {/* {show && (
+        <>
+          {channels
+            .filter(
+              (channel) => channel.screen_name !== currentChannel.screen_name
+            )
+            .map((channel) => (
+              <Link
+                className={css("hover:scale-105")}
+                key={`twitter-channel-selector-${channel.profile_image_url}`}
+                // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
+                href={"/sort"}
+              >
+                <TwitterChannelIcon imageUrl={channel.profile_image_url} />
+              </Link>
+            ))}
+        </>
+      )} */}
+    </div>
+  );
+};
 
 interface UserPreviewProps {
   profile: Profile;

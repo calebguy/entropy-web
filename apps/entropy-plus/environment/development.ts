@@ -1,6 +1,6 @@
 import { Env } from ".";
 
-const proxyUrl = "https://www.entropyplus.xyz";
+const proxyUrl = "https://entropyplus.xyz";
 // const proxyUrl = null;
 
 const env: Env = {

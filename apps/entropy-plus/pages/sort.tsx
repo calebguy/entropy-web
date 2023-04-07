@@ -10,6 +10,7 @@ import {
   Text,
   TextSize,
 } from "dsl";
+import axios, { AxiosInstance } from "axios";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -58,11 +59,32 @@ const SortPage = observer(({ twitterChannels }: SortPageProps) => {
     fetchData()
   }, []);
 
+  const PatchForServer = {
+    patch: (url: string, data?: any) => axios.patch(url, data),
+    // add other methods here as needed
+  };
 
   const handleApproveImage = async () => {
     try {
       if (image) {
         const imageData: ImageData = { id: image.id };
+        try {
+          const getMe = AppStore.auth.profile?.handle;
+          if (!getMe) {
+            throw new Error("Profile handle is not defined.");
+          }
+          const profile = await HttpForServer.getProfile(getMe);
+          const slug = profile.data.profile.slug;
+          const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
+          const response = await PatchForServer.patch(url);
+          console.log(response, "approve")
+          if (response.status === 200) {
+            const updatedImageData = await await getSortImageData(getMe);
+            setImage(updatedImageData.image);
+          }
+        } catch (error) {
+          console.error(error);
+        }
         await HttpForServer.approveImage(imageData);
       }
     } catch (error) {
@@ -73,7 +95,23 @@ const SortPage = observer(({ twitterChannels }: SortPageProps) => {
     try {
       if (image) {
         const imageData: ImageData = { id: image.id };
-        await HttpForServer.declineImage(imageData);
+        try {
+          const getMe = AppStore.auth.profile?.handle;
+          if (!getMe) {
+            throw new Error("Profile handle is not defined.");
+          }
+          const profile = await HttpForServer.getProfile(getMe);
+          const slug = profile.data.profile.slug;
+          const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
+          const response = await PatchForServer.patch(url);
+          console.log(response, "decline")
+          if (response.status === 200) {
+            const updatedImageData = await await getSortImageData(getMe);
+            setImage(updatedImageData.image);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       }
     } catch (error) {
       console.error(error);

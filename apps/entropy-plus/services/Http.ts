@@ -339,7 +339,6 @@ class _HttpForClient extends EntropyHttp {
 
 
 export async function getDashboardData(slug: string) {
-  console.log("glllladsflasdlflasflasdf")
   const entropyHttp = new EntropyHttp('https://entropy-plus.herokuapp.com/api/');
   const me = await entropyHttp.getProfile(slug);
   const profSlug = me.data.profile.slug;
@@ -622,6 +621,7 @@ export async function getSortImageData(slug: string) {
   };
   return { image: returnedImage };
 }
+
 
 export const HttpForServer = EntropyHttp.createForServer();
 export const HttpForClient = EntropyHttp.createForClient();

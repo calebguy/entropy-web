@@ -127,15 +127,6 @@ class EntropyHttp {
     return { data: data };
   }
 
-  async getImageData() {
-    const profile = await this.getProfile("brian");
-    const handle = profile.data.profile.slug;
-    const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${handle}`;
-    const response = await fetch(url);
-    const imageData = await response.json();
-    const data = imageData[0];
-    return data;
-  }
   async getTwitterChannels() {
     const response = await fetch(
       "https://entropy-plus.herokuapp.com/api/v1/twitter-channels/"

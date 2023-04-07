@@ -10,7 +10,7 @@ export enum DropdownIntent {
 
 export enum DropdownSize {}
 
-const dropdownStyles = cva("", {
+const dropdownStyles = cva("z-10", {
   variants: {
     intent: {
       [DropdownIntent.Primary]: css(

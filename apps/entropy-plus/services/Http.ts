@@ -1,7 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import AppStore from "../store/App.store";
 import {
   GetLeaderboardResponse,
   LoginDto,
@@ -9,11 +8,11 @@ import {
   PostLoginResponse,
   Profile,
 } from "../interfaces";
+import AppStore from "../store/App.store";
 import { AuthTokens } from "./../interfaces/index";
 ;
 
 
-import App from "next/app";
 
 interface MeProps {
   me: Profile;
@@ -81,6 +80,12 @@ class EntropyHttp {
 
   async joinWaitlist(email: string) {
     return this.http.post("/api/waitlist/", { email });
+  }
+
+  getSortImage(slug: string) {
+    return this.http.get(`/api/v1/sort`, {
+      params: {slug}
+    });
   }
 
   async getProfile(slug: string) {

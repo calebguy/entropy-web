@@ -66,7 +66,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       })
       .once("error", reject)
       .web(req, res, {
-        // secure: true,
         target: env.api.baseUrl,
         changeOrigin: true,
         autoRewrite: false,

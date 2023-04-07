@@ -3,25 +3,20 @@ import {
   Button,
   ButtonIntent,
   ButtonSize,
-  Icon,
-  IconName,
   Pane,
   PaneSize,
   Text,
-  TextSize,
+  TextSize
 } from "dsl";
-import axios, { AxiosInstance } from "axios";
-import { GetServerSideProps } from "next";
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { css } from "utils";
 import ProfileIcon from "../components/ProfileIcon";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { observer } from "mobx-react-lite";
 import AppStore from "../store/App.store";
-import { GetSortResponse } from "../interfaces";
-import { HttpForServer, getSortImageData, getTwitterChannel } from "../services/Http";
+import SortPageStore from "../store/SortPage.store";
 
 
 interface SortPageProps {
@@ -37,7 +32,11 @@ interface ImageData {
 
 
 const SortPage = observer(({ twitterChannels }: SortPageProps) => {
-  const [profile, setProfile] = useState(AppStore.auth.profile);
+  const store = useMemo(() => new SortPageStore(), [])
+  useEffect(() => {
+    store.init()
+  }, [])
+
   const [image, setImage] = useState<Photo | null>(null);
   const [currentChannel, setcurrentChannel] = useState<TwitterChannel>({
     profile_image_url: '',
@@ -45,78 +44,78 @@ const SortPage = observer(({ twitterChannels }: SortPageProps) => {
   });
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (AppStore.auth.profile) {
-        const imageData = await getSortImageData(AppStore.auth.profile.handle);
-        const returnedImage = imageData.image;
-        setImage(returnedImage);
-        const currentChannelResp = returnedImage.twitter_channel;
-        const currentChannel = await getTwitterChannel(currentChannelResp);
-        setcurrentChannel(currentChannel);
-      }
-    }
-    fetchData()
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (AppStore.auth.profile) {
+  //       const imageData = await getSortImageData(AppStore.auth.profile.handle);
+  //       const returnedImage = imageData.image;
+  //       setImage(returnedImage);
+  //       const currentChannelResp = returnedImage.twitter_channel;
+  //       const currentChannel = await getTwitterChannel(currentChannelResp);
+  //       setcurrentChannel(currentChannel);
+  //     }
+  //   }
+  //   fetchData()
+  // }, []);
 
-  const PatchForServer = {
-    patch: (url: string, data?: any) => axios.patch(url, data),
-    // add other methods here as needed
-  };
+  // const PatchForServer = {
+  //   patch: (url: string, data?: any) => axios.patch(url, data),
+  //   // add other methods here as needed
+  // };
 
-  const handleApproveImage = async () => {
-    try {
-      if (image) {
-        const imageData: ImageData = { id: image.id };
-        try {
-          const getMe = AppStore.auth.profile?.handle;
-          if (!getMe) {
-            throw new Error("Profile handle is not defined.");
-          }
-          const profile = await HttpForServer.getProfile(getMe);
-          const slug = profile.data.profile.slug;
-          const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
-          const response = await PatchForServer.patch(url);
-          console.log(response, "approve")
-          if (response.status === 200) {
-            const updatedImageData = await await getSortImageData(getMe);
-            setImage(updatedImageData.image);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-        await HttpForServer.approveImage(imageData);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleDeclineImage = async () => {
-    try {
-      if (image) {
-        const imageData: ImageData = { id: image.id };
-        try {
-          const getMe = AppStore.auth.profile?.handle;
-          if (!getMe) {
-            throw new Error("Profile handle is not defined.");
-          }
-          const profile = await HttpForServer.getProfile(getMe);
-          const slug = profile.data.profile.slug;
-          const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
-          const response = await PatchForServer.patch(url);
-          console.log(response, "decline")
-          if (response.status === 200) {
-            const updatedImageData = await await getSortImageData(getMe);
-            setImage(updatedImageData.image);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleApproveImage = async () => {
+  //   try {
+  //     if (image) {
+  //       const imageData: ImageData = { id: image.id };
+  //       try {
+  //         const getMe = AppStore.auth.profile?.handle;
+  //         if (!getMe) {
+  //           throw new Error("Profile handle is not defined.");
+  //         }
+  //         const profile = await HttpForServer.getProfile(getMe);
+  //         const slug = profile.data.profile.slug;
+  //         const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
+  //         const response = await PatchForServer.patch(url);
+  //         console.log(response, "approve")
+  //         if (response.status === 200) {
+  //           const updatedImageData = await await getSortImageData(getMe);
+  //           setImage(updatedImageData.image);
+  //         }
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //       await HttpForServer.approveImage(imageData);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  // const handleDeclineImage = async () => {
+  //   try {
+  //     if (image) {
+  //       const imageData: ImageData = { id: image.id };
+  //       try {
+  //         const getMe = AppStore.auth.profile?.handle;
+  //         if (!getMe) {
+  //           throw new Error("Profile handle is not defined.");
+  //         }
+  //         const profile = await HttpForServer.getProfile(getMe);
+  //         const slug = profile.data.profile.slug;
+  //         const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
+  //         const response = await PatchForServer.patch(url);
+  //         console.log(response, "decline")
+  //         if (response.status === 200) {
+  //           const updatedImageData = await await getSortImageData(getMe);
+  //           setImage(updatedImageData.image);
+  //         }
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -155,7 +154,7 @@ const SortPage = observer(({ twitterChannels }: SortPageProps) => {
             />
           </div>
         </div>
-        <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
+        {/* <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
           {AppStore.auth.profile && (
             <Button onClick={handleDeclineImage} size={ButtonSize.Lg} block>
               <Icon name={IconName.Close} />
@@ -166,7 +165,7 @@ const SortPage = observer(({ twitterChannels }: SortPageProps) => {
               <Icon name={IconName.Heart} />
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
     </AppLayout>
   );

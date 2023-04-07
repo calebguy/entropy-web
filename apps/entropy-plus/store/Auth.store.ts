@@ -11,6 +11,9 @@ class AuthStore {
   @observable
   profile: Nullable<Profile> = null;
 
+  @observable
+  hasInitialized = false;
+
   constructor() {
     makeObservable(this);
   }
@@ -18,7 +21,8 @@ class AuthStore {
   init() {
     this.getProfile()
       .then(() => (this.isLoggedIn = true))
-      .catch(() => (this.isLoggedIn = false));
+      .catch(() => (this.isLoggedIn = false))
+      .finally(() => (this.hasInitialized = true))
   }
 
   login({ username, password }: LoginDto) {

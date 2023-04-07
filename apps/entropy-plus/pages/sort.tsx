@@ -20,7 +20,7 @@ import AppLayout from "../layouts/App.layout";
 import { observer } from "mobx-react-lite";
 import AppStore from "../store/App.store";
 import { GetSortResponse } from "../interfaces";
-import { HttpForServer, getRank } from "../services/Http";
+import { HttpForServer, getSortImageData, getTwitterChannel } from "../services/Http";
 
 
 interface SortPageProps {
@@ -35,34 +35,42 @@ interface ImageData {
 }
 
 
-const SortPage = observer(({ image, twitterChannels, currentChannel }: SortPageProps) => {
-  const [dashboardData, setDashboardData] = useState({})
+const SortPage = observer(({ twitterChannels }: SortPageProps) => {
   const [profile, setProfile] = useState(AppStore.auth.profile);
-
-
+  const [image, setImage] = useState<Photo | null>(null);
+  const [currentChannel, setcurrentChannel] = useState({})
 
   useEffect(() => {
-    // Fetch data on the client side using an API call
     const fetchData = async () => {
       if (AppStore.auth.profile) {
-        const rankData = await getRank(AppStore.auth.profile.handle);
-        setProfile(AppStore.auth.profile);
+        const imageData = await getSortImageData(AppStore.auth.profile.handle);
+        const returnedImage = imageData.image;
+        setImage(returnedImage);
+        const currentChannelResp = returnedImage.twitter_channel;
+        const currentChannel = await getTwitterChannel(currentChannelResp);
+        setcurrentChannel(currentChannel);
       }
     }
     fetchData()
-  }, [])
+  }, []);
+
+
   const handleApproveImage = async () => {
     try {
-      const imageData: ImageData = { id: image.id };
-      await HttpForServer.approveImage(imageData);
+      if (image) {
+        const imageData: ImageData = { id: image.id };
+        await HttpForServer.approveImage(imageData);
+      }
     } catch (error) {
       console.error(error);
     }
   };
   const handleDeclineImage = async () => {
     try {
-      const imageData: ImageData = { id: image.id };
-      await HttpForServer.declineImage(imageData);
+      if (image) {
+        const imageData: ImageData = { id: image.id };
+        await HttpForServer.declineImage(imageData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +91,7 @@ const SortPage = observer(({ image, twitterChannels, currentChannel }: SortPageP
             "gap-2"
           )}
         >
-          {image.curator && <UserPreview profile={image.curator} />}
+          {image?.curator && <UserPreview profile={image.curator} />}
           <AspectRatio
             ratio={"1/1"}
             className={css(
@@ -96,7 +104,7 @@ const SortPage = observer(({ image, twitterChannels, currentChannel }: SortPageP
               "bg-center",
               "bg-no-repeat"
             )}
-            style={{ backgroundImage: `url(${image.url})` }}
+            style={{ backgroundImage: `url(${image?.url})` }}
           />
           <div className={css("self-start", "-my-1")}>
             <TwitterProfileSelector
@@ -166,7 +174,7 @@ const TwitterProfileSelector = ({
       <button onClick={() => setShow(!show)} className={css()}>
         <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
       </button>
-      {/* {show && (
+      {show && (
         <>
           {channels
             .filter(
@@ -175,7 +183,7 @@ const TwitterProfileSelector = ({
             .map((channel) => (
               <Link
                 className={css("hover:scale-105")}
-                key={`twitter-channel-selector-${channel.profile_image_url}`}
+                key={`twitter-channel-selector-${channel}`}
                 // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
                 href={"/sort"}
               >
@@ -183,7 +191,7 @@ const TwitterProfileSelector = ({
               </Link>
             ))}
         </>
-      )} */}
+      )}
     </div>
   );
 };
@@ -210,18 +218,6 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<SortPageProps> = async ({
-  req,
-  res,
-}) => {
-  const {
-    data
-  } = await HttpForServer.getSort();
-  return {
-    props: {
-      ...data
-    },
-  };
-};
+
 
 export default SortPage;

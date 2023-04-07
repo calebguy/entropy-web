@@ -129,8 +129,8 @@ class EntropyHttp {
 
   async getImageData() {
     const profile = await this.getProfile("brian");
-    const slug = profile.data.profile.slug;
-    const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${slug}`;
+    const handle = profile.data.profile.slug;
+    const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${handle}`;
     const response = await fetch(url);
     const imageData = await response.json();
     const data = imageData[0];
@@ -144,22 +144,6 @@ class EntropyHttp {
     return data;
   }
   async getSort() {
-    const imageData = await this.getImageData();
-    const twitterChannels = await this.getTwitterChannels();
-    const image_channel = imageData.twitter_channel;
-    const response = await fetch(
-      `https://entropy-plus.herokuapp.com/api/twitter-channels/${image_channel}`
-    );
-
-    const image_twitter_channel = await response.json();
-
-    const data = {
-      image: imageData,
-      twitterChannels: twitterChannels,
-      currentChannel: image_twitter_channel,
-      profile: AppStore.auth.profile,
-    };
-    return { data: data };
   }
 
   async approveImage(imageData: ImageData) {
@@ -628,6 +612,25 @@ export async function getRank(slug: string) {
   return { data: data };
 }
 
+export async function getTwitterChannel(slug: string) {
+  const response = await fetch(
+    `https://entropy-plus.herokuapp.com/api/twitter-channels/${slug}/`
+  );
+  const data = await response.json();
+  return data;
+}
+
+
+export async function getSortImageData(slug: string) {
+  const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${slug}`;
+  const response = await fetch(url);
+  const imageData = await response.json();
+  const returnedImage = imageData[0];
+  const data = {
+    image: returnedImage,
+  };
+  return { image: returnedImage };
+}
 
 export const HttpForServer = EntropyHttp.createForServer();
 export const HttpForClient = EntropyHttp.createForClient();

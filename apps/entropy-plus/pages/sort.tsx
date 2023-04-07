@@ -38,7 +38,11 @@ interface ImageData {
 const SortPage = observer(({ twitterChannels }: SortPageProps) => {
   const [profile, setProfile] = useState(AppStore.auth.profile);
   const [image, setImage] = useState<Photo | null>(null);
-  const [currentChannel, setcurrentChannel] = useState({})
+  const [currentChannel, setcurrentChannel] = useState<TwitterChannel>({
+    profile_image_url: '',
+    screen_name: ''
+  });
+
 
   useEffect(() => {
     const fetchData = async () => {

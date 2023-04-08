@@ -1,20 +1,25 @@
 import { makeObservable, observable } from "mobx";
 import { HttpForClient } from "../services/Http";
+import { Nullable, Sort } from "./../interfaces/index";
 import AppStore from "./App.store";
 
 export default class SortPageStore {
   @observable
-  image = "";
+  sort: Nullable<Sort> = null;
 
-  constructor() {
+  constructor(sort: Sort) {
     makeObservable(this);
+    this.sort = sort;
   }
 
-  init() {
-    // console.log("GOT HANDLE", AppStore.auth.profile!.handle);
+  init() {}
+
+  getSort() {
+    // can we get the image height && width from the server?
+
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
       ({ data }) => {
-        console.log(data);
+        this.sort = data[0];
       }
     );
   }

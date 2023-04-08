@@ -5,7 +5,7 @@ export interface Photo {
   id: number;
   title: string;
   created: Datetime;
-  image: { url: any; height_field: number; width_field: number; } | undefined;
+  image: { url: any; height_field: number; width_field: number } | undefined;
   url: string;
   thumb_url: Nullable<string>;
   square_url: Nullable<string>;
@@ -37,12 +37,13 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
-
 export interface Profile {
   id: number;
   handle: string;
   bio: Nullable<string>;
-  profile_image: { url: any; height_field: number; width_field: number; } | undefined;
+  profile_image:
+    | { url: any; height_field: number; width_field: number }
+    | undefined;
   name: Nullable<string>;
   slug: string;
   entropy_score: Nullable<string>;
@@ -63,7 +64,9 @@ export interface HeaderProfile {
   id: number;
   handle: string;
   bio: Nullable<string>;
-  profile_image: { url: any; height_field: number; width_field: number; } | undefined;
+  profile_image:
+    | { url: any; height_field: number; width_field: number }
+    | undefined;
 }
 
 interface User {
@@ -83,9 +86,11 @@ export interface Acheivement {
   isArchivist: boolean;
 }
 
+export type TwitterChannelScreenName = string;
+
 export interface TwitterChannel {
   profile_image_url: string;
-  screen_name: string;
+  screen_name: TwitterChannelScreenName;
 }
 
 interface CloudinaryField {
@@ -102,7 +107,7 @@ export interface AuthTokens {
   detail?: string;
 }
 
-export interface ContentSource { }
+export interface ContentSource {}
 
 export interface LoginDto {
   username: string;
@@ -128,8 +133,6 @@ export interface GetSortResponse {
   profile: Profile;
 }
 
-
-
 export interface GetProfileResponse {
   profile: Profile;
   images: Photo[];
@@ -154,4 +157,20 @@ export interface GetDashboardResponse {
 
 export interface GetLeaderboardResponse {
   curators: Profile[];
+}
+
+export interface Sort {
+  added_to_profile: [];
+  approved_by_user: [];
+  approved_to_tweet: boolean;
+  declined_by_user: Slug[];
+  id: number;
+  twitter_channel: TwitterChannelScreenName;
+  url: string;
+  was_tweeted: boolean;
+  curator?: Profile;
+}
+
+export interface Slug {
+  slug: string;
 }

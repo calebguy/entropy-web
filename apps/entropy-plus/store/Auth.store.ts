@@ -19,7 +19,7 @@ class AuthStore {
   }
 
   init() {
-    this.getProfile()
+    return this.getProfile()
       .then(() => {
         this.isLoggedIn = true;
         this.hasInitialized = true;

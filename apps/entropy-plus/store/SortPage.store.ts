@@ -24,16 +24,16 @@ export default class SortPageStore {
   }
 
   handleApprove() {
-    return Promise.all([
-      HttpForClient.approveImage(this.sort!.id, AppStore.auth.profile!.handle),
-      this.getSort(),
-    ]);
+    HttpForClient.approveImage(
+      this.sort!.id,
+      AppStore.auth.profile!.handle
+    ).then(() => this.getSort());
   }
 
   handleReject() {
-    return Promise.all([
-      HttpForClient.rejectImage(this.sort!.id, AppStore.auth.profile!.handle),
-      this.getSort(),
-    ]);
+    HttpForClient.rejectImage(
+      this.sort!.id,
+      AppStore.auth.profile!.handle
+    ).then(() => this.getSort());
   }
 }

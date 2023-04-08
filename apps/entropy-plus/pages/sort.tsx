@@ -12,7 +12,7 @@ import {
 } from "dsl";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { css } from "utils";
 import ProfileIcon from "../components/ProfileIcon";
 import withAuth from "../helpers/auth";
@@ -29,10 +29,6 @@ interface SortPageProps {
 
 const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   const store = useMemo(() => new SortPageStore(sort), []);
-  useEffect(() => {
-    store.init();
-  }, []);
-
   return (
     <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>

@@ -1,15 +1,20 @@
-import { makeObservable, observable } from "mobx";
+import { action, makeObservable, observable } from "mobx";
+import { jsonify } from "utils";
 import { HttpForClient } from "../services/Http";
-import { Nullable, Sort } from "./../interfaces/index";
+import { Sort, TwitterChannel } from "./../interfaces/index";
 import AppStore from "./App.store";
 
 export default class SortPageStore {
   @observable
-  sort: Nullable<Sort> = null;
+  sort?: Sort = undefined;
 
-  constructor(sort: Sort) {
+  @observable
+  selectedTwitterChannel?: TwitterChannel = undefined;
+
+  constructor(sort: Sort, currentTwitterChannel: TwitterChannel) {
     makeObservable(this);
     this.sort = sort;
+    this.selectedTwitterChannel = currentTwitterChannel;
   }
 
   getSort() {
@@ -24,14 +29,22 @@ export default class SortPageStore {
   handleApprove() {
     HttpForClient.approveImage(
       this.sort!.id,
-      AppStore.auth.profile!.handle
+      AppStore.auth.profile!.handle,
+      this.selectedTwitterChannel!.screen_name
     ).then(() => this.getSort());
   }
 
   handleReject() {
     HttpForClient.rejectImage(
       this.sort!.id,
-      AppStore.auth.profile!.handle
+      AppStore.auth.profile!.handle,
+      this.selectedTwitterChannel!.screen_name
     ).then(() => this.getSort());
+  }
+
+  @action
+  setSelectedTwitterChannel(twitterChannel: TwitterChannel) {
+    console.log("setting channel", jsonify(twitterChannel));
+    this.selectedTwitterChannel = twitterChannel;
   }
 }

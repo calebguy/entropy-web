@@ -1,22 +1,12 @@
-import {
-  AspectRatio,
-  Button,
-  ButtonIntent,
-  ButtonSize,
-  Icon,
-  IconName,
-  Pane,
-  PaneSize,
-  Text,
-  TextSize,
-} from "dsl";
+import { Button, ButtonSize, Icon, IconName } from "dsl";
 import { observer } from "mobx-react-lite";
-import Link from "next/link";
-import { useMemo, useState } from "react";
+import Image from "next/image";
+import { useMemo } from "react";
 import { css } from "utils";
-import ProfileIcon from "../components/ProfileIcon";
+import TwitterChannelSelector from "../components/SortPage/TwitterChannelSelector";
+import UserPreview from "../components/SortPage/UserPreview";
 import withAuth from "../helpers/auth";
-import { Profile, Sort, TwitterChannel } from "../interfaces";
+import { Sort, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
 import AppStore from "../store/App.store";
@@ -28,7 +18,7 @@ interface SortPageProps {
 }
 
 const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
-  const store = useMemo(() => new SortPageStore(sort), []);
+  const store = useMemo(() => new SortPageStore(sort, currentChannel), []);
   return (
     <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -46,24 +36,31 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
           )}
         >
           {store.sort?.curator && <UserPreview profile={store.sort.curator} />}
-          <AspectRatio
-            ratio={"1/1"}
+          <div
             className={css(
-              "mx-auto",
+              "relative",
               "w-full",
-              "border-[1px]",
-              "border-black",
-              "rounded-sm",
-              "bg-cover",
-              "bg-center",
-              "bg-no-repeat"
+              `h-[500px]`
+              // "border-[1px]",
+              // "border-solid",
+              // "border-black"
             )}
-            style={{ backgroundImage: `url(${store.sort?.url})` }}
-          />
+          >
+            {/* TODO: IF WE CAN'T GET IMAGE HEIGHT AND WIDTH FROM SERVER WE NEED TO CALCULATE LOCALLY AND SET THE HEIGHT BASED ON THE ASPECT RATIO OF THE NATURAL IMAGE AND THE WIDTH OF THE CONTAINER */}
+            <Image
+              alt={"sort image"}
+              src={store.sort!.url}
+              style={{ objectFit: "contain" }}
+              sizes="100vw"
+              priority
+              fill
+            />
+          </div>
           <div className={css("self-start", "-my-1")}>
-            <TwitterProfileSelector
+            <TwitterChannelSelector
               channels={AppStore.twitterChannels}
-              currentChannel={currentChannel}
+              selectedChannel={store.selectedTwitterChannel!}
+              onClick={(channel) => store.setSelectedTwitterChannel(channel)}
             />
           </div>
         </div>
@@ -92,94 +89,6 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   );
 });
 
-const TwitterChannelIcon = ({ imageUrl }: { imageUrl: string }) => {
-  return (
-    <AspectRatio
-      ratio={"1/1"}
-      className={css(
-        "rounded-full",
-        "w-[28px]",
-        "bg-cover",
-        "bg-center",
-        "border-[1px]",
-        "border-black"
-      )}
-      style={{
-        backgroundImage: `url(${imageUrl})`,
-      }}
-    />
-  );
-};
-
-interface TwitterProfileSelectorProps {
-  channels: TwitterChannel[];
-  currentChannel: TwitterChannel;
-}
-
-const TwitterProfileSelector = ({
-  channels,
-  currentChannel,
-}: TwitterProfileSelectorProps) => {
-  const [show, setShow] = useState(false);
-  return (
-    <div
-      className={css(
-        "flex",
-        "items-center",
-        "gap-1",
-        "border-[1px]",
-        "p-1",
-        "rounded-sm",
-        { "border-black": show, "border-transparent": !show }
-      )}
-    >
-      <button onClick={() => setShow(!show)} className={css()}>
-        <TwitterChannelIcon imageUrl={currentChannel.profile_image_url} />
-      </button>
-      {show && (
-        <>
-          {channels
-            .filter(
-              (channel) => channel.screen_name !== currentChannel.screen_name
-            )
-            .map((channel) => (
-              <Link
-                className={css("hover:scale-105")}
-                key={`twitter-channel-selector-${channel.screen_name}`}
-                // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
-                href={"/sort"}
-              >
-                <TwitterChannelIcon imageUrl={channel.profile_image_url} />
-              </Link>
-            ))}
-        </>
-      )}
-    </div>
-  );
-};
-
-interface UserPreviewProps {
-  profile: Profile;
-}
-
-const UserPreview = ({ profile }: UserPreviewProps) => {
-  return (
-    <Pane size={PaneSize.Sm} block>
-      <div className={css("flex", "justify-between", "items-center")}>
-        <div className={css("flex", "items-center", "gap-2")}>
-          <ProfileIcon profile={profile} />
-          <Text size={TextSize.Lg}>@{profile.name}</Text>
-        </div>
-        <Link href={`/curator/${profile.slug}`}>
-          <Button size={ButtonSize.Sm} intent={ButtonIntent.Secondary} round>
-            view profile
-          </Button>
-        </Link>
-      </div>
-    </Pane>
-  );
-};
-
 export const getServerSideProps = withAuth<any>(async () => {
   try {
     const { data: me } = await HttpForServer.getMe();
@@ -192,6 +101,7 @@ export const getServerSideProps = withAuth<any>(async () => {
       props: { sort, currentChannel },
     };
   } catch (e) {
+    console.error(e);
     return {
       notFound: true,
     };

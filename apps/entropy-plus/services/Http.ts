@@ -74,13 +74,21 @@ class EntropyHttp {
     return this.http.get<TwitterChannel[]>("/api/v1/twitter-channels/");
   }
 
-  approveImage(id: number, slug: string) {
+  approveImage(
+    id: number,
+    slug: string,
+    twitterChannel: TwitterChannelScreenName
+  ) {
     return this.http.patch<Sort>(`/api/images/${id}/update/`, {
       params: { slug },
     });
   }
 
-  rejectImage(id: number, slug: string) {
+  rejectImage(
+    id: number,
+    slug: string,
+    twitterChannel: TwitterChannelScreenName
+  ) {
     return this.http.patch<Sort>(`/api/images/${id}/update/decline/`, {
       params: { slug },
     });

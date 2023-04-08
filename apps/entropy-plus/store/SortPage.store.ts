@@ -1,5 +1,4 @@
 import { action, makeObservable, observable } from "mobx";
-import { jsonify } from "utils";
 import { HttpForClient } from "../services/Http";
 import { Sort, TwitterChannel } from "./../interfaces/index";
 import AppStore from "./App.store";
@@ -44,7 +43,6 @@ export default class SortPageStore {
 
   @action
   setSelectedTwitterChannel(twitterChannel: TwitterChannel) {
-    console.log("setting channel", jsonify(twitterChannel));
     this.selectedTwitterChannel = twitterChannel;
   }
 }

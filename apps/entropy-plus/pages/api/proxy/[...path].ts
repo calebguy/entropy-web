@@ -40,6 +40,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       const index = req.url.indexOf("?");
       req.url = req.url.slice(0, index) + "/" + req.url.slice(index);
     }
+
+    console.log("REQUEST URL", req.url);
     proxy
       .once("proxyRes", (proxyRes, req: any, res: any) => {
         if (isLogin || isRefresh) {
@@ -79,8 +81,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
         changeOrigin: true,
         autoRewrite: false,
         selfHandleResponse: isLogin || isRefresh,
-        // ignorePath: true,
-        // followRedirects: true,
       });
   });
 };

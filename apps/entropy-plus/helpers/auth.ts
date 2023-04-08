@@ -28,6 +28,7 @@ export default function withAuth<T>(
         HttpForServer.setRefreshToken(refreshToken);
         try {
           const { data: authData } = await HttpForServer.refreshToken();
+          console.log("setting cookies");
           setCookies({ req: context.req, res: context.res, authData });
           HttpForServer.setAccessToken(authData.access);
           HttpForServer.setRefreshToken(authData.refresh);

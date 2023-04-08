@@ -16,11 +16,24 @@ export default class SortPageStore {
 
   getSort() {
     // can we get the image height && width from the server?
-
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
       ({ data }) => {
         this.sort = data[0];
       }
     );
+  }
+
+  handleApprove() {
+    return Promise.all([
+      HttpForClient.approveImage(this.sort!.id, AppStore.auth.profile!.handle),
+      this.getSort(),
+    ]);
+  }
+
+  handleReject() {
+    return Promise.all([
+      HttpForClient.rejectImage(this.sort!.id, AppStore.auth.profile!.handle),
+      this.getSort(),
+    ]);
   }
 }

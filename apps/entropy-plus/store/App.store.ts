@@ -1,5 +1,6 @@
 import { makeObservable, observable } from "mobx";
 import { TwitterChannel } from "../interfaces";
+import { HttpForClient } from "../services/Http";
 import AuthStore from "./Auth.store";
 
 class _AppStore {
@@ -14,11 +15,11 @@ class _AppStore {
     this.auth = new AuthStore();
   }
 
-  init() {
-    this.auth.init();
-    // return HttpForClient.getTwitterChannels().then(({ data }) => {
-    //   this.twitterChannels = data;
-    // });
+  async init() {
+    await this.auth.init();
+    return HttpForClient.getTwitterChannels().then(({ data }) => {
+      this.twitterChannels = data;
+    });
   }
 }
 

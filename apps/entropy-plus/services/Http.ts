@@ -91,6 +91,16 @@ class EntropyHttp {
     return this.http.get("/api/v1/twitter-channels/");
   }
 
+  approveImage(id: number, slug: string) {
+    return this.http.patch(`/api/images/${id}/update/`, { params: { slug } });
+  }
+
+  rejectImage(id: number, slug: string) {
+    return this.http.patch(`/api/images/${id}/update/decline/`, {
+      params: { slug },
+    });
+  }
+
   // ############################################################################ //
 
   async getProfile(slug: string) {
@@ -134,7 +144,7 @@ class EntropyHttp {
     return { data: data };
   }
 
-  async approveImage(imageData: ImageData) {
+  async _approveImage(imageData: ImageData) {
     try {
       const getMe = AppStore.auth.profile?.handle;
       if (!getMe) {

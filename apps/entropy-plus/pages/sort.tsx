@@ -3,6 +3,8 @@ import {
   Button,
   ButtonIntent,
   ButtonSize,
+  Icon,
+  IconName,
   Pane,
   PaneSize,
   Text,
@@ -11,7 +13,7 @@ import {
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { css, jsonify } from "utils";
+import { css } from "utils";
 import ProfileIcon from "../components/ProfileIcon";
 import withAuth from "../helpers/auth";
 import { Profile, Sort, TwitterChannel } from "../interfaces";
@@ -25,69 +27,12 @@ interface SortPageProps {
   currentChannel: TwitterChannel;
 }
 
-interface ImageData {
-  id: number;
-}
-
 const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   const store = useMemo(() => new SortPageStore(sort), []);
   useEffect(() => {
     store.init();
   }, []);
 
-  // const handleApproveImage = async () => {
-  //   try {
-  //     if (image) {
-  //       const imageData: ImageData = { id: image.id };
-  //       try {
-  //         const getMe = AppStore.auth.profile?.handle;
-  //         if (!getMe) {
-  //           throw new Error("Profile handle is not defined.");
-  //         }
-  //         const profile = await HttpForServer.getProfile(getMe);
-  //         const slug = profile.data.profile.slug;
-  //         const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
-  //         const response = await PatchForServer.patch(url);
-  //         console.log(response, "approve")
-  //         if (response.status === 200) {
-  //           const updatedImageData = await await getSortImageData(getMe);
-  //           setImage(updatedImageData.image);
-  //         }
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //       await HttpForServer.approveImage(imageData);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  // const handleDeclineImage = async () => {
-  //   try {
-  //     if (image) {
-  //       const imageData: ImageData = { id: image.id };
-  //       try {
-  //         const getMe = AppStore.auth.profile?.handle;
-  //         if (!getMe) {
-  //           throw new Error("Profile handle is not defined.");
-  //         }
-  //         const profile = await HttpForServer.getProfile(getMe);
-  //         const slug = profile.data.profile.slug;
-  //         const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
-  //         const response = await PatchForServer.patch(url);
-  //         console.log(response, "decline")
-  //         if (response.status === 200) {
-  //           const updatedImageData = await await getSortImageData(getMe);
-  //           setImage(updatedImageData.image);
-  //         }
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
   return (
     <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -104,9 +49,6 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
             "gap-2"
           )}
         >
-          {jsonify(store.sort)}
-          {jsonify(currentChannel)}
-          {jsonify(AppStore.twitterChannels)}
           {store.sort?.curator && <UserPreview profile={store.sort.curator} />}
           <AspectRatio
             ratio={"1/1"}
@@ -129,18 +71,26 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
             />
           </div>
         </div>
-        {/* <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
+        <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
           {AppStore.auth.profile && (
-            <Button onClick={handleDeclineImage} size={ButtonSize.Lg} block>
+            <Button
+              onClick={() => store.handleReject()}
+              size={ButtonSize.Lg}
+              block
+            >
               <Icon name={IconName.Close} />
             </Button>
           )}
           {AppStore.auth.profile && (
-            <Button onClick={handleApproveImage} size={ButtonSize.Lg} block>
+            <Button
+              onClick={() => store.handleApprove()}
+              size={ButtonSize.Lg}
+              block
+            >
               <Icon name={IconName.Heart} />
             </Button>
           )}
-        </div> */}
+        </div>
       </div>
     </AppLayout>
   );
@@ -199,7 +149,7 @@ const TwitterProfileSelector = ({
             .map((channel) => (
               <Link
                 className={css("hover:scale-105")}
-                key={`twitter-channel-selector-${channel}`}
+                key={`twitter-channel-selector-${channel.screen_name}`}
                 // @next -- @brian -- is this for switching channels or for classifying the presented image as belonging to the selected channel?
                 href={"/sort"}
               >
@@ -235,15 +185,21 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
 };
 
 export const getServerSideProps = withAuth<any>(async () => {
-  const { data: me } = await HttpForServer.getMe();
-  const { data: sorts } = await HttpForServer.getSortImage(me.handle);
-  const sort = sorts[0];
-  const { data: currentChannel } = await HttpForServer.getTwitterChannel(
-    sort.twitter_channel
-  );
-  return {
-    props: { sort, currentChannel },
-  };
+  try {
+    const { data: me } = await HttpForServer.getMe();
+    const { data: sorts } = await HttpForServer.getSortImage(me.handle);
+    const sort = sorts[0];
+    const { data: currentChannel } = await HttpForServer.getTwitterChannel(
+      sort.twitter_channel
+    );
+    return {
+      props: { sort, currentChannel },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
 });
 
 export default SortPage;

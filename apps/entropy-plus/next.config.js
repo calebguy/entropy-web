@@ -1,10 +1,10 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   transpilePackages: ["dsl", "utils"],
   experimental: {
     scrollRestoration: true,
   },
   images: {
-    domains: ['res.cloudinary.com'],
+    domains: ["res.cloudinary.com"],
   },
 };

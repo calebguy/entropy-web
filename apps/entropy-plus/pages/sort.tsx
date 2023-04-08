@@ -6,18 +6,18 @@ import {
   Pane,
   PaneSize,
   Text,
-  TextSize
+  TextSize,
 } from "dsl";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { css } from "utils";
 import ProfileIcon from "../components/ProfileIcon";
+import withAuth from "../helpers/auth";
 import { Photo, Profile, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import AppStore from "../store/App.store";
 import SortPageStore from "../store/SortPage.store";
-
 
 interface SortPageProps {
   image: Photo;
@@ -25,24 +25,21 @@ interface SortPageProps {
   currentChannel: TwitterChannel;
 }
 
-
 interface ImageData {
   id: number;
 }
 
-
 const SortPage = observer(({ twitterChannels }: SortPageProps) => {
-  const store = useMemo(() => new SortPageStore(), [])
+  const store = useMemo(() => new SortPageStore(), []);
   useEffect(() => {
-    store.init()
-  }, [])
+    store.init();
+  }, []);
 
   const [image, setImage] = useState<Photo | null>(null);
   const [currentChannel, setcurrentChannel] = useState<TwitterChannel>({
-    profile_image_url: '',
-    screen_name: ''
+    profile_image_url: "",
+    screen_name: "",
   });
-
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -259,6 +256,10 @@ const UserPreview = ({ profile }: UserPreviewProps) => {
   );
 };
 
-
+export const getServerSideProps = withAuth<any>(async () => {
+  return {
+    props: {},
+  };
+});
 
 export default SortPage;

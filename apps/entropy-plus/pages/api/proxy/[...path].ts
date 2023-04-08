@@ -9,7 +9,7 @@ import { AuthTokens } from "../../../interfaces";
 
 // https://github.com/maximilianschmitt/next-auth
 
-const proxy = httpProxy.createProxyServer();
+const proxy = httpProxy.createProxyServer({ autoRewrite: false });
 
 export const config = {
   api: {
@@ -29,8 +29,17 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       req.headers["Authorization"] = `Bearer ${authToken}`;
     }
 
-    // rewrite the url & add a trailing slash to make django happy
-    req.url = req.url?.replace(PROXY_PREFIX, "") + "/";
+    // WE HAVE VERY SPECIFIC PLACEMENT OF SLASHES THAT THE API ACCEPTS
+    // HTTP-PROXY LIKES TO REWRITE SLASHES EVERYWHERE SO HERE WE HAVE SOME NOT SO FUN IFS
+    if (!req.url?.includes("?")) {
+      // if there is no query param then add a trailling slash
+      req.url = req.url?.replace(PROXY_PREFIX, "") + "/";
+    } else {
+      // if there is a query param then add a slash before the query param
+      req.url = req.url?.replace(PROXY_PREFIX, "");
+      const index = req.url.indexOf("?");
+      req.url = req.url.slice(0, index) + "/" + req.url.slice(index);
+    }
     proxy
       .once("proxyRes", (proxyRes, req: any, res: any) => {
         if (isLogin || isRefresh) {
@@ -70,6 +79,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
         changeOrigin: true,
         autoRewrite: false,
         selfHandleResponse: isLogin || isRefresh,
+        // ignorePath: true,
+        // followRedirects: true,
       });
   });
 };

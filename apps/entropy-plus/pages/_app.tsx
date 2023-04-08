@@ -5,6 +5,8 @@ import "../styles/globals.css";
 
 import { observer } from "mobx-react-lite";
 import type { AppProps } from "next/app";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { css } from "utils";
 import AppStore from "../store/App.store";
@@ -20,14 +22,16 @@ const helvetica = localFont({
   variable: "--font-helvetica-neue",
 });
 
-const MyApp = observer(({ Component, pageProps }: AppProps) =>{
+const MyApp = observer(({ Component, pageProps }: AppProps) => {
   const description = "universal connector";
   const name = "E+";
   // @next update
   const twitterCardUrl =
     "https://entropy-web-docs.vercel.app/images/twitter-card.png";
   const url = "https://entropy-web-docs.vercel.app/";
+  const router = useRouter();
   useEffect(() => {
+    console.log("calling init");
     AppStore.init();
   }, []);
   return (
@@ -51,10 +55,28 @@ const MyApp = observer(({ Component, pageProps }: AppProps) =>{
       </Head>
       <main className={css(helvetica.variable, "grow", "flex", "flex-col")}>
         {AppStore.auth.hasInitialized && <Component {...pageProps} />}
-        {!AppStore.auth.hasInitialized && <div>we authing boi</div>}
+        {!AppStore.auth.hasInitialized && (
+          <div
+            className={css(
+              "w-full",
+              "h-full",
+              "flex",
+              "items-center",
+              "justify-center",
+              "grow"
+            )}
+          >
+            <Image
+              alt={"rotating logo"}
+              src="/images/rotating-logo.gif"
+              width={30}
+              height={30}
+            />
+          </div>
+        )}
       </main>
     </>
   );
-})
+});
 
 export default MyApp;

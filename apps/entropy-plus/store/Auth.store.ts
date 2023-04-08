@@ -20,9 +20,14 @@ class AuthStore {
 
   init() {
     this.getProfile()
-      .then(() => (this.isLoggedIn = true))
-      .catch(() => (this.isLoggedIn = false))
-      .finally(() => (this.hasInitialized = true))
+      .then(() => {
+        this.isLoggedIn = true;
+        this.hasInitialized = true;
+      })
+      .catch((e) => {
+        this.isLoggedIn = false;
+        this.hasInitialized = true;
+      });
   }
 
   login({ username, password }: LoginDto) {

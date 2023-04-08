@@ -1,15 +1,13 @@
 import { Dropdown, DropdownItem, Icon, IconName, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
 import { css } from "utils";
 import Dev from "../environment/Dev";
+import { Profile } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
-import ProfileIcon from "./ProfileIcon";
-import { Profile } from "../interfaces";
-import Image from "next/image";
-
 
 interface HeaderProps {
   profile: Profile;
@@ -24,7 +22,7 @@ const Header = observer(({ profile }: HeaderProps) => {
             <Link href={"/sort"}>
               <Icon name={IconName.Logo} size={41} />
             </Link>
-            {/* <Dev>
+            <Dev>
               <div
                 className={css(
                   "border-[1px]",
@@ -46,7 +44,7 @@ const Header = observer(({ profile }: HeaderProps) => {
                   <Text>logout</Text>
                 </button>
               </div>
-            </Dev> */}
+            </Dev>
           </div>
           <div className={css("flex", "items-center", "gap-6")}>
             <Link href={"/upload"}>
@@ -58,7 +56,15 @@ const Header = observer(({ profile }: HeaderProps) => {
             {AppStore.auth.profile && (
               <Link href={`/curator/${AppStore.auth.profile.handle}`}>
                 {AppStore.auth.profile && (
-                  <Image width={100} height={100} src={`https://res.cloudinary.com/dpooqlfdf/${AppStore.auth.profile.profile_image || ''}`} alt={AppStore.auth.profile.handle} className={css("w-8", "h-8", "rounded-full")} />
+                  <Image
+                    width={100}
+                    height={100}
+                    src={`https://res.cloudinary.com/dpooqlfdf/${
+                      AppStore.auth.profile.profile_image || ""
+                    }`}
+                    alt={AppStore.auth.profile.handle}
+                    className={css("w-8", "h-8", "rounded-full")}
+                  />
                 )}
               </Link>
             )}

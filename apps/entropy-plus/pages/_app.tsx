@@ -6,7 +6,6 @@ import "../styles/globals.css";
 import { observer } from "mobx-react-lite";
 import type { AppProps } from "next/app";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { css } from "utils";
 import AppStore from "../store/App.store";
@@ -29,9 +28,7 @@ const MyApp = observer(({ Component, pageProps }: AppProps) => {
   const twitterCardUrl =
     "https://entropy-web-docs.vercel.app/images/twitter-card.png";
   const url = "https://entropy-web-docs.vercel.app/";
-  const router = useRouter();
   useEffect(() => {
-    console.log("calling init");
     AppStore.init();
   }, []);
   return (

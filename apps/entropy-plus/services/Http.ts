@@ -8,28 +8,11 @@ import {
   PostLoginResponse,
   Profile,
   Sort,
+  TwitterChannel,
   TwitterChannelScreenName,
 } from "../interfaces";
 import AppStore from "../store/App.store";
 import { AuthTokens } from "./../interfaces/index";
-interface MeProps {
-  me: Profile;
-}
-
-interface ImageData {
-  id: number;
-}
-
-interface ProfileData {
-  slug: string;
-}
-interface ImageData {
-  id: number;
-}
-
-async function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 class EntropyHttp {
   protected http: AxiosInstance;
@@ -84,19 +67,21 @@ class EntropyHttp {
   }
 
   getTwitterChannel(channel: TwitterChannelScreenName) {
-    return this.http.get(`/api/twitter-channels/${channel}/`);
+    return this.http.get<TwitterChannel>(`/api/twitter-channels/${channel}/`);
   }
 
   getTwitterChannels() {
-    return this.http.get("/api/v1/twitter-channels/");
+    return this.http.get<TwitterChannel[]>("/api/v1/twitter-channels/");
   }
 
   approveImage(id: number, slug: string) {
-    return this.http.patch(`/api/images/${id}/update/`, { params: { slug } });
+    return this.http.patch<Sort>(`/api/images/${id}/update/`, {
+      params: { slug },
+    });
   }
 
   rejectImage(id: number, slug: string) {
-    return this.http.patch(`/api/images/${id}/update/decline/`, {
+    return this.http.patch<Sort>(`/api/images/${id}/update/decline/`, {
       params: { slug },
     });
   }
@@ -142,44 +127,6 @@ class EntropyHttp {
 
     const data = { profile: profile, images: profileImages };
     return { data: data };
-  }
-
-  async _approveImage(imageData: ImageData) {
-    try {
-      const getMe = AppStore.auth.profile?.handle;
-      if (!getMe) {
-        throw new Error("Profile handle is not defined.");
-      }
-      const profile = await this.getProfile(getMe);
-      const slug = profile.data.profile.slug;
-      const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/?slug=${slug}`;
-      const response = await this.http.patch(url);
-      console.log(response, "approve");
-      if (response.status === 200) {
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async declineImage(imageData: ImageData) {
-    try {
-      const getMe = AppStore.auth.profile?.handle;
-      if (!getMe) {
-        throw new Error("Profile handle is not defined.");
-      }
-      const profile = await this.getProfile(getMe);
-      const slug = profile.data.profile.slug;
-      const url = `https://entropy-plus.herokuapp.com/api/images/${imageData.id}/update/decline/?slug=${slug}`;
-      const response = await this.http.patch(url);
-      console.log(response, "decline");
-      if (response.status === 200) {
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   async getCuratorImage(curatorSlug: string, id: string) {

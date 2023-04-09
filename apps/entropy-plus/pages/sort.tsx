@@ -19,6 +19,21 @@ interface SortPageProps {
 
 const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   const store = useMemo(() => new SortPageStore(sort, currentChannel), []);
+  const overlayCss = useMemo(
+    () =>
+      css(
+        "absolute",
+        "inset-0",
+        "w-full",
+        "h-full",
+        "bg-white",
+        "opacity-75",
+        "justify-center",
+        "items-center",
+        { hidden: !store.isLoading, flex: store.isLoading }
+      ),
+    [store.isLoading]
+  );
   return (
     <AppLayout profile={AppStore.auth.profile!}>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
@@ -56,19 +71,8 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
               priority
               fill
             />
-            <div
-              className={css(
-                "absolute",
-                "inset-0",
-                "w-full",
-                "h-full",
-                "bg-white",
-                "opacity-75",
-                "justify-center",
-                "items-center",
-                { hidden: !store.isLoading, flex: store.isLoading }
-              )}
-            >
+            <div className={css(overlayCss)} />
+            <div className={css(overlayCss)}>
               <Image
                 alt={"rotating logo"}
                 src="/images/rotating-logo.gif"
@@ -77,35 +81,34 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
               />
             </div>
           </div>
-          <div className={css("self-start", "-my-1")}>
+          <div className={css("self-start", "-my-1", "relative")}>
             <TwitterChannelSelector
               channels={AppStore.twitterChannels}
               selectedChannel={store.selectedTwitterChannel!}
               onClick={(channel) => store.setSelectedTwitterChannel(channel)}
             />
+            <div className={css(overlayCss)} />
           </div>
         </div>
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
-          {AppStore.auth.profile && (
-            <Button
-              loading={store.isLoading}
-              onClick={() => store.handleReject()}
-              size={ButtonSize.Lg}
-              block
-            >
-              <Icon name={IconName.Close} />
-            </Button>
-          )}
-          {AppStore.auth.profile && (
-            <Button
-              loading={store.isLoading}
-              onClick={() => store.handleApprove()}
-              size={ButtonSize.Lg}
-              block
-            >
-              <Icon name={IconName.Heart} />
-            </Button>
-          )}
+          <Button
+            loading={store.isLoading}
+            onClick={() => store.handleReject()}
+            size={ButtonSize.Lg}
+            spinner={false}
+            block
+          >
+            <Icon name={IconName.Close} />
+          </Button>
+          <Button
+            loading={store.isLoading}
+            onClick={() => store.handleApprove()}
+            size={ButtonSize.Lg}
+            spinner={false}
+            block
+          >
+            <Icon name={IconName.Heart} />
+          </Button>
         </div>
       </div>
     </AppLayout>

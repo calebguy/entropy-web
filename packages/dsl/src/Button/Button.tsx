@@ -70,6 +70,7 @@ export interface ButtonProps
   intent?: ButtonIntent;
   size?: ButtonSize;
   bold?: boolean;
+  spinner?: boolean;
 }
 
 const buttonSizeToTextSize = {
@@ -104,6 +105,7 @@ export const Button = ({
   loading,
   block,
   bold,
+  spinner = true,
 }: ButtonProps) => {
   return (
     <button
@@ -138,19 +140,21 @@ export const Button = ({
               }
             )}
           />
-          <div
-            className={css(
-              "w-full",
-              "h-full",
-              "absolute",
-              "inset-0",
-              "flex",
-              "justify-center",
-              "items-center"
-            )}
-          >
-            <Spinner size={buttonSizeToSpinnerSize[size]} />
-          </div>
+          {spinner && (
+            <div
+              className={css(
+                "w-full",
+                "h-full",
+                "absolute",
+                "inset-0",
+                "flex",
+                "justify-center",
+                "items-center"
+              )}
+            >
+              <Spinner size={buttonSizeToSpinnerSize[size]} />
+            </div>
+          )}
         </>
       )}
     </button>

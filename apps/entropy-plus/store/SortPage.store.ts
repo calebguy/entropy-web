@@ -10,6 +10,9 @@ export default class SortPageStore {
   @observable
   selectedTwitterChannel?: TwitterChannel = undefined;
 
+  @observable
+  isLoading = false;
+
   constructor(sort: Sort, currentTwitterChannel: TwitterChannel) {
     makeObservable(this);
     this.sort = sort;
@@ -26,6 +29,7 @@ export default class SortPageStore {
   }
 
   handleApprove() {
+    this.isLoading = true;
     HttpForClient.approveImage(
       this.sort!.id,
       AppStore.auth.profile!.handle,
@@ -34,6 +38,7 @@ export default class SortPageStore {
   }
 
   handleReject() {
+    this.isLoading = true;
     HttpForClient.rejectImage(
       this.sort!.id,
       AppStore.auth.profile!.handle,
@@ -44,5 +49,14 @@ export default class SortPageStore {
   @action
   setSelectedTwitterChannel(twitterChannel: TwitterChannel) {
     this.selectedTwitterChannel = twitterChannel;
+  }
+
+  @action
+  onLoadingComplete() {
+    this.isLoading = false;
+    // we wait to update the twitter channel here to keep the UI in sync
+    this.selectedTwitterChannel = AppStore.twitterChannels.find(
+      (channel) => channel.screen_name === this.sort!.twitter_channel
+    );
   }
 }

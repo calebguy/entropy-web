@@ -51,10 +51,31 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
               alt={"sort image"}
               src={store.sort!.url}
               style={{ objectFit: "contain" }}
+              onLoadingComplete={() => store.onLoadingComplete()}
               sizes="100vw"
               priority
               fill
             />
+            <div
+              className={css(
+                "absolute",
+                "inset-0",
+                "w-full",
+                "h-full",
+                "bg-white",
+                "opacity-75",
+                "justify-center",
+                "items-center",
+                { hidden: !store.isLoading, flex: store.isLoading }
+              )}
+            >
+              <Image
+                alt={"rotating logo"}
+                src="/images/rotating-logo.gif"
+                width={45}
+                height={45}
+              />
+            </div>
           </div>
           <div className={css("self-start", "-my-1")}>
             <TwitterChannelSelector
@@ -67,6 +88,7 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
         <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
           {AppStore.auth.profile && (
             <Button
+              loading={store.isLoading}
               onClick={() => store.handleReject()}
               size={ButtonSize.Lg}
               block
@@ -76,6 +98,7 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
           )}
           {AppStore.auth.profile && (
             <Button
+              loading={store.isLoading}
               onClick={() => store.handleApprove()}
               size={ButtonSize.Lg}
               block

@@ -25,7 +25,7 @@ const LeaderboardPage = observer(({ leaderBoard }: LeaderboardPageProps) => {
 });
 
 export async function getServerSideProps() {
-  const { data: leaderBoard } = await HttpForServer._getLeaderboard();
+  const { data: leaderBoard } = await HttpForServer.getLeaderboard();
   return {
     props: {
       leaderBoard,

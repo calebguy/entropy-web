@@ -92,8 +92,16 @@ class EntropyHttp {
     });
   }
 
-  async _getLeaderboard() {
+  getLeaderboard() {
     return this.http.get<Profile[]>("/api/leaderboard");
+  }
+
+  getCuratorPhoto(curator: string, id: string | number) {
+    return this.http.get<Photo>(`/api/${curator}/photos/${id}/`);
+  }
+
+  getCuratorProfile(curator: string) {
+    return this.http.get<Profile>(`/api/profiles/${curator}/`);
   }
 
   static createForServer() {
@@ -145,51 +153,6 @@ class EntropyHttp {
 
     const data = { profile: profile, images: profileImages };
     return { data: data };
-  }
-
-  async getCuratorImage(curatorSlug: string, id: string) {
-    const photoURL = `https://entropy-plus.herokuapp.com/api/${curatorSlug}/photos/${id}/`;
-    const response = await fetch(photoURL);
-    const responseData = await response.json();
-
-    const profileUrl = `https://entropy-plus.herokuapp.com/api/profiles/${curatorSlug}/`;
-    const profileResponse = await fetch(profileUrl);
-    const profileData = await profileResponse.json();
-
-    const profile = {
-      profile_image: {
-        url: profileData.profile_image,
-        height_field: 100,
-        width_field: 100,
-      },
-      name: profileData.name,
-      bio: profileData.bio,
-      id: profileData.id,
-      handle: profileData.handle,
-      twitter_handle: profileData.twitter_handle,
-      ig_handle: profileData.ig_handle,
-      website: profileData.website,
-      slug: profileData.slug,
-      admin_approved: profileData.admin_approved,
-      profile_views: profileData.profile_views,
-      seen_feed_images: profileData.seen_feed_images,
-      liked_feed_images: profileData.liked_feed_images,
-      entropy_score: profileData.entropy_score,
-      total_feed_impressions: profileData.total_feed_impressions,
-      profile_awards: profileData.profile_awards,
-      wallet_address: profileData.wallet_address,
-    };
-
-    const data = {
-      image: responseData,
-      profile: profile,
-    };
-
-    console.log("data", data);
-
-    return { data: data };
-    // return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
-    // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
   }
 }
 

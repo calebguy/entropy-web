@@ -202,7 +202,7 @@ const DashboardPage = observer(
 );
 
 export const getServerSideProps = withAuth<any>(async () => {
-  const { data: leaderBoard } = await HttpForServer._getLeaderboard();
+  const { data: leaderBoard } = await HttpForServer.getLeaderboard();
   console.log(leaderBoard[0]);
   const { data: suggestedPhotos } = await getSuggestedPhotos();
 

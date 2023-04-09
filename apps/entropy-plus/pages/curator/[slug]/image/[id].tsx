@@ -90,16 +90,26 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
 export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
   context
 ) => {
-  const { curator, id } = context.query;
-  const {
-    data: { profile, image },
-  } = await HttpForServer.getCuratorImage(curator as string, id as string);
-  return {
-    props: {
-      profile,
-      image,
-    },
-  };
+  try {
+    const { slug, id } = context.query;
+    const { data: profile } = await HttpForServer.getCuratorProfile(
+      slug as string
+    );
+    const { data: image } = await HttpForServer.getCuratorPhoto(
+      slug as string,
+      id as string
+    );
+    return {
+      props: {
+        profile,
+        image,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default ImageById;

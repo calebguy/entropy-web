@@ -1,4 +1,5 @@
 import { Button, ButtonSize, Icon, IconName } from "dsl";
+import Logo from "dsl/src/Icon/CustomIcons/Logo";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import { useMemo } from "react";
@@ -27,9 +28,9 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
         "w-full",
         "h-full",
         "bg-white",
-        "opacity-75",
         "justify-center",
         "items-center",
+        "opacity-80",
         { hidden: !store.isLoading, flex: store.isLoading }
       ),
     [store.isLoading]
@@ -72,13 +73,18 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
               fill
             />
             <div className={css(overlayCss)} />
-            <div className={css(overlayCss)}>
-              <Image
-                alt={"rotating logo"}
-                src="/images/rotating-logo.gif"
-                width={45}
-                height={45}
-              />
+            <div
+              className={css(
+                "absolute",
+                "inset-0",
+                "w-full",
+                "h-full",
+                "justify-center",
+                "items-center",
+                { hidden: !store.isLoading, flex: store.isLoading }
+              )}
+            >
+              <Logo size={32} />
             </div>
           </div>
           <div className={css("self-start", "-my-1", "relative")}>

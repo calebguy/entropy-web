@@ -27,7 +27,7 @@ const TwitterChannelSelector = ({
         { "border-black": show, "border-transparent": !show }
       )}
     >
-      <button onClick={() => setShow(!show)} className={css()}>
+      <button onClick={() => setShow(!show)} className={css("hover:scale-105")}>
         <TwitterChannelIcon imageUrl={selectedChannel.profile_image_url} />
       </button>
       {show && (

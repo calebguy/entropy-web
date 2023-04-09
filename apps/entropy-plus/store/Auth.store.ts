@@ -31,7 +31,11 @@ class AuthStore {
   }
 
   login({ username, password }: LoginDto) {
-    return HttpForClient.login({ username, password })
+    return HttpForClient.login({
+      // we'll probably have to change this and check if lowercase is the correct format
+      username: username.toLocaleLowerCase(),
+      password,
+    })
       .then(() => {
         this.isLoggedIn = true;
         return this.getProfile();

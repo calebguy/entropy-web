@@ -12,7 +12,7 @@ export default class SortPageStore {
 
   // @next -- we should pull in 3 or 4 sort images to have to render directly after button clicks to avoid loaders all together
   @observable
-  isLoading = false;
+  isLoading = true;
 
   constructor(sort: Sort, currentTwitterChannel: TwitterChannel) {
     makeObservable(this);

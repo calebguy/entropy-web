@@ -37,28 +37,29 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
-export interface Profile {
-  id: number;
-  handle: string;
-  bio: Nullable<string>;
-  profile_image:
-    | { url: any; height_field: number; width_field: number }
-    | undefined;
-  name: Nullable<string>;
-  slug: string;
-  entropy_score: Nullable<string>;
-  twitter_handle: string;
-  ig_handle: Nullable<string>;
-  website: Nullable<string>;
+// export interface Profile {
+//   id: number;
+//   handle: string;
+//   bio: Nullable<string>;
+//   profile_image:
+//     | { url: any; height_field: number; width_field: number }
+//     | undefined;
+//   name: Nullable<string>;
+//   slug: string;
+//   entropy_score: Nullable<string>;
+//   twitter_handle: string;
+//   ig_handle: Nullable<string>;
+//   website: Nullable<string>;
 
-  admin_approved: boolean;
-  profile_views: Nullable<string>;
-  seen_feed_images: Nullable<string>;
-  liked_feed_images: Nullable<string>;
-  total_feed_impressions: Nullable<string>;
-  profile_awards: Nullable<string>;
-  wallet_address: Nullable<string>;
-}
+//   admin_approved: boolean;
+//   profile_views: Nullable<string>;
+//   seen_feed_images: Nullable<string>;
+//   liked_feed_images: Nullable<string>;
+//   total_feed_impressions: Nullable<string>;
+//   wallet_address: Nullable<string>;
+
+//   profile_awards: Nullable<string>;
+// }
 
 export interface HeaderProfile {
   id: number;
@@ -152,11 +153,33 @@ export interface GetDashboardResponse {
   userInvitesCount: number;
   curatedPhotosCount: number;
   allPhotosCount: number;
+  leaderBoard: Profile[];
   // acheivements: Acheivement;
 }
 
 export interface GetLeaderboardResponse {
   curators: Profile[];
+}
+
+export interface Profile {
+  id: number;
+  handle: string;
+  profile_image: string;
+  name: Nullable<string>;
+  slug: string;
+  entropy_score: number;
+  twitter_handle: string;
+  ig_handle: string;
+  website: string;
+  admin_approved: boolean;
+  profile_views: number;
+  seen_feed_images: number;
+  liked_feed_images: number;
+  total_feed_impressions: number;
+  wallet_address: Nullable<string>;
+  bio: string;
+  profile_awards: Array<number>;
+  user: number;
 }
 
 export interface Sort {

@@ -2,7 +2,6 @@ import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
 import {
-  GetLeaderboardResponse,
   LoginDto,
   Photo,
   PostLoginResponse,
@@ -11,7 +10,6 @@ import {
   TwitterChannel,
   TwitterChannelScreenName,
 } from "../interfaces";
-import AppStore from "../store/App.store";
 import { AuthTokens } from "./../interfaces/index";
 
 class EntropyHttp {
@@ -92,6 +90,18 @@ class EntropyHttp {
     return this.http.patch<Sort>(`/api/images/${id}/update/decline/`, {
       params: { slug },
     });
+  }
+
+  async _getLeaderboard() {
+    return this.http.get<Profile[]>("/api/leaderboard");
+  }
+
+  static createForServer() {
+    return new _HttpForServer();
+  }
+
+  static createForClient() {
+    return new _HttpForClient();
   }
 
   // ############################################################################ //
@@ -181,64 +191,6 @@ class EntropyHttp {
     // return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
     // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
   }
-
-  async getLogin() {
-    console.log(AppStore.auth.isLoggedIn, "auth");
-  }
-  async getDashboard() {
-    console.log("hello");
-  }
-
-  async getLeaderboard() {
-    const url = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-    const response = await fetch(url);
-    const responseData = await response.json();
-    const curators: Profile[] = []; // create an array variable
-
-    // iterate through each object in responseData and push to curators array
-    for (const data of responseData) {
-      const profile = {
-        profile_image: {
-          url: data.profile_image,
-          height_field: 100,
-          width_field: 100,
-        },
-        name: data.name,
-        id: data.id,
-        bio: data.bio,
-        handle: data.handle,
-        twitter_handle: data.twitter_handle,
-        ig_handle: data.ig_handle,
-        website: data.website,
-        slug: data.slug,
-        admin_approved: data.admin_approved,
-        profile_views: data.profile_views,
-        seen_feed_images: data.seen_feed_images,
-        liked_feed_images: data.liked_feed_images,
-        entropy_score: data.entropy_score,
-        total_feed_impressions: data.total_feed_impressions,
-        profile_awards: data.profile_awards,
-        wallet_address: data.wallet_address,
-      };
-      curators.push(profile);
-    }
-
-    console.log(curators);
-
-    const CREATE_LEADERBOARD_DATA = (): GetLeaderboardResponse => ({
-      curators: curators,
-    });
-
-    return { data: CREATE_LEADERBOARD_DATA() };
-  }
-
-  static createForServer() {
-    return new _HttpForServer();
-  }
-
-  static createForClient() {
-    return new _HttpForClient();
-  }
 }
 
 class _HttpForServer extends EntropyHttp {
@@ -294,109 +246,109 @@ class _HttpForClient extends EntropyHttp {
   }
 }
 
-export async function getDashboardData(slug: string) {
-  const entropyHttp = new EntropyHttp(
-    "https://entropy-plus.herokuapp.com/api/"
-  );
-  const me = await entropyHttp.getProfile(slug);
-  const profSlug = me.data.profile.slug;
-  const url = `https://entropy-plus.herokuapp.com/api/profiles/${profSlug}/`;
-  const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-  const leaderboardResponse = await fetch(leaderboardUrl);
-  const leaderboardResponseData = await leaderboardResponse.json();
+// export async function getDashboardData(slug: string) {
+//   const entropyHttp = new EntropyHttp(
+//     "https://entropy-plus.herokuapp.com/api/"
+//   );
+//   const me = await entropyHttp.getProfile(slug);
+//   const profSlug = me.data.profile.slug;
+//   const url = `https://entropy-plus.herokuapp.com/api/profiles/${profSlug}/`;
+//   const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+//   const leaderboardResponse = await fetch(leaderboardUrl);
+//   const leaderboardResponseData = await leaderboardResponse.json();
 
-  let topThreeCurators: Profile[] = [];
-  if (
-    Array.isArray(leaderboardResponseData) &&
-    leaderboardResponseData.length > 0
-  ) {
-    topThreeCurators = leaderboardResponseData
-      .slice(0, 3)
-      .map((curator: any) => {
-        const profile = {
-          profile_image: {
-            url: curator.profile_image,
-            height_field: 100,
-            width_field: 100,
-          },
-          id: curator.id,
-          bio: curator.bio,
-          name: curator.name,
-          handle: curator.handle,
-          twitter_handle: curator.twitter_handle,
-          ig_handle: curator.ig_handle,
-          website: curator.website,
-          slug: curator.slug,
-          admin_approved: curator.admin_approved,
-          profile_views: curator.profile_views,
-          seen_feed_images: curator.seen_feed_images,
-          liked_feed_images: curator.liked_feed_images,
-          entropy_score: curator.entropy_score,
-          total_feed_impressions: curator.total_feed_impressions,
-          profile_awards: curator.profile_awards,
-          wallet_address: curator.wallet_address,
-        };
-        return profile;
-      });
-  }
+//   let topThreeCurators: Profile[] = [];
+//   if (
+//     Array.isArray(leaderboardResponseData) &&
+//     leaderboardResponseData.length > 0
+//   ) {
+//     topThreeCurators = leaderboardResponseData
+//       .slice(0, 3)
+//       .map((curator: any) => {
+//         const profile = {
+//           profile_image: {
+//             url: curator.profile_image,
+//             height_field: 100,
+//             width_field: 100,
+//           },
+//           id: curator.id,
+//           bio: curator.bio,
+//           name: curator.name,
+//           handle: curator.handle,
+//           twitter_handle: curator.twitter_handle,
+//           ig_handle: curator.ig_handle,
+//           website: curator.website,
+//           slug: curator.slug,
+//           admin_approved: curator.admin_approved,
+//           profile_views: curator.profile_views,
+//           seen_feed_images: curator.seen_feed_images,
+//           liked_feed_images: curator.liked_feed_images,
+//           entropy_score: curator.entropy_score,
+//           total_feed_impressions: curator.total_feed_impressions,
+//           profile_awards: curator.profile_awards,
+//           wallet_address: curator.wallet_address,
+//         };
+//         return profile;
+//       });
+//   }
 
-  const response = await fetch(url);
-  const responseData = await response.json();
-  const rankIndex = leaderboardResponseData.findIndex(
-    (profile: any) => profile.handle === slug
-  );
+//   const response = await fetch(url);
+//   const responseData = await response.json();
+//   const rankIndex = leaderboardResponseData.findIndex(
+//     (profile: any) => profile.handle === slug
+//   );
 
-  // const suggestedResponse = await fetch(
-  //   "https://entropyplus.xyz/api/suggested-photos/"
-  // );
-  // const suggestedData = await suggestedResponse.json();
-  // const suggestedPhotos: Photo[] = [];
+//   // const suggestedResponse = await fetch(
+//   //   "https://entropyplus.xyz/api/suggested-photos/"
+//   // );
+//   // const suggestedData = await suggestedResponse.json();
+//   // const suggestedPhotos: Photo[] = [];
 
-  // if (Array.isArray(suggestedData) && suggestedData.length > 0) {
-  //   suggestedPhotos.push(...suggestedData.slice(0, 10));
-  // }
+//   // if (Array.isArray(suggestedData) && suggestedData.length > 0) {
+//   //   suggestedPhotos.push(...suggestedData.slice(0, 10));
+//   // }
 
-  const profile = {
-    profile_image: {
-      url: responseData.profile_image,
-      height_field: 100,
-      width_field: 100,
-    },
-    name: responseData.name,
-    id: responseData.id,
-    bio: responseData.bio,
-    handle: responseData.handle,
-    twitter_handle: responseData.twitter_handle,
-    ig_handle: responseData.ig_handle,
-    website: responseData.website,
-    slug: responseData.slug,
-    admin_approved: responseData.admin_approved,
-    profile_views: responseData.profile_views,
-    seen_feed_images: responseData.seen_feed_images,
-    liked_feed_images: responseData.liked_feed_images,
-    entropy_score: responseData.entropy_score,
-    total_feed_impressions: responseData.total_feed_impressions,
-    profile_awards: responseData.profile_awards,
-    wallet_address: responseData.wallet_address,
-  };
-  const data = {
-    profile: profile,
-    rankedCurators: topThreeCurators,
-    // suggestedPhotos: suggestedPhotos,
-    rank: rankIndex,
-    userInvitesCount: 4,
-    curatedPhotosCount: responseData.liked_feed_images,
-    allPhotosCount: responseData.seen_feed_images,
-    acheivements: {
-      isCoreCurator: true,
-      isTopFivePercent: true,
-      isJuiced: true,
-      isArchivist: true,
-    },
-  };
+//   const profile = {
+//     profile_image: {
+//       url: responseData.profile_image,
+//       height_field: 100,
+//       width_field: 100,
+//     },
+//     name: responseData.name,
+//     id: responseData.id,
+//     bio: responseData.bio,
+//     handle: responseData.handle,
+//     twitter_handle: responseData.twitter_handle,
+//     ig_handle: responseData.ig_handle,
+//     website: responseData.website,
+//     slug: responseData.slug,
+//     admin_approved: responseData.admin_approved,
+//     profile_views: responseData.profile_views,
+//     seen_feed_images: responseData.seen_feed_images,
+//     liked_feed_images: responseData.liked_feed_images,
+//     entropy_score: responseData.entropy_score,
+//     total_feed_impressions: responseData.total_feed_impressions,
+//     profile_awards: responseData.profile_awards,
+//     wallet_address: responseData.wallet_address,
+//   };
+//   const data = {
+//     profile: profile,
+//     rankedCurators: topThreeCurators,
+//     // suggestedPhotos: suggestedPhotos,
+//     rank: rankIndex,
+//     userInvitesCount: 4,
+//     curatedPhotosCount: responseData.liked_feed_images,
+//     allPhotosCount: responseData.seen_feed_images,
+//     acheivements: {
+//       isCoreCurator: true,
+//       isTopFivePercent: true,
+//       isJuiced: true,
+//       isArchivist: true,
+//     },
+//   };
 
-  return { data: data };
-}
+//   return { data: data };
+// }
 
 export async function getSuggestedPhotos() {
   const entropyHttp = new EntropyHttp(
@@ -415,159 +367,148 @@ export async function getSuggestedPhotos() {
   return { data: suggestedPhotos };
 }
 
-export async function getDashboardLeaderboard() {
-  const entropyHttp = new EntropyHttp(
-    "https://entropy-plus.herokuapp.com/api/"
-  );
-  const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-  const leaderboardResponse = await fetch(leaderboardUrl);
-  const leaderboardResponseData = await leaderboardResponse.json();
+// export async function getDashboardLeaderboard() {
+//   const entropyHttp = new EntropyHttp(
+//     "https://entropy-plus.herokuapp.com/api/"
+//   );
+//   const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+//   const leaderboardResponse = await fetch(leaderboardUrl);
+//   const leaderboardResponseData = await leaderboardResponse.json();
 
-  let topThreeCurators: Profile[] = [];
-  if (
-    Array.isArray(leaderboardResponseData) &&
-    leaderboardResponseData.length > 0
-  ) {
-    topThreeCurators = leaderboardResponseData
-      .slice(0, 3)
-      .map((curator: any) => {
-        const profile = {
-          profile_image: {
-            url: curator.profile_image,
-            height_field: 100,
-            width_field: 100,
-          },
-          id: curator.id,
-          bio: curator.bio,
-          name: curator.name,
-          handle: curator.handle,
-          twitter_handle: curator.twitter_handle,
-          ig_handle: curator.ig_handle,
-          website: curator.website,
-          slug: curator.slug,
-          admin_approved: curator.admin_approved,
-          profile_views: curator.profile_views,
-          seen_feed_images: curator.seen_feed_images,
-          liked_feed_images: curator.liked_feed_images,
-          entropy_score: curator.entropy_score,
-          total_feed_impressions: curator.total_feed_impressions,
-          profile_awards: curator.profile_awards,
-          wallet_address: curator.wallet_address,
-        };
-        return profile;
-      });
-  }
-  const data = {
-    rankedCurators: topThreeCurators,
-  };
+//   let topThreeCurators: Profile[] = [];
+//   if (
+//     Array.isArray(leaderboardResponseData) &&
+//     leaderboardResponseData.length > 0
+//   ) {
+//     topThreeCurators = leaderboardResponseData
+//       .slice(0, 3)
+//       .map((curator: any) => {
+//         const profile = {
+//           profile_image: {
+//             url: curator.profile_image,
+//             height_field: 100,
+//             width_field: 100,
+//           },
+//           id: curator.id,
+//           bio: curator.bio,
+//           name: curator.name,
+//           handle: curator.handle,
+//           twitter_handle: curator.twitter_handle,
+//           ig_handle: curator.ig_handle,
+//           website: curator.website,
+//           slug: curator.slug,
+//           admin_approved: curator.admin_approved,
+//           profile_views: curator.profile_views,
+//           seen_feed_images: curator.seen_feed_images,
+//           liked_feed_images: curator.liked_feed_images,
+//           entropy_score: curator.entropy_score,
+//           total_feed_impressions: curator.total_feed_impressions,
+//           profile_awards: curator.profile_awards,
+//           wallet_address: curator.wallet_address,
+//         };
+//         return profile;
+//       });
+//   }
+//   const data = {
+//     rankedCurators: topThreeCurators,
+//   };
 
-  return topThreeCurators;
-}
+//   return topThreeCurators;
+// }
 
-export async function getFullDashboardLeaderboard() {
-  const entropyHttp = new EntropyHttp(
-    "https://entropy-plus.herokuapp.com/api/"
-  );
-  const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-  const leaderboardResponse = await fetch(leaderboardUrl);
-  const leaderboardResponseData = await leaderboardResponse.json();
+// export async function getFullDashboardLeaderboard() {
+//   const entropyHttp = new EntropyHttp(
+//     "https://entropy-plus.herokuapp.com/api/"
+//   );
+//   const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+//   const leaderboardResponse = await fetch(leaderboardUrl);
+//   const leaderboardResponseData = await leaderboardResponse.json();
 
-  let topThreeCurators: Profile[] = [];
-  if (
-    Array.isArray(leaderboardResponseData) &&
-    leaderboardResponseData.length > 0
-  ) {
-    topThreeCurators = leaderboardResponseData.map((curator: any) => {
-      const profile = {
-        profile_image: {
-          url: curator.profile_image,
-          height_field: 100,
-          width_field: 100,
-        },
-        id: curator.id,
-        bio: curator.bio,
-        name: curator.name,
-        handle: curator.handle,
-        twitter_handle: curator.twitter_handle,
-        ig_handle: curator.ig_handle,
-        website: curator.website,
-        slug: curator.slug,
-        admin_approved: curator.admin_approved,
-        profile_views: curator.profile_views,
-        seen_feed_images: curator.seen_feed_images,
-        liked_feed_images: curator.liked_feed_images,
-        entropy_score: curator.entropy_score,
-        total_feed_impressions: curator.total_feed_impressions,
-        profile_awards: curator.profile_awards,
-        wallet_address: curator.wallet_address,
-      };
-      return profile;
-    });
-  }
-  const data = {
-    rankedCurators: topThreeCurators,
-  };
+//   let topThreeCurators: Profile[] = [];
+//   if (
+//     Array.isArray(leaderboardResponseData) &&
+//     leaderboardResponseData.length > 0
+//   ) {
+//     topThreeCurators = leaderboardResponseData.map((curator: any) => {
+//       const profile = {
+//         profile_image: {
+//           url: curator.profile_image,
+//           height_field: 100,
+//           width_field: 100,
+//         },
+//         id: curator.id,
+//         bio: curator.bio,
+//         name: curator.name,
+//         handle: curator.handle,
+//         twitter_handle: curator.twitter_handle,
+//         ig_handle: curator.ig_handle,
+//         website: curator.website,
+//         slug: curator.slug,
+//         admin_approved: curator.admin_approved,
+//         profile_views: curator.profile_views,
+//         seen_feed_images: curator.seen_feed_images,
+//         liked_feed_images: curator.liked_feed_images,
+//         entropy_score: curator.entropy_score,
+//         total_feed_impressions: curator.total_feed_impressions,
+//         profile_awards: curator.profile_awards,
+//         wallet_address: curator.wallet_address,
+//       };
+//       return profile;
+//     });
+//   }
+//   const data = {
+//     rankedCurators: topThreeCurators,
+//   };
 
-  return topThreeCurators;
-}
+//   return topThreeCurators;
+// }
 
-export async function getRank(slug: string) {
-  const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
-  const leaderboardResponse = await fetch(leaderboardUrl);
-  const leaderboardResponseData = await leaderboardResponse.json();
+// export async function getRank(slug: string) {
+//   const leaderboardUrl = `https://entropy-plus.herokuapp.com/api/leaderboard/`;
+//   const leaderboardResponse = await fetch(leaderboardUrl);
+//   const leaderboardResponseData = await leaderboardResponse.json();
 
-  let topThreeCurators: Profile[] = [];
-  if (
-    Array.isArray(leaderboardResponseData) &&
-    leaderboardResponseData.length > 0
-  ) {
-    topThreeCurators = leaderboardResponseData.map((curator: any) => {
-      const profile = {
-        profile_image: {
-          url: curator.profile_image,
-          height_field: 100,
-          width_field: 100,
-        },
-        id: curator.id,
-        bio: curator.bio,
-        name: curator.name,
-        handle: curator.handle,
-        twitter_handle: curator.twitter_handle,
-        ig_handle: curator.ig_handle,
-        website: curator.website,
-        slug: curator.slug,
-        admin_approved: curator.admin_approved,
-        profile_views: curator.profile_views,
-        seen_feed_images: curator.seen_feed_images,
-        liked_feed_images: curator.liked_feed_images,
-        entropy_score: curator.entropy_score,
-        total_feed_impressions: curator.total_feed_impressions,
-        profile_awards: curator.profile_awards,
-        wallet_address: curator.wallet_address,
-      };
-      return profile;
-    });
-  }
-  const rankIndex = leaderboardResponseData.findIndex(
-    (profile: any) => profile.handle === slug
-  );
-  const data = {
-    rank: rankIndex,
-  };
+//   let topThreeCurators: Profile[] = [];
+//   if (
+//     Array.isArray(leaderboardResponseData) &&
+//     leaderboardResponseData.length > 0
+//   ) {
+//     topThreeCurators = leaderboardResponseData.map((curator: any) => {
+//       const profile = {
+//         profile_image: {
+//           url: curator.profile_image,
+//           height_field: 100,
+//           width_field: 100,
+//         },
+//         id: curator.id,
+//         bio: curator.bio,
+//         name: curator.name,
+//         handle: curator.handle,
+//         twitter_handle: curator.twitter_handle,
+//         ig_handle: curator.ig_handle,
+//         website: curator.website,
+//         slug: curator.slug,
+//         admin_approved: curator.admin_approved,
+//         profile_views: curator.profile_views,
+//         seen_feed_images: curator.seen_feed_images,
+//         liked_feed_images: curator.liked_feed_images,
+//         entropy_score: curator.entropy_score,
+//         total_feed_impressions: curator.total_feed_impressions,
+//         profile_awards: curator.profile_awards,
+//         wallet_address: curator.wallet_address,
+//       };
+//       return profile;
+//     });
+//   }
+//   const rankIndex = leaderboardResponseData.findIndex(
+//     (profile: any) => profile.handle === slug
+//   );
+//   const data = {
+//     rank: rankIndex,
+//   };
 
-  return { data: data };
-}
-
-export async function getSortImageData(slug: string) {
-  const url = `https://entropy-plus.herokuapp.com/api/v1/sort/?slug=${slug}`;
-  const response = await fetch(url);
-  const imageData = await response.json();
-  const returnedImage = imageData[0];
-  const data = {
-    image: returnedImage,
-  };
-  return { image: returnedImage };
-}
+//   return { data: data };
+// }
 
 export const HttpForServer = EntropyHttp.createForServer();
 export const HttpForClient = EntropyHttp.createForClient();

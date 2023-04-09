@@ -10,6 +10,7 @@ export default class SortPageStore {
   @observable
   selectedTwitterChannel?: TwitterChannel = undefined;
 
+  // @next -- we should pull in 3 or 4 sort images to have to render directly after button clicks to avoid loaders all together
   @observable
   isLoading = false;
 

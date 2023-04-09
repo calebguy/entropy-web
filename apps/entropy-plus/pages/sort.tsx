@@ -81,6 +81,7 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
                 "h-full",
                 "justify-center",
                 "items-center",
+                "animate-spin",
                 { hidden: !store.isLoading, flex: store.isLoading }
               )}
             >
@@ -96,7 +97,15 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
             <div className={css(overlayCss)} />
           </div>
         </div>
-        <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
+        <div
+          className={css(
+            "flex",
+            "justify-around",
+            "gap-4",
+            "md:gap-24",
+            "mb-4"
+          )}
+        >
           <Button
             loading={store.isLoading}
             onClick={() => store.handleReject()}

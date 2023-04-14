@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Icon,
   IconName,
   InfiniteScroll,
@@ -30,7 +31,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   const {
     query: { slug },
   } = useRouter();
-  const store = useMemo(() => new CuratorPageStore(slug as string), []);
+  const store = useMemo(() => new CuratorPageStore(slug as string), [slug]);
   useEffect(() => {
     store.init();
   }, []);
@@ -149,20 +150,44 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
             <Link
               key={`curator-image-${photo.url}-${index}`}
               href={`${slug}/image/${photo.id}`}
+              className={css("w-full", "h-full")}
             >
-              <div className={css("relative", "w-full", "h-full")}>
-                <Image alt={photo.url} src={photo.url} fill />
+              <div className={css("relative")}>
+                <AspectRatio
+                  className={css(
+                    "bg-cover",
+                    "bg-center",
+                    "bg-no-repeat",
+                    "rounded-md",
+                    "z-10"
+                  )}
+                  ratio={`1/1`}
+                  style={{ backgroundImage: `url(${photo.url})` }}
+                />
+
+                <div
+                  className={css(
+                    "border-[1px]",
+                    "border-solid",
+                    "border-black",
+                    "w-full",
+                    "h-full",
+                    "rounded-md",
+                    "flex",
+                    "justify-center",
+                    "items-center",
+                    "absolute",
+                    "inset-0"
+                  )}
+                >
+                  <Image
+                    src={"/images/logo.svg"}
+                    alt={"loader"}
+                    width={25}
+                    height={25}
+                  />
+                </div>
               </div>
-              {/* <AspectRatio
-                className={css(
-                  "bg-cover",
-                  "bg-center",
-                  "bg-no-repeat",
-                  "rounded-md"
-                )}
-                ratio={`1/1`}
-                style={{ backgroundImage: `url(${photo.url})` }}
-              /> */}
             </Link>
           ))}
         </div>

@@ -6,6 +6,7 @@ import sleep from "utils/sleep";
 
 export default class ScrollableDataProviderStore<T> {
   private itemsPerPage = 25;
+  private secondsToWait = 0.5;
 
   @observable
   private page = 0;
@@ -21,7 +22,7 @@ export default class ScrollableDataProviderStore<T> {
   }
 
   async next() {
-    sleep(1);
+    await sleep(this.secondsToWait);
     this.page++;
   }
 

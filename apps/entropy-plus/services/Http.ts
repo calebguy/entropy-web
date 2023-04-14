@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
 import {
+  CuratorPhoto,
   LoginDto,
   Photo,
   PostLoginResponse,
@@ -97,11 +98,15 @@ class EntropyHttp {
   }
 
   getCuratorPhoto(curator: string, id: string | number) {
-    return this.http.get<Photo>(`/api/${curator}/photos/${id}/`);
+    return this.http.get<CuratorPhoto>(`/api/${curator}/photos/${id}/`);
   }
 
   getCuratorProfile(curator: string) {
     return this.http.get<Profile>(`/api/profiles/${curator}/`);
+  }
+
+  getCuratorPhotos(curator: string) {
+    return this.http.get<Array<CuratorPhoto>>(`/api/${curator}/photos/`);
   }
 
   static createForServer() {

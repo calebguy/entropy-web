@@ -33,7 +33,7 @@ const Leaderboard = ({ leaderBoard: curators }: LeaderboardProps) => {
             scoreTextSize = TextSize.Md;
           }
           return (
-            <Pane size={PaneSize.Lg} block>
+            <Pane key={`${curator.handle}-${index}`} size={PaneSize.Lg} block>
               <div className={css("grid", "grid-cols-6", "gap-2")}>
                 <div className={css("flex", "items-center", "col-span-1")}>
                   <RankEmblem rank={index + 1} />

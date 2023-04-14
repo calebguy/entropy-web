@@ -37,6 +37,24 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
+export interface CuratorPhoto {
+  id: number;
+  url: string;
+  added_to_profile: Array<{ slug: string }>;
+  image_source: Nullable<string>;
+  image_creator: Nullable<string>;
+  image_description: Nullable<string>;
+}
+
+export interface SuggestedPhoto
+  extends Pick<CuratorPhoto, "id" | "url" | "added_to_profile"> {
+  approved_to_tweet: boolean;
+  was_tweeted: boolean;
+  twitter_channel: string;
+  approved_by_user: Array<{ slug: string }>;
+  declined_by_user: Array<{ slug: string }>;
+}
+
 // export interface Profile {
 //   id: number;
 //   handle: string;
@@ -163,23 +181,23 @@ export interface GetLeaderboardResponse {
 
 export interface Profile {
   id: number;
-  handle: string;
+  user: number;
   profile_image: string;
   name: Nullable<string>;
-  slug: string;
-  entropy_score: number;
+  bio: string;
+  handle: string;
   twitter_handle: string;
   ig_handle: string;
   website: string;
+  slug: string;
   admin_approved: boolean;
   profile_views: number;
   seen_feed_images: number;
   liked_feed_images: number;
+  entropy_score: number;
   total_feed_impressions: number;
-  wallet_address: Nullable<string>;
-  bio: string;
   profile_awards: Array<number>;
-  user: number;
+  wallet_address: Nullable<string>;
 }
 
 export interface Sort {

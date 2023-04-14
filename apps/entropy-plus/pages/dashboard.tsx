@@ -205,7 +205,7 @@ export const getServerSideProps = withAuth<any>(async () => {
   const { data: leaderBoard } = await HttpForServer.getLeaderboard();
   console.log(leaderBoard[0]);
   const { data: suggestedPhotos } = await getSuggestedPhotos();
-
+  console.log(suggestedPhotos);
   return {
     props: {
       suggestedPhotos,

@@ -1,10 +1,7 @@
-
 import {
-  AspectRatio,
-  Button,
-  ButtonIntent,
   Icon,
   IconName,
+  InfiniteScroll,
   Pane,
   PaneSize,
   Text,
@@ -13,25 +10,30 @@ import {
 } from "dsl";
 import { observer } from "mobx-react-lite";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { css, formatWithThousandsSeparators, jsonify } from "utils";
+import { useEffect, useMemo } from "react";
+import { css, formatWithThousandsSeparators } from "utils";
 import ProfileIcon from "../../../components/ProfileIcon";
-import { Photo, Profile } from "../../../interfaces";
+import { Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
 import { HttpForServer } from "../../../services/Http";
-import AppStore from "../../../store/App.store";
+import CuratorPageStore from "../../../store/CuratorPage.store";
 
 interface CuratorPageProps {
   profile: Profile;
-  photos: Photo[];
   // acheivements: Acheivement;
 }
 
-const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
+const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   const {
     query: { slug },
   } = useRouter();
+  const store = useMemo(() => new CuratorPageStore(slug as string), []);
+  useEffect(() => {
+    store.init();
+  }, []);
   // const acheivmentKeys = objectKeys(acheivements);
   const hasLinks =
     !!profile.twitter_handle || !!profile.ig_handle || !!profile.website;
@@ -128,7 +130,11 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
           </Pane>
         )}
       </div>
-      {photos.length > 0 && (
+      <InfiniteScroll
+        hasMore={store.hasMore}
+        dataLength={store.dataLength}
+        next={() => store.next()}
+      >
         <div
           className={css(
             "grid",
@@ -139,12 +145,15 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
             "mt-2"
           )}
         >
-          {photos.map((photo, index) => (
+          {store.data.map((photo, index) => (
             <Link
               key={`curator-image-${photo.url}-${index}`}
               href={`${slug}/image/${photo.id}`}
             >
-              <AspectRatio
+              <div className={css("relative", "w-full", "h-full")}>
+                <Image alt={photo.url} src={photo.url} fill />
+              </div>
+              {/* <AspectRatio
                 className={css(
                   "bg-cover",
                   "bg-center",
@@ -153,11 +162,11 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
                 )}
                 ratio={`1/1`}
                 style={{ backgroundImage: `url(${photo.url})` }}
-              />
+              /> */}
             </Link>
           ))}
         </div>
-      )}
+      </InfiniteScroll>
     </AppLayout>
   );
 });
@@ -165,14 +174,12 @@ const CuratorPage = observer(({ profile, photos }: CuratorPageProps) => {
 export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   context
 ) => {
-  const { slug } = context.query;
-  const {
-    data: { profile, images },
-  } = await HttpForServer.getProfile(slug as string);
+  const { slug } = context.query as { slug: string };
+  const { data: profile } = await HttpForServer.getCuratorProfile(slug);
+  console.log("PROFILE", profile);
   return {
     props: {
       profile,
-      photos: images,
       // acheivements,
     },
   };

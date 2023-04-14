@@ -130,7 +130,7 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   );
 });
 
-export const getServerSideProps = withAuth<any>(async () => {
+export const getServerSideProps = withAuth<SortPageProps>(async (context) => {
   try {
     const { data: me } = await HttpForServer.getMe();
     const { data: sorts } = await HttpForServer.getSortImage(me.handle);

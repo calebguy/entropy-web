@@ -17,12 +17,16 @@ class _AppStore {
 
   async init() {
     await this.auth.init();
-    return HttpForClient.getTwitterChannels().then(({ data }) => {
-      // null channel is returned from server
-      this.twitterChannels = data.filter(
-        (channel) => channel.profile_image_url !== null
-      );
-    });
+    return HttpForClient.getTwitterChannels()
+      .then(({ data }) => {
+        // null channel is returned from server
+        this.twitterChannels = data.filter(
+          (channel) => channel.profile_image_url !== null
+        );
+      })
+      .catch((e) => {
+        console.error("GOT ERROR FETCHING TWITTER CHANNELS", e);
+      });
   }
 }
 

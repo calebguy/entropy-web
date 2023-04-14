@@ -13,7 +13,7 @@ import {
 } from "../interfaces";
 import { AuthTokens } from "./../interfaces/index";
 
-class EntropyHttp {
+export class EntropyHttp {
   protected http: AxiosInstance;
 
   constructor(baseUrl: string) {
@@ -161,6 +161,8 @@ class EntropyHttp {
   }
 }
 
+// NOTE: The server HTTP instance does not automatically refresh tokens on its own,
+// as we we'd need to supply the requests context on every request which is meh
 class _HttpForServer extends EntropyHttp {
   private _accessToken?: string;
   private _refreshToken?: string;

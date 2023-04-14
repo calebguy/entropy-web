@@ -6,18 +6,24 @@ import UnauthenticatedError from "../services/exceptions/Unauthenticated.error";
 import redirectToLogin from "./redirectToLogin";
 const Cookies = require("cookies");
 
+// @next -- attach current user onto the session
 export default function withAuth<T>(
-  callback: (accessToken: string) => Promise<GetServerSidePropsResult<T>>
+  callback: (
+    context: GetServerSidePropsContext,
+    accessToken: string
+  ) => Promise<GetServerSidePropsResult<T>>
 ) {
   return async (context: GetServerSidePropsContext) => {
     try {
       const cookie = new Cookies(context.req, context.res);
       const accessToken = cookie.get(ACCESS_COOKIE_NAME);
+      const refreshToken = cookie.get(REFRESH_COOKIE_NAME);
       if (!accessToken) {
         throw new UnauthenticatedError();
       }
       HttpForServer.setAccessToken(accessToken);
-      return callback(accessToken);
+      HttpForServer.setRefreshToken(refreshToken);
+      return callback(context, accessToken);
     } catch (e) {
       if (e instanceof UnauthenticatedError) {
         const cookie = new Cookies(context.req, context.res);
@@ -28,11 +34,10 @@ export default function withAuth<T>(
         HttpForServer.setRefreshToken(refreshToken);
         try {
           const { data: authData } = await HttpForServer.refreshToken();
-          console.log("setting cookies");
           setCookies({ req: context.req, res: context.res, authData });
           HttpForServer.setAccessToken(authData.access);
           HttpForServer.setRefreshToken(authData.refresh);
-          return callback(authData.access);
+          return callback(context, authData.access);
         } catch (e) {
           return redirectToLogin();
         }

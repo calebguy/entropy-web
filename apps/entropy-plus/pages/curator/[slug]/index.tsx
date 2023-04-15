@@ -9,6 +9,7 @@ import {
   TextIntent,
   TextSize,
 } from "dsl";
+import Logo from "dsl/src/Icon/CustomIcons/Logo";
 import { observer } from "mobx-react-lite";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -141,13 +142,41 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
             "mt-2"
           )}
         >
-          {store.data.map((photo, index) => (
-            <ImagePreview
-              key={`image-preview-${index}`}
-              photo={photo}
-              slug={slug as string}
-            />
-          ))}
+          {store.isLoading &&
+            Array(16)
+              .fill(0)
+              .map(() => (
+                <AspectRatio
+                  ratio={"1/1"}
+                  className={css(
+                    "border-[1px]",
+                    "border-black",
+                    "border-solid",
+                    "rounded-md",
+                    "h-[218px]"
+                  )}
+                >
+                  <div
+                    className={css(
+                      "w-full",
+                      "h-full",
+                      "flex",
+                      "justify-center",
+                      "items-center"
+                    )}
+                  >
+                    <Logo size={25} />
+                  </div>
+                </AspectRatio>
+              ))}
+          {!store.isLoading &&
+            store.data.map((photo, index) => (
+              <ImagePreview
+                key={`image-preview-${index}`}
+                photo={photo}
+                slug={slug as string}
+              />
+            ))}
         </div>
       </InfiniteScroll>
     </AppLayout>
@@ -161,7 +190,7 @@ const ImagePreview = ({
   photo: CuratorPhoto;
   slug: string;
 }) => {
-  const [showLoader, setShowLoader] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <Link
       key={`curator-image-${photo.url}`}
@@ -174,7 +203,7 @@ const ImagePreview = ({
             fill
             alt={photo.url}
             src={photo.url}
-            onLoadingComplete={() => setShowLoader(false)}
+            onLoadingComplete={() => setIsLoading(false)}
             className={css(
               "w-full",
               "h-full",
@@ -184,7 +213,7 @@ const ImagePreview = ({
             )}
           />
         </AspectRatio>
-        {showLoader && (
+        {isLoading && (
           <div
             className={css(
               "border-[1px]",
@@ -200,12 +229,7 @@ const ImagePreview = ({
               "inset-0"
             )}
           >
-            <Image
-              src={"/images/logo.svg"}
-              alt={"loader"}
-              width={25}
-              height={25}
-            />
+            <Logo size={25} />
           </div>
         )}
       </div>

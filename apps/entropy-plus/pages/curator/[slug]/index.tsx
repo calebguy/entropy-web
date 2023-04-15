@@ -14,17 +14,16 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { css, formatWithThousandsSeparators } from "utils";
 import ProfileIcon from "../../../components/ProfileIcon";
-import { Profile } from "../../../interfaces";
+import { CuratorPhoto, Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
 import { HttpForServer } from "../../../services/Http";
 import CuratorPageStore from "../../../store/CuratorPage.store";
 
 interface CuratorPageProps {
   profile: Profile;
-  // acheivements: Acheivement;
 }
 
 const CuratorPage = observer(({ profile }: CuratorPageProps) => {
@@ -35,7 +34,6 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   useEffect(() => {
     store.init();
   }, []);
-  // const acheivmentKeys = objectKeys(acheivements);
   const hasLinks =
     !!profile.twitter_handle || !!profile.ig_handle || !!profile.website;
   return (
@@ -67,9 +65,6 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
                     <Text intent={TextIntent.Gray}>{profile.bio}</Text>
                   </div>
                 )}
-                {/* {AppStore.auth.profile && (
-                  <Text>{jsonify(AppStore.auth.profile)}</Text>
-                )} */}
               </div>
               {/* {acheivmentKeys.length > 0 && (
                 <div
@@ -147,54 +142,76 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
           )}
         >
           {store.data.map((photo, index) => (
-            <Link
-              key={`curator-image-${photo.url}-${index}`}
-              href={`${slug}/image/${photo.id}`}
-              className={css("w-full", "h-full")}
-            >
-              <div className={css("relative")}>
-                <AspectRatio
-                  className={css(
-                    "bg-cover",
-                    "bg-center",
-                    "bg-no-repeat",
-                    "rounded-md",
-                    "z-10"
-                  )}
-                  ratio={`1/1`}
-                  style={{ backgroundImage: `url(${photo.url})` }}
-                />
-
-                <div
-                  className={css(
-                    "border-[1px]",
-                    "border-solid",
-                    "border-black",
-                    "w-full",
-                    "h-full",
-                    "rounded-md",
-                    "flex",
-                    "justify-center",
-                    "items-center",
-                    "absolute",
-                    "inset-0"
-                  )}
-                >
-                  <Image
-                    src={"/images/logo.svg"}
-                    alt={"loader"}
-                    width={25}
-                    height={25}
-                  />
-                </div>
-              </div>
-            </Link>
+            <ImagePreview
+              key={`image-preview-${index}`}
+              photo={photo}
+              slug={slug as string}
+            />
           ))}
         </div>
       </InfiniteScroll>
     </AppLayout>
   );
 });
+
+const ImagePreview = ({
+  photo,
+  slug,
+}: {
+  photo: CuratorPhoto;
+  slug: string;
+}) => {
+  const [showLoader, setShowLoader] = useState(true);
+  return (
+    <Link
+      key={`curator-image-${photo.url}`}
+      href={`${slug}/image/${photo.id}`}
+      className={css("w-full", "h-full")}
+    >
+      <div className={css("relative", "h-full", "w-full")}>
+        <AspectRatio ratio={"1/1"} className={css("rounded-md", "relative")}>
+          <Image
+            fill
+            alt={photo.url}
+            src={photo.url}
+            onLoadingComplete={() => setShowLoader(false)}
+            className={css(
+              "w-full",
+              "h-full",
+              "rounded-md",
+              "z-10",
+              "object-cover"
+            )}
+          />
+        </AspectRatio>
+        {showLoader && (
+          <div
+            className={css(
+              "border-[1px]",
+              "border-solid",
+              "border-black",
+              "w-full",
+              "h-full",
+              "rounded-md",
+              "flex",
+              "justify-center",
+              "items-center",
+              "absolute",
+              "inset-0"
+            )}
+          >
+            <Image
+              src={"/images/logo.svg"}
+              alt={"loader"}
+              width={25}
+              height={25}
+            />
+          </div>
+        )}
+      </div>
+    </Link>
+  );
+};
 
 export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
   context

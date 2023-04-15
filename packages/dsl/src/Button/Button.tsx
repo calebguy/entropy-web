@@ -71,6 +71,7 @@ export interface ButtonProps
   size?: ButtonSize;
   bold?: boolean;
   spinner?: boolean;
+  interactive?: boolean;
 }
 
 const buttonSizeToTextSize = {
@@ -106,6 +107,7 @@ export const Button = ({
   block,
   bold,
   spinner = true,
+  interactive,
 }: ButtonProps) => {
   return (
     <button
@@ -114,7 +116,8 @@ export const Button = ({
       onClick={onClick}
       className={css(
         buttonStyles({ intent, round, size, block }),
-        sizeToRadius[size]
+        sizeToRadius[size],
+        { "hover:scale-105 focus:scale-95": interactive && !disabled }
       )}
     >
       <Text

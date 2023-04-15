@@ -107,20 +107,23 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
           )}
         >
           <Button
+            block
+            interactive
             loading={store.isLoading}
             onClick={() => store.handleReject()}
             size={ButtonSize.Lg}
             spinner={false}
-            block
           >
             <Icon name={IconName.Close} />
           </Button>
+
           <Button
+            block
+            interactive
             loading={store.isLoading}
             onClick={() => store.handleApprove()}
             size={ButtonSize.Lg}
             spinner={false}
-            block
           >
             <Icon name={IconName.Heart} />
           </Button>

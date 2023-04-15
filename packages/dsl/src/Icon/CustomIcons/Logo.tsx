@@ -1,6 +1,10 @@
+import resolveConfig from "tailwindcss/resolveConfig";
+//@ts-ignore
+import tailwindConfig from "../../../tailwind.config.js";
 import { CustomIconProps } from "../Icon";
+const config = resolveConfig(tailwindConfig);
 
-const Logo = ({ size, fill = "#0000FF" }: CustomIconProps) => {
+const Logo = ({ size, fill = config.theme.colors.brand }: CustomIconProps) => {
   return (
     <svg
       width={size}

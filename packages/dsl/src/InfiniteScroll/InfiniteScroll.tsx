@@ -9,14 +9,16 @@ import {
 } from "react";
 import { css } from "utils";
 import { Spinner } from "../Spinner/Spinner";
+import { Text, TextIntent, TextSize } from "../Text/Text";
 
 export interface InfinteScrollProps {
   next: () => any;
   hasMore: boolean;
   dataLength: number;
   height?: number;
-  endDataMessage?: string;
+  renderEndData?: () => ReactNode;
   renderLoader?: () => ReactNode;
+  endDataMessage?: string;
 }
 
 export const InfiniteScroll: React.FC<
@@ -26,9 +28,10 @@ export const InfiniteScroll: React.FC<
   next,
   hasMore,
   dataLength,
-  endDataMessage,
+  renderEndData,
   height,
   renderLoader,
+  endDataMessage,
 }) => {
   const [showLoader, setShowLoader] = useState(true);
   const [actionTriggered, setActionTriggered] = useState(false);
@@ -80,7 +83,6 @@ export const InfiniteScroll: React.FC<
   });
 
   const defaultEndMessage = "-";
-
   return (
     <div
       ref={infiniteScrollRef}
@@ -111,7 +113,13 @@ export const InfiniteScroll: React.FC<
               "mt-14"
             )}
           >
-            {endDataMessage ? endDataMessage : defaultEndMessage}
+            {renderEndData ? (
+              renderEndData()
+            ) : (
+              <Text intent={TextIntent.Gray} size={TextSize.Sm}>
+                {endDataMessage || defaultEndMessage}
+              </Text>
+            )}
           </div>
         )}
       </div>

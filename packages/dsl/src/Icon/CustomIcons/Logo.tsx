@@ -4,7 +4,10 @@ import tailwindConfig from "../../../tailwind.config.js";
 import { CustomIconProps } from "../Icon";
 const config = resolveConfig(tailwindConfig);
 
-const Logo = ({ size, fill = config.theme.colors.brand }: CustomIconProps) => {
+const Logo = ({
+  size,
+  fill = config!.theme!.colors!.brand as string,
+}: CustomIconProps) => {
   return (
     <svg
       width={size}

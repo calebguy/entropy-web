@@ -1,12 +1,20 @@
-import { Button, ButtonIntent, Form, Icon, IconName, TextInput } from "dsl";
+import {
+  Button,
+  ButtonIntent,
+  Form,
+  Icon,
+  IconName,
+  Submit,
+  TextInput,
+} from "dsl";
 import { observer } from "mobx-react-lite";
-import { useMemo } from "react";
+import Router from "next/router";
 import { css } from "utils";
-import { LoginPayload } from "../interfaces";
-import LoginStore from "../store/Login.store";
+import Dev from "../environment/Dev";
+import { LoginDto } from "../interfaces";
+import AppStore from "../store/App.store";
 
 const Login = observer(() => {
-  const store = useMemo(() => new LoginStore(), []);
   return (
     <div
       className={css(
@@ -22,9 +30,11 @@ const Login = observer(() => {
       <Icon name={IconName.Logo} />
       <Form
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
-        onSubmit={({ username, password }: LoginPayload) =>
-          store.onSubmit(username, password)
-        }
+        onSubmit={({ username, password }: LoginDto) => {
+          return AppStore.auth.login({ username, password }).then(() => {
+            return Router.push("/sort");
+          });
+        }}
       >
         <TextInput
           name={"username"}
@@ -40,9 +50,20 @@ const Login = observer(() => {
           rules={{ required: true }}
         />
         <div className={css("flex", "justify-center")}>
-          <Button intent={ButtonIntent.Secondary} submit>
-            Login
-          </Button>
+          <Submit intent={ButtonIntent.Secondary}>Login</Submit>
+          <Dev>
+            <Button
+              onClick={() =>
+                AppStore.auth
+                  .login({ username: "gainor", password: "Sf4y6RWV9b*" })
+                  .then(() => {
+                    Router.push("/sort");
+                  })
+              }
+            >
+              login gainor
+            </Button>
+          </Dev>
         </div>
       </Form>
     </div>

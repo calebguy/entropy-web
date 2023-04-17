@@ -1,11 +1,13 @@
 import { Text } from "dsl";
-import AppLayout from "../../layouts/App.layout";
+import {
+  Pane,
+} from "dsl";
 
 const UsersInvitePage = () => {
   return (
-    <AppLayout>
+    <Pane>
       <Text>users invite</Text>
-    </AppLayout>
+    </Pane>
   );
 };
 

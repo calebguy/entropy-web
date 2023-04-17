@@ -3,8 +3,12 @@ import "dsl/styles.css";
 import Head from "next/head";
 import "../styles/globals.css";
 
+import { observer } from "mobx-react-lite";
 import type { AppProps } from "next/app";
+import Image from "next/image";
+import { useEffect } from "react";
 import { css } from "utils";
+import AppStore from "../store/App.store";
 
 // @next can this live in the DSL?
 const helvetica = localFont({
@@ -17,13 +21,16 @@ const helvetica = localFont({
   variable: "--font-helvetica-neue",
 });
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = observer(({ Component, pageProps }: AppProps) => {
   const description = "universal connector";
   const name = "E+";
   // @next update
   const twitterCardUrl =
     "https://entropy-web-docs.vercel.app/images/twitter-card.png";
   const url = "https://entropy-web-docs.vercel.app/";
+  useEffect(() => {
+    AppStore.init();
+  }, []);
   return (
     <>
       <Head>
@@ -44,8 +51,29 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <main className={css(helvetica.variable, "grow", "flex", "flex-col")}>
-        <Component {...pageProps} />
+        {AppStore.auth.hasInitialized && <Component {...pageProps} />}
+        {!AppStore.auth.hasInitialized && (
+          <div
+            className={css(
+              "w-full",
+              "h-full",
+              "flex",
+              "items-center",
+              "justify-center",
+              "grow"
+            )}
+          >
+            <Image
+              alt={"rotating logo"}
+              src="/images/rotating-logo.gif"
+              width={30}
+              height={30}
+            />
+          </div>
+        )}
       </main>
     </>
   );
-}
+});
+
+export default MyApp;

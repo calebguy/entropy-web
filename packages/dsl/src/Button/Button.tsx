@@ -70,6 +70,8 @@ export interface ButtonProps
   intent?: ButtonIntent;
   size?: ButtonSize;
   bold?: boolean;
+  spinner?: boolean;
+  interactive?: boolean;
 }
 
 const buttonSizeToTextSize = {
@@ -104,6 +106,8 @@ export const Button = ({
   loading,
   block,
   bold,
+  spinner = true,
+  interactive,
 }: ButtonProps) => {
   return (
     <button
@@ -112,7 +116,11 @@ export const Button = ({
       onClick={onClick}
       className={css(
         buttonStyles({ intent, round, size, block }),
-        sizeToRadius[size]
+        sizeToRadius[size],
+        {
+          "hover:scale-105 focus:scale-95":
+            interactive && !disabled && !loading,
+        }
       )}
     >
       <Text
@@ -138,19 +146,21 @@ export const Button = ({
               }
             )}
           />
-          <div
-            className={css(
-              "w-full",
-              "h-full",
-              "absolute",
-              "inset-0",
-              "flex",
-              "justify-center",
-              "items-center"
-            )}
-          >
-            <Spinner size={buttonSizeToSpinnerSize[size]} />
-          </div>
+          {spinner && (
+            <div
+              className={css(
+                "w-full",
+                "h-full",
+                "absolute",
+                "inset-0",
+                "flex",
+                "justify-center",
+                "items-center"
+              )}
+            >
+              <Spinner size={buttonSizeToSpinnerSize[size]} />
+            </div>
+          )}
         </>
       )}
     </button>
@@ -167,6 +177,7 @@ export const Submit = ({ ...rest }: SubmitProps) => {
   return (
     <Button
       submit
+      loading={state.isSubmitting}
       disabled={hasErrors}
       children={rest.children ? rest.children : "Submit"}
       {...rest}

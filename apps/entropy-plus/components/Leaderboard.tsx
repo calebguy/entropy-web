@@ -5,10 +5,10 @@ import ProfileIcon from "./ProfileIcon";
 import RankEmblem from "./RankEmblem";
 
 interface LeaderboardProps {
-  curators: Profile[];
+  leaderBoard: Profile[];
 }
 
-const Leaderboard = ({ curators }: LeaderboardProps) => {
+const Leaderboard = ({ leaderBoard: curators }: LeaderboardProps) => {
   return (
     <div>
       <div className={css("grid", "grid-cols-6", "gap-2")}>
@@ -33,24 +33,25 @@ const Leaderboard = ({ curators }: LeaderboardProps) => {
             scoreTextSize = TextSize.Md;
           }
           return (
-            <Pane size={PaneSize.Lg} block>
+            <Pane key={`${curator.handle}-${index}`} size={PaneSize.Lg} block>
               <div className={css("grid", "grid-cols-6", "gap-2")}>
                 <div className={css("flex", "items-center", "col-span-1")}>
-                  <RankEmblem rank={index} />
+                  <RankEmblem rank={index + 1} />
                 </div>
                 <div
                   className={css("flex", "items-center", "gap-2", "col-span-3")}
                 >
                   <ProfileIcon profile={curator} />
-                  <Text>@{curator.name}</Text>
+                  <Text>@{curator.handle}</Text>
                 </div>
-                {curator.entropy_score && (
-                  <div className={css("flex", "items-center", "col-span-2")}>
-                    <Text size={scoreTextSize}>
-                      {formatWithThousandsSeparators(curator.entropy_score)}
-                    </Text>
-                  </div>
-                )}
+                {curator.entropy_score !== null &&
+                  curator.entropy_score !== undefined && (
+                    <div className={css("flex", "items-center", "col-span-2")}>
+                      <Text size={scoreTextSize}>
+                        {formatWithThousandsSeparators(curator.entropy_score)}
+                      </Text>
+                    </div>
+                  )}
               </div>
             </Pane>
           );

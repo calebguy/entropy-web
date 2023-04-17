@@ -4,10 +4,13 @@ import { useState } from "react";
 import AspectRatioDemo from "../components/AspectRatio.demo";
 import ButtonDemo from "../components/Button.demo";
 import DividerDemo from "../components/Divider.demo";
+import DropdownDemo from "../components/Dropdown.demo";
 import FormDemo from "../components/Form.demo";
 import IconDemo from "../components/Icon.demo";
+import InfiniteScrollDemo from "../components/InfiniteScroll.demo";
 import PaneDemo from "../components/Pane.demo";
 import PillDemo from "../components/Pill.demo";
+import SelectDemo from "../components/Select.demo";
 import SpinnerDemo from "../components/Spinner.demo";
 import TextDemo from "../components/Text.demo";
 import TextFieldDemo from "../components/TextField.demo";
@@ -47,6 +50,9 @@ export default function Docs() {
           <IconDemo />
           <SpinnerDemo />
           <DividerDemo />
+          <DropdownDemo />
+          <SelectDemo />
+          <InfiniteScrollDemo />
         </div>
       </main>
     </DisplayContext.Provider>

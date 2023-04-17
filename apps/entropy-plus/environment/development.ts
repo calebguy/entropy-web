@@ -5,7 +5,7 @@ const proxyUrl = "https://api.entropyplus.xyz";
 
 const env: Env = {
   app: { name: "[LOCAL] E+" },
-  api: { baseUrl: "https://entropy-plus.herokuapp.com" },
+  api: { baseUrl: "https://api.entropyplus.xyz" },
 };
 
 if (proxyUrl) {

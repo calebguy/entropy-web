@@ -11,13 +11,13 @@ import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { css } from "utils";
 import ProfileIcon from "../../../../components/ProfileIcon";
-import { Photo, Profile } from "../../../../interfaces";
+import { CuratorPhoto, Profile } from "../../../../interfaces";
 import AppLayout from "../../../../layouts/App.layout";
 import { HttpForServer } from "../../../../services/Http";
 
 interface ImageByIdProps {
   profile: Profile;
-  image: Photo;
+  image: CuratorPhoto;
 }
 
 const ImageById = ({ profile, image }: ImageByIdProps) => {
@@ -40,7 +40,7 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
               <div className={css("flex", "items-center", "justify-between")}>
                 <div className={css("flex", "items-center", "gap-2")}>
                   <ProfileIcon profile={profile} />
-                  <Text size={TextSize.Lg}>@{profile.name}</Text>
+                  <Text size={TextSize.Lg}>@{profile.handle}</Text>
                 </div>
                 <Link href={`/curator/${profile.slug}`}>
                   <Button round intent={ButtonIntent.Secondary}>
@@ -90,16 +90,27 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
 export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
   context
 ) => {
-  const { curator, id } = context.query;
-  const {
-    data: { profile, image },
-  } = await HttpForServer.getCuratorImage(curator as string, id as string);
-  return {
-    props: {
-      profile,
-      image,
-    },
-  };
+  try {
+    const { slug, id } = context.query;
+    const { data: profile } = await HttpForServer.getCuratorProfile(
+      slug as string
+    );
+    const { data: image } = await HttpForServer.getCuratorPhoto(
+      slug as string,
+      id as string
+    );
+    console.log(image);
+    return {
+      props: {
+        profile,
+        image,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default ImageById;

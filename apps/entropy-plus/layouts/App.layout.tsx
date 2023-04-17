@@ -15,7 +15,15 @@ const AppLayout = observer(({ children, profile }: AuthedLayoutProps) => {
           <Header profile={profile} />
         </div>
       </div>
-      <div className={css("flex", "justify-center", "p-4", "grow")}>
+      <div
+        className={css(
+          "flex",
+          "justify-center",
+          "p-4",
+          "grow",
+          "overflow-y-hidden"
+        )}
+      >
         <div className={css("max-w-4xl", "w-full")}>{children}</div>
       </div>
     </>

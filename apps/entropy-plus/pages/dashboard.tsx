@@ -8,55 +8,30 @@ import {
   TextSize,
 } from "dsl";
 import { observer } from "mobx-react-lite";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { css, formatWithThousandsSeparators, objectKeys, jsonify } from "utils";
-import AcheivementPill from "../components/AcheivementPill";
+import { useMemo } from "react";
+import { css } from "utils";
 import Leaderboard from "../components/Leaderboard";
 import ProfileIcon from "../components/ProfileIcon";
 import RankEmblem from "../components/RankEmblem";
-import { GetDashboardResponse } from "../interfaces";
+import withAuth from "../helpers/auth";
+import { Photo, Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer, getDashboardData, getSuggestedPhotos, getDashboardLeaderboard, getRank } from "../services/Http";
+import { HttpForServer, getSuggestedPhotos } from "../services/Http";
 import AppStore from "../store/App.store";
-import { useState, useEffect } from 'react'
-import { json } from "stream/consumers";
+import DashboardPageStore from "../store/DashboardPage.store";
 
-
-interface DashboardPageProps extends GetDashboardResponse { }
+interface DashboardPageProps {
+  suggestedPhotos: Photo[];
+  userInvitesCount: number;
+  leaderBoard: Profile[];
+}
 
 const DashboardPage = observer(
-  ({
-    suggestedPhotos,
-    userInvitesCount,
-    rankedCurators,
-    curatedPhotosCount,
-    allPhotosCount,
-    // acheivements,
-  }: DashboardPageProps) => {
-    const [dashboardData, setDashboardData] = useState({})
-    const [profile, setProfile] = useState(AppStore.auth.profile);
-    const [rank, setRank] = useState(null);
-    const imgURL = "https://res.cloudinary.com/dpooqlfdf/" + AppStore.auth.profile?.profile_image;
-
-
-
-    useEffect(() => {
-      // Fetch data on the client side using an API call
-      const fetchData = async () => {
-        if (AppStore.auth.profile) {
-          const data = await getDashboardData(AppStore.auth.profile.handle);
-          const rankData = await getRank(AppStore.auth.profile.handle);
-          setDashboardData(data);
-          setRank(rankData?.data?.rank);
-          setProfile(AppStore.auth.profile);
-        }
-      }
-      fetchData()
-    }, [])
+  ({ suggestedPhotos, userInvitesCount, leaderBoard }: DashboardPageProps) => {
+    const store = useMemo(() => new DashboardPageStore(leaderBoard), []);
     return (
       <AppLayout profile={AppStore.auth.profile!}>
-
         <div className={css("flex", "flex-col", "gap-2")}>
           {!!userInvitesCount && (
             <Pane size={PaneSize.Lg} block>
@@ -80,47 +55,23 @@ const DashboardPage = observer(
           <Pane size={PaneSize.Lg} block>
             <div className={css("flex", "flex-col", "gap-2")}>
               <div className={css("flex", "justify-between")}>
-
                 <Text>rank</Text>
                 <Text>Entropy Score</Text>
               </div>
               <Pane size={PaneSize.Lg} block>
                 <div className={css("flex", "items-center", "justify-between")}>
                   <div className={css("flex", "items-center", "gap-2")}>
-                    {rank !== null && <RankEmblem rank={rank} />}
-                    {profile && (
-                      <Link href={`/curator/${profile.slug}`}>
-                        <AspectRatio
-                          style={
-                            imgURL
-                              ? {
-                                backgroundImage: `url(${imgURL})`,
-                              }
-                              : undefined
-                          }
-                          className={css(
-                            "w-[35px]",
-                            "border-[1px]",
-                            "border-solid",
-                            "border-black",
-                            "rounded-full",
-                            "bg-cover",
-                            { "bg-brand": !imgURL }
-                          )}
-                          ratio={"1/1"}
-                        />
-                      </Link>
-                    )}
-                    {AppStore.auth.profile?.handle ? (
-                      <Text>@{AppStore.auth.profile?.handle}</Text>
-                    ) : (
-                      <Text>Loading...</Text>
-                    )}
+                    <RankEmblem rank={store.rank} />
+                    <ProfileIcon profile={AppStore.auth.profile!} />
+                    <Text>@{AppStore.auth.profile?.handle}</Text>
                   </div>
-                  {AppStore.auth.profile?.seen_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.entropy_score}</Text> :
+                  {AppStore.auth.profile?.seen_feed_images ? (
+                    <Text size={TextSize.Xl}>
+                      {AppStore.auth.profile?.entropy_score}
+                    </Text>
+                  ) : (
                     <Text>Loading...</Text>
-                  }
+                  )}
                 </div>
               </Pane>
               {/* {objectKeys(acheivements).length > 0 && (
@@ -144,10 +95,13 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>You have seen</Text>
                 <div className={css("text-center")}>
-                  {AppStore.auth.profile?.seen_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.seen_feed_images} images</Text> :
+                  {AppStore.auth.profile?.seen_feed_images ? (
+                    <Text size={TextSize.Xl}>
+                      {AppStore.auth.profile?.seen_feed_images} images
+                    </Text>
+                  ) : (
                     <Text>No images have been seen yet.</Text>
-                  }
+                  )}
                 </div>
               </div>
             </Pane>
@@ -155,10 +109,13 @@ const DashboardPage = observer(
               <div className={css("flex", "flex-col", "items-center", "gap-2")}>
                 <Text>Images curated</Text>
                 <div className={css("text-center")}>
-                  {AppStore.auth.profile?.liked_feed_images ?
-                    <Text size={TextSize.Xl}>{AppStore.auth.profile?.liked_feed_images} images</Text> :
+                  {AppStore.auth.profile?.liked_feed_images ? (
+                    <Text size={TextSize.Xl}>
+                      {AppStore.auth.profile?.liked_feed_images} images
+                    </Text>
+                  ) : (
                     <Text>Loading...</Text>
-                  }
+                  )}
                 </div>
               </div>
             </Pane>
@@ -182,33 +139,29 @@ const DashboardPage = observer(
             <Pane size={PaneSize.Lg} block>
               {suggestedPhotos ? (
                 <div className={css("flex", "flex-wrap", "gap-2")}>
-                  {
-                    suggestedPhotos.map((photo, index) => (
-                      // @next -- where should this link to
-                      <Link
-                        key={`${photo.image?.url}-${index}`}
-                        href={`/sort`}
-                        className={css("inline-block", "max-w-[150px]", "w-full")}
-                      >
-                        <AspectRatio
-                          ratio={"1/1"}
-                          className={css(
-                            "bg-cover",
-                            "bg-center",
-                            "bg-no-repeat",
-                            "rounded-md"
-                          )}
-                          style={{ backgroundImage: `url(${photo.url})` }}
-                        />
-                      </Link>
-                    ))
-                  }
-
+                  {suggestedPhotos.map((photo, index) => (
+                    // @next -- where should this link to
+                    <Link
+                      key={`${photo.image?.url}-${index}`}
+                      href={`/sort`}
+                      className={css("inline-block", "max-w-[150px]", "w-full")}
+                    >
+                      <AspectRatio
+                        ratio={"1/1"}
+                        className={css(
+                          "bg-cover",
+                          "bg-center",
+                          "bg-no-repeat",
+                          "rounded-md"
+                        )}
+                        style={{ backgroundImage: `url(${photo.url})` }}
+                      />
+                    </Link>
+                  ))}
                 </div>
               ) : (
                 <Text>Loading...</Text>
-              )
-              }
+              )}
               <Link href={"/sort"} className={css("mt-2", "inline-block")}>
                 <Button intent={ButtonIntent.Secondary} round>
                   Explore
@@ -222,7 +175,7 @@ const DashboardPage = observer(
             </div>
             <Pane size={PaneSize.Lg} block>
               <div>
-                <Leaderboard curators={rankedCurators} />
+                <Leaderboard leaderBoard={leaderBoard.slice(0, 3)} />
                 <div className={css("mt-2", "flex", "justify-center")}>
                   <Link href={"/leaderboard"}>
                     <Button intent={ButtonIntent.Secondary} round>
@@ -248,25 +201,17 @@ const DashboardPage = observer(
   }
 );
 
-export async function getServerSideProps() {
+export const getServerSideProps = withAuth<any>(async () => {
+  const { data: leaderBoard } = await HttpForServer.getLeaderboard();
+  console.log(leaderBoard[0]);
   const { data: suggestedPhotos } = await getSuggestedPhotos();
-  const rankedCurators = await getDashboardLeaderboard();
-
-  let rank = null;
-  if (AppStore.auth.profile?.handle) {
-    const { data: rankData } = await getRank(AppStore.auth.profile.handle);
-    rank = rankData.rank;
-  }
-
-
+  console.log(suggestedPhotos);
   return {
     props: {
       suggestedPhotos,
-      rankedCurators,
-      rank,
+      leaderBoard,
     },
   };
-}
-
+});
 
 export default DashboardPage;

@@ -3,10 +3,10 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { css, jsonify } from "utils";
 import sleep from "utils/sleep";
+import { Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
-import { Profile } from "../interfaces";
 interface MeProps {
   me: Profile;
 }
@@ -22,7 +22,9 @@ const MePage = observer(({ me }: MeProps) => {
   }, []);
   return (
     <AppLayout profile={me}>
-      <Text>{jsonify(AppStore.auth.profile)}</Text>
+      <div className={css("break-words")}>
+        <Text>{jsonify(AppStore.auth.profile)}</Text>
+      </div>
       <div className={css("flex", "flex-col", "h-full", "gap-4", "mt-4")}>
         <Button
           round

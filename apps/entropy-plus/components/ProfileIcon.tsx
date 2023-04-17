@@ -8,14 +8,16 @@ interface ProfileIconProps {
 }
 
 const ProfileIcon = ({ profile }: ProfileIconProps) => {
-  const imageUrl = profile?.profile_image?.url;
   return (
     <Link href={`/curator/${profile.slug}`}>
       <AspectRatio
         style={
-          imageUrl
+          profile?.profile_image
             ? {
-                backgroundImage: `url(${imageUrl})`,
+                backgroundImage: `url(${
+                  "https://res.cloudinary.com/dpooqlfdf/" +
+                  profile?.profile_image
+                })`,
               }
             : undefined
         }
@@ -26,7 +28,7 @@ const ProfileIcon = ({ profile }: ProfileIconProps) => {
           "border-black",
           "rounded-full",
           "bg-cover",
-          { "bg-brand": !imageUrl }
+          { "bg-brand": !profile?.profile_image }
         )}
         ratio={"1/1"}
       />

@@ -1,20 +1,25 @@
 import { Dropdown, DropdownItem, Icon, IconName, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
+import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
 import { css } from "utils";
 import Dev from "../environment/Dev";
+import { Profile } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
-import ProfileIcon from "./ProfileIcon";
 
-const Header = observer(() => {
+interface HeaderProps {
+  profile: Profile;
+}
+
+const Header = observer(({ profile }: HeaderProps) => {
   return (
     <div className={css("flex", "justify-between", "items-center")}>
       {AppStore.auth.isLoggedIn && (
         <>
           <div className={css("flex", "items-center", "gap-4")}>
-            <Link href={AppStore.auth.isLoggedIn ? "/sort" : "/"}>
+            <Link href={"/sort"}>
               <Icon name={IconName.Logo} size={41} />
             </Link>
             <Dev>
@@ -49,7 +54,19 @@ const Header = observer(() => {
               <Icon name={IconName.FourSquare} size={29} />
             </Link>
             {AppStore.auth.profile && (
-              <ProfileIcon profile={AppStore.auth.profile} />
+              <Link href={`/curator/${AppStore.auth.profile.handle}`}>
+                {AppStore.auth.profile && (
+                  <Image
+                    width={100}
+                    height={100}
+                    src={`https://res.cloudinary.com/dpooqlfdf/${
+                      AppStore.auth.profile.profile_image || ""
+                    }`}
+                    alt={AppStore.auth.profile.handle}
+                    className={css("w-8", "h-8", "rounded-full")}
+                  />
+                )}
+              </Link>
             )}
           </div>
         </>

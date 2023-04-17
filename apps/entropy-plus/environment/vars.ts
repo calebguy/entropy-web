@@ -14,6 +14,7 @@ export const vars: Vars = {
   AppEnv: process.env.NEXT_PUBLIC_APP_ENV as AppEnv,
 };
 
+
 const assertVars = () => {
   const publicKeys = objectKeys(vars).filter((key) => {
     const t = key as string;

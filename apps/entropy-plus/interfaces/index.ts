@@ -5,7 +5,7 @@ export interface Photo {
   id: number;
   title: string;
   created: Datetime;
-  image: Nullable<CloudinaryField>;
+  image: { url: any; height_field: number; width_field: number } | undefined;
   url: string;
   thumb_url: Nullable<string>;
   square_url: Nullable<string>;
@@ -37,25 +37,55 @@ export interface Photo {
   content_source: Nullable<ContentSource>;
 }
 
-export interface Profile {
+export interface CuratorPhoto {
+  id: number;
+  url: string;
+  added_to_profile: Array<{ slug: string }>;
+  image_source: Nullable<string>;
+  image_creator: Nullable<string>;
+  image_description: Nullable<string>;
+}
+
+export interface SuggestedPhoto
+  extends Pick<CuratorPhoto, "id" | "url" | "added_to_profile"> {
+  approved_to_tweet: boolean;
+  was_tweeted: boolean;
+  twitter_channel: string;
+  approved_by_user: Array<{ slug: string }>;
+  declined_by_user: Array<{ slug: string }>;
+}
+
+// export interface Profile {
+//   id: number;
+//   handle: string;
+//   bio: Nullable<string>;
+//   profile_image:
+//     | { url: any; height_field: number; width_field: number }
+//     | undefined;
+//   name: Nullable<string>;
+//   slug: string;
+//   entropy_score: Nullable<string>;
+//   twitter_handle: string;
+//   ig_handle: Nullable<string>;
+//   website: Nullable<string>;
+
+//   admin_approved: boolean;
+//   profile_views: Nullable<string>;
+//   seen_feed_images: Nullable<string>;
+//   liked_feed_images: Nullable<string>;
+//   total_feed_impressions: Nullable<string>;
+//   wallet_address: Nullable<string>;
+
+//   profile_awards: Nullable<string>;
+// }
+
+export interface HeaderProfile {
   id: number;
   handle: string;
   bio: Nullable<string>;
-  profile_image: Nullable<CloudinaryField>;
-  name: Nullable<string>;
-  slug: string;
-  entropy_score: Nullable<string>;
-  twitter_handle: string;
-  ig_handle: Nullable<string>;
-  website: Nullable<string>;
-
-  // admin_approved: boolean;
-  // profile_views: Nullable<string>;
-  // seen_feed_images: Nullable<string>;
-  // linked_feed_images: Nullable<string>;
-  // total_feed_impressions: Nullable<string>;
-  // profile_awards: Nullable<string>;
-  // wallet_address: Nullable<string>;
+  profile_image:
+    | { url: any; height_field: number; width_field: number }
+    | undefined;
 }
 
 interface User {
@@ -75,9 +105,11 @@ export interface Acheivement {
   isArchivist: boolean;
 }
 
+export type TwitterChannelScreenName = string;
+
 export interface TwitterChannel {
   profile_image_url: string;
-  screen_name: string;
+  screen_name: TwitterChannelScreenName;
 }
 
 interface CloudinaryField {
@@ -117,12 +149,13 @@ export interface GetSortResponse {
   image: Photo;
   twitter_channels: TwitterChannel[];
   current_channel: TwitterChannel;
+  profile: Profile;
 }
 
 export interface GetProfileResponse {
   profile: Profile;
   images: Photo[];
-  acheivements: Acheivement;
+  // acheivements: Acheivement;
 }
 
 export interface GetCuratorImageResponse {
@@ -138,9 +171,47 @@ export interface GetDashboardResponse {
   userInvitesCount: number;
   curatedPhotosCount: number;
   allPhotosCount: number;
-  acheivements: Acheivement;
+  leaderBoard: Profile[];
+  // acheivements: Acheivement;
 }
 
 export interface GetLeaderboardResponse {
   curators: Profile[];
+}
+
+export interface Profile {
+  id: number;
+  user: number;
+  profile_image: string;
+  name: Nullable<string>;
+  bio: string;
+  handle: string;
+  twitter_handle: string;
+  ig_handle: string;
+  website: string;
+  slug: string;
+  admin_approved: boolean;
+  profile_views: number;
+  seen_feed_images: number;
+  liked_feed_images: number;
+  entropy_score: number;
+  total_feed_impressions: number;
+  profile_awards: Array<number>;
+  wallet_address: Nullable<string>;
+}
+
+export interface Sort {
+  added_to_profile: [];
+  approved_by_user: [];
+  approved_to_tweet: boolean;
+  declined_by_user: Slug[];
+  id: number;
+  twitter_channel: TwitterChannelScreenName;
+  url: string;
+  was_tweeted: boolean;
+  curator?: Profile;
+}
+
+export interface Slug {
+  slug: string;
 }

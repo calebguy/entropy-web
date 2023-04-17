@@ -3,10 +3,17 @@ import MediaInput from "dsl/src/Form/MediaInput";
 import { css } from "utils";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
+import { observer } from "mobx-react-lite";
+import { Profile } from "../interfaces";
 
-const UploadPage = () => {
+
+interface UploadPageProps {
+  profile: Profile;
+}
+
+const UploadPage = observer(({ profile }: UploadPageProps) => {
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div className={css("h-full")}>
         <Form
           onSubmit={(vals) => {
@@ -70,6 +77,6 @@ const UploadPage = () => {
       </div>
     </AppLayout>
   );
-};
+});
 
 export default UploadPage;

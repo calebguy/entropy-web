@@ -4,10 +4,17 @@ import { useState } from "react";
 import { css } from "utils";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
+import { Profile } from "../interfaces";
 
-export default function Web() {
+
+interface AuthedLayoutProps extends React.PropsWithChildren {
+  profile: Profile;
+}
+
+
+export default function Web({ profile }: AuthedLayoutProps) {
   return (
-    <AppLayout>
+    <AppLayout profile={profile}>
       <div className={css("flex", "items-center", "h-full", "flex-col")}>
         <div className={css("grow", "relative", "w-full")}>
           <Image

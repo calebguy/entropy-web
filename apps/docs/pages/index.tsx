@@ -7,6 +7,7 @@ import DividerDemo from "../components/Divider.demo";
 import DropdownDemo from "../components/Dropdown.demo";
 import FormDemo from "../components/Form.demo";
 import IconDemo from "../components/Icon.demo";
+import InfiniteScrollDemo from "../components/InfiniteScroll.demo";
 import PaneDemo from "../components/Pane.demo";
 import PillDemo from "../components/Pill.demo";
 import SelectDemo from "../components/Select.demo";
@@ -51,6 +52,7 @@ export default function Docs() {
           <DividerDemo />
           <DropdownDemo />
           <SelectDemo />
+          <InfiniteScrollDemo />
         </div>
       </main>
     </DisplayContext.Provider>

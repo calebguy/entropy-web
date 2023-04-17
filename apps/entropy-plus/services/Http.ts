@@ -1,17 +1,19 @@
 import axios, { AxiosInstance } from "axios";
 import { PROXY_PREFIX } from "../constants";
 import env from "../environment";
-import { LoginDto, PostLoginResponse, Profile } from "../interfaces";
-import { AuthTokens } from "./../interfaces/index";
 import {
-  GET_MOCK_DASHBAORD_RESPONSE,
-  GET_MOCK_GET_CURATOR_IMAGE_RESPONSE,
-  GET_MOCK_GET_SORT_RESPONSE,
-  GET_MOCK_LEADERBOARD_RESPONSE,
-  GET_MOCK_PROFILE_RESPONSE,
-} from "./mocks";
+  CuratorPhoto,
+  LoginDto,
+  Photo,
+  PostLoginResponse,
+  Profile,
+  Sort,
+  TwitterChannel,
+  TwitterChannelScreenName,
+} from "../interfaces";
+import { AuthTokens } from "./../interfaces/index";
 
-class EntropyHttp {
+export class EntropyHttp {
   protected http: AxiosInstance;
 
   constructor(baseUrl: string) {
@@ -37,7 +39,7 @@ class EntropyHttp {
   }
 
   getMe() {
-    return this.http.get<Profile>("/api/login/me");
+    return this.http.get<Profile>("/api/login/me/");
   }
 
   getPing() {
@@ -46,7 +48,9 @@ class EntropyHttp {
 
   postImage(image: File, imageSource: string) {
     const formData = new FormData();
+    // get the image file from the input
     formData.append("picture", image);
+
     formData.append("image_source", imageSource);
     return this.http.post("/api/upload/image/", formData);
   }
@@ -55,29 +59,54 @@ class EntropyHttp {
     return this.http.post("/api/waitlist/", { email });
   }
 
-  async getSort() {
-    return { data: GET_MOCK_GET_SORT_RESPONSE() };
-    // return this.http.get<GetSortResponse>("/sort");
+  getSortImage(slug: string) {
+    return this.http.get<Sort[]>(`/api/v1/sort/`, {
+      params: { slug },
+    });
   }
 
-  async getProfile(slug: string) {
-    return { data: GET_MOCK_PROFILE_RESPONSE() };
-    // return this.http.get<GetProfileResponse>(`/profile/${slug}`);
+  getTwitterChannel(channel: TwitterChannelScreenName) {
+    return this.http.get<TwitterChannel>(`/api/twitter-channels/${channel}/`);
   }
 
-  async getCuratorImage(curatorSlug: string, id: string) {
-    return { data: GET_MOCK_GET_CURATOR_IMAGE_RESPONSE(Number(id)) };
-    // return this.http.get<GetCuratorImageResponse>(`${curatorSlug}/image/${id}`);
+  getTwitterChannels() {
+    return this.http.get<TwitterChannel[]>("/api/v1/twitter-channels/");
   }
 
-  async getDashboard() {
-    return { data: GET_MOCK_DASHBAORD_RESPONSE() };
-    // return this.http.get<GetDashboardResponse>("/dashboard");
+  approveImage(
+    id: number,
+    slug: string,
+    twitterChannel: TwitterChannelScreenName
+  ) {
+    return this.http.patch<Sort>(`/api/images/${id}/update/`, {
+      params: { slug },
+    });
   }
 
-  async getLeaderboard() {
-    return { data: GET_MOCK_LEADERBOARD_RESPONSE() };
-    // return this.http.get<GetLeaderboardResponse>("/leaderboard");
+  rejectImage(
+    id: number,
+    slug: string,
+    twitterChannel: TwitterChannelScreenName
+  ) {
+    return this.http.patch<Sort>(`/api/images/${id}/update/decline/`, {
+      params: { slug },
+    });
+  }
+
+  getLeaderboard() {
+    return this.http.get<Profile[]>("/api/leaderboard");
+  }
+
+  getCuratorPhoto(curator: string, id: string | number) {
+    return this.http.get<CuratorPhoto>(`/api/${curator}/photos/${id}/`);
+  }
+
+  getCuratorProfile(curator: string) {
+    return this.http.get<Profile>(`/api/profiles/${curator}/`);
+  }
+
+  getCuratorPhotos(curator: string) {
+    return this.http.get<Array<CuratorPhoto>>(`/api/${curator}/photos/`);
   }
 
   static createForServer() {
@@ -87,8 +116,53 @@ class EntropyHttp {
   static createForClient() {
     return new _HttpForClient();
   }
+
+  // ############################################################################ //
+
+  async getProfile(slug: string) {
+    const profileUrl = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
+    const profileResponse = await fetch(profileUrl);
+    const profileData = await profileResponse.json();
+    const photoUrl = `https://entropy-plus.herokuapp.com/api/${slug}/photos/`;
+    const photoResponse = await fetch(photoUrl);
+    const photoData = await photoResponse.json();
+
+    const profileImages: Photo[] = [];
+    for (let i = 0; i < 30 && i < photoData.length; i++) {
+      profileImages.push(photoData[i]);
+    }
+
+    const profile = {
+      profile_image: {
+        url: profileData.profile_image,
+        height_field: 100,
+        width_field: 100,
+      },
+      name: profileData.name,
+      bio: profileData.bio,
+      id: profileData.id,
+      handle: profileData.handle,
+      twitter_handle: profileData.twitter_handle,
+      ig_handle: profileData.ig_handle,
+      website: profileData.website,
+      slug: profileData.slug,
+      admin_approved: profileData.admin_approved,
+      profile_views: profileData.profile_views,
+      seen_feed_images: profileData.seen_feed_images,
+      liked_feed_images: profileData.liked_feed_images,
+      entropy_score: profileData.entropy_score,
+      total_feed_impressions: profileData.total_feed_impressions,
+      profile_awards: profileData.profile_awards,
+      wallet_address: profileData.wallet_address,
+    };
+
+    const data = { profile: profile, images: profileImages };
+    return { data: data };
+  }
 }
 
+// NOTE: The server HTTP instance does not automatically refresh tokens on its own,
+// as we we'd need to supply the requests context on every request which is meh
 class _HttpForServer extends EntropyHttp {
   private _accessToken?: string;
   private _refreshToken?: string;
@@ -140,6 +214,23 @@ class _HttpForClient extends EntropyHttp {
       }
     );
   }
+}
+
+export async function getSuggestedPhotos() {
+  const entropyHttp = new EntropyHttp(
+    "https://entropy-plus.herokuapp.com/api/"
+  );
+  const suggestedResponse = await fetch(
+    "https://entropy-plus.herokuapp.com/api/suggested-photos/"
+  );
+  const suggestedData = await suggestedResponse.json();
+  const suggestedPhotos: Photo[] = [];
+
+  if (Array.isArray(suggestedData) && suggestedData.length > 0) {
+    suggestedPhotos.push(...suggestedData.slice(0, 10));
+  }
+
+  return { data: suggestedPhotos };
 }
 
 export const HttpForServer = EntropyHttp.createForServer();

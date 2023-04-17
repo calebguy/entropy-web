@@ -11,23 +11,34 @@ class AuthStore {
   @observable
   profile: Nullable<Profile> = null;
 
+  @observable
+  hasInitialized = false;
+
   constructor() {
     makeObservable(this);
   }
 
   init() {
-    this.getProfile()
-      .then(() => (this.isLoggedIn = true))
-      .catch(() => (this.isLoggedIn = false));
+    return this.getProfile()
+      .then(() => {
+        this.isLoggedIn = true;
+        this.hasInitialized = true;
+      })
+      .catch((e) => {
+        this.isLoggedIn = false;
+        this.hasInitialized = true;
+      });
   }
 
   login({ username, password }: LoginDto) {
-    return HttpForClient.login({ username, password })
+    return HttpForClient.login({
+      // we'll probably have to change this and check if lowercase is the correct format
+      username: username.toLocaleLowerCase(),
+      password,
+    })
       .then(() => {
         this.isLoggedIn = true;
-        this.getProfile().then(() => {
-          Router.push("/me");
-        });
+        return this.getProfile();
       })
       .catch((e) => {
         this.isLoggedIn = false;

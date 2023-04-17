@@ -4,15 +4,16 @@ import Demo from "./Demo";
 import SubDemo from "./SubDemo";
 
 const SelectDemo = () => {
-  const [value, setValue] = useState("select");
+  const items = ["🤳", "🖼️", "📀", "💻", "🌏", "🌐", "test"].map((item) => ({
+    name: item,
+    id: item,
+  }));
+  const [value, setValue] = useState(items[0].id);
+
   return (
     <Demo title="Select">
       <SubDemo>
-        <Select
-          value={value}
-          onChange={(val) => setValue(val)}
-          items={[{ name: "select", id: "select" }]}
-        />
+        <Select value={value} onChange={(val) => setValue(val)} items={items} />
       </SubDemo>
     </Demo>
   );

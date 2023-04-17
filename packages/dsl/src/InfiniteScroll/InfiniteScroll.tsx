@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { css } from "utils";
+import GreyLogo from "../Icon/CustomIcons/GreyLogo";
 import { Spinner } from "../Spinner/Spinner";
 import { Text, TextIntent, TextSize } from "../Text/Text";
 
@@ -117,12 +118,20 @@ export const InfiniteScroll: React.FC<
               renderEndData()
             ) : (
               <Text intent={TextIntent.Gray} size={TextSize.Sm}>
-                {endDataMessage || defaultEndMessage}
+                {endDataMessage || <DefaultEnd />}
               </Text>
             )}
           </div>
         )}
       </div>
+    </div>
+  );
+};
+
+const DefaultEnd = () => {
+  return (
+    <div className={css("flex", "justify-center")}>
+      <GreyLogo size={14} />
     </div>
   );
 };

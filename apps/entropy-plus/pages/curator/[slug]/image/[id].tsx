@@ -100,7 +100,6 @@ export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
       slug as string,
       id as string
     );
-    console.log(image);
     return {
       props: {
         profile,

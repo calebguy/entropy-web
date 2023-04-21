@@ -5,6 +5,9 @@ import AuthStore from "./Auth.store";
 
 class _AppStore {
   @observable
+  hasInitialized = false;
+
+  @observable
   auth: AuthStore;
 
   @observable
@@ -23,6 +26,7 @@ class _AppStore {
         this.twitterChannels = data.filter(
           (channel) => channel.profile_image_url !== null
         );
+        this.hasInitialized = true;
       })
       .catch((e) => {
         console.error("GOT ERROR FETCHING TWITTER CHANNELS", e);

@@ -14,10 +14,12 @@ export default class SortPageStore {
   @observable
   isLoading = true;
 
-  constructor(sort: Sort, currentTwitterChannel: TwitterChannel) {
+  constructor(sort: Sort) {
     makeObservable(this);
     this.sort = sort;
-    this.selectedTwitterChannel = currentTwitterChannel;
+    this.selectedTwitterChannel = AppStore.twitterChannels.find(
+      (channel) => channel.screen_name === sort.twitter_channel
+    );
   }
 
   getSort() {

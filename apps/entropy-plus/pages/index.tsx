@@ -1,23 +1,72 @@
-import { ButtonIntent, Form, Submit, Text, TextInput, TextSize } from "dsl";
+import {
+  Button,
+  ButtonIntent,
+  ButtonSize,
+  Form,
+  Icon,
+  IconName,
+  Submit,
+  Text,
+  TextInput,
+  TextIntent,
+  TextSize,
+} from "dsl";
+import { observer } from "mobx-react-lite";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { css } from "utils";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
+import AppStore from "../store/App.store";
 
-interface AuthedLayoutProps extends React.PropsWithChildren {}
-
-export default function Web({}: AuthedLayoutProps) {
+const Web = observer(() => {
   return (
     <AppLayout>
       <div className={css("flex", "items-center", "h-full", "flex-col")}>
         <div className={css("grow", "relative", "w-full")}>
-          <Image
-            className={css("object-contain")}
-            src={"/images/rotating-logo.gif"}
-            alt={"logo-rotation-magic"}
-            fill
-          />
+          {!AppStore.auth.isLoggedIn && (
+            <Image
+              className={css("object-contain")}
+              src={"/images/rotating-logo.gif"}
+              alt={"logo-rotation-magic"}
+              fill
+            />
+          )}
+          {AppStore.auth.isLoggedIn && (
+            <div
+              className={css(
+                "absolute",
+                "w-full",
+                "h-full",
+                "flex",
+                "justify-center",
+                "items-center"
+              )}
+            >
+              <Link href={"/sort"}>
+                <Button
+                  interactive
+                  size={ButtonSize.Lg}
+                  intent={ButtonIntent.Primary}
+                >
+                  <div
+                    className={css(
+                      "flex",
+                      "flex-col",
+                      "items-center",
+                      "gap-1.5"
+                    )}
+                  >
+                    <Icon name={IconName.Logo} fill={"white"} />
+                    <Text intent={TextIntent.White} bold>
+                      welcome
+                    </Text>
+                  </div>
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
         {/* <div className={css("w-full")}>
           <JoinWaitlist />
@@ -25,7 +74,7 @@ export default function Web({}: AuthedLayoutProps) {
       </div>
     </AppLayout>
   );
-}
+});
 
 const JoinWaitlist = () => {
   const [view, setView] = useState("form");
@@ -65,3 +114,5 @@ const JoinWaitlist = () => {
   }
   return <></>;
 };
+
+export default Web;

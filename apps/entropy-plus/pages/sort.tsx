@@ -7,18 +7,17 @@ import { css } from "utils";
 import TwitterChannelSelector from "../components/SortPage/TwitterChannelSelector";
 import UserPreview from "../components/SortPage/UserPreview";
 import withAuth from "../helpers/auth";
-import { Sort, TwitterChannel } from "../interfaces";
+import { Sort } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import AppStore from "../store/App.store";
 import SortPageStore from "../store/SortPage.store";
 
 interface SortPageProps {
   sort: Sort;
-  currentChannel: TwitterChannel;
 }
 
-const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
-  const store = useMemo(() => new SortPageStore(sort, currentChannel), []);
+const SortPage = observer(({ sort }: SortPageProps) => {
+  const store = useMemo(() => new SortPageStore(sort), []);
   // useEffect(() => store.init(), [])
   const overlayCss = useMemo(
     () =>
@@ -138,14 +137,10 @@ export const getServerSideProps = withAuth<SortPageProps>(async (_, Http) => {
     const { data: me } = await Http.getMe();
     const { data: sorts } = await Http.getSortImage(me.handle);
     const sort = sorts[0];
-    const { data: currentChannel } = await Http.getTwitterChannel(
-      sort.twitter_channel
-    );
     return {
-      props: { sort, currentChannel },
+      props: { sort },
     };
   } catch (e) {
-    console.error(e);
     return {
       notFound: true,
     };

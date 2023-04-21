@@ -51,8 +51,8 @@ const MyApp = observer(({ Component, pageProps }: AppProps) => {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <main className={css(helvetica.variable, "grow", "flex", "flex-col")}>
-        {AppStore.auth.hasInitialized && <Component {...pageProps} />}
-        {!AppStore.auth.hasInitialized && (
+        {AppStore.hasInitialized && <Component {...pageProps} />}
+        {!AppStore.hasInitialized && (
           <div
             className={css(
               "w-full",

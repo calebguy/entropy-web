@@ -1,6 +1,10 @@
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { HttpForClient } from "../services/Http";
-import { Sort, TwitterChannel } from "./../interfaces/index";
+import {
+  Sort,
+  TwitterChannel,
+  TwitterChannelScreenName,
+} from "./../interfaces/index";
 import AppStore from "./App.store";
 
 export default class SortPageStore {
@@ -14,12 +18,12 @@ export default class SortPageStore {
   @observable
   isLoading = true;
 
-  constructor(sort: Sort) {
+  constructor() {
     makeObservable(this);
-    this.sort = sort;
-    this.selectedTwitterChannel = AppStore.twitterChannels.find(
-      (channel) => channel.screen_name === sort.twitter_channel
-    );
+  }
+
+  init() {
+    return this.getSort();
   }
 
   getSort() {
@@ -27,6 +31,9 @@ export default class SortPageStore {
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
       ({ data }) => {
         this.sort = data[0];
+        this.selectedTwitterChannel = AppStore.twitterChannels.find(
+          (channel) => channel.screen_name === this.sort!.twitter_channel
+        );
       }
     );
   }
@@ -60,6 +67,14 @@ export default class SortPageStore {
     // we wait to update the twitter channel here to keep the UI in sync
     this.selectedTwitterChannel = AppStore.twitterChannels.find(
       (channel) => channel.screen_name === this.sort!.twitter_channel
+    );
+  }
+
+  @computed
+  get defaultChannel() {
+    const channelName: TwitterChannelScreenName = "ennntropy";
+    return AppStore.twitterChannels.find(
+      (channel) => channel.screen_name === channelName
     );
   }
 }

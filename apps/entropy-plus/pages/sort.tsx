@@ -2,23 +2,22 @@ import { Button, ButtonSize, Icon, IconName } from "dsl";
 import Logo from "dsl/src/Icon/CustomIcons/Logo";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { css } from "utils";
 import TwitterChannelSelector from "../components/SortPage/TwitterChannelSelector";
 import UserPreview from "../components/SortPage/UserPreview";
 import withAuth from "../helpers/auth";
-import { Sort } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import AppStore from "../store/App.store";
 import SortPageStore from "../store/SortPage.store";
 
-interface SortPageProps {
-  sort: Sort;
-}
+interface SortPageProps {}
 
-const SortPage = observer(({ sort }: SortPageProps) => {
-  const store = useMemo(() => new SortPageStore(sort), []);
-  // useEffect(() => store.init(), [])
+const SortPage = observer(({}: SortPageProps) => {
+  const store = useMemo(() => new SortPageStore(), []);
+  useEffect(() => {
+    store.init();
+  }, []);
   const overlayCss = useMemo(
     () =>
       css(
@@ -62,15 +61,17 @@ const SortPage = observer(({ sort }: SortPageProps) => {
             )}
           >
             {/* TODO: IF WE CAN'T GET IMAGE HEIGHT AND WIDTH FROM SERVER WE NEED TO CALCULATE LOCALLY AND SET THE HEIGHT BASED ON THE ASPECT RATIO OF THE NATURAL IMAGE AND THE WIDTH OF THE CONTAINER */}
-            <Image
-              alt={"sort image"}
-              src={store.sort!.url}
-              style={{ objectFit: "contain" }}
-              onLoadingComplete={() => store.onLoadingComplete()}
-              sizes="100vw"
-              priority
-              fill
-            />
+            {store.sort?.url && (
+              <Image
+                alt={"sort image"}
+                src={store.sort.url}
+                style={{ objectFit: "contain" }}
+                onLoadingComplete={() => store.onLoadingComplete()}
+                sizes="100vw"
+                priority
+                fill
+              />
+            )}
             <div className={css(overlayCss)} />
             <div
               className={css(
@@ -90,7 +91,11 @@ const SortPage = observer(({ sort }: SortPageProps) => {
           <div className={css("self-start", "-my-1", "relative")}>
             <TwitterChannelSelector
               channels={AppStore.twitterChannels}
-              selectedChannel={store.selectedTwitterChannel!}
+              selectedChannel={
+                store.selectedTwitterChannel
+                  ? store.selectedTwitterChannel
+                  : store.defaultChannel!
+              }
               onClick={(channel) => store.setSelectedTwitterChannel(channel)}
             />
             <div className={css(overlayCss)} />
@@ -132,19 +137,10 @@ const SortPage = observer(({ sort }: SortPageProps) => {
   );
 });
 
-export const getServerSideProps = withAuth<SortPageProps>(async (_, Http) => {
-  try {
-    const { data: me } = await Http.getMe();
-    const { data: sorts } = await Http.getSortImage(me.handle);
-    const sort = sorts[0];
-    return {
-      props: { sort },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+export const getServerSideProps = withAuth<SortPageProps>(async () => {
+  return {
+    props: {},
+  };
 });
 
 export default SortPage;

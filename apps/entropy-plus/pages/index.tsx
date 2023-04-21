@@ -59,9 +59,7 @@ const Web = observer(() => {
                     )}
                   >
                     <Icon name={IconName.Logo} fill={"white"} />
-                    <Text intent={TextIntent.White} bold>
-                      welcome
-                    </Text>
+                    <Text intent={TextIntent.White}>welcome</Text>
                   </div>
                 </Button>
               </Link>

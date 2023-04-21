@@ -1,6 +1,5 @@
 import { Env } from ".";
 
-// const proxyUrl = "http://localhost:8000";
 const proxyUrl = null;
 
 const env: Env = {

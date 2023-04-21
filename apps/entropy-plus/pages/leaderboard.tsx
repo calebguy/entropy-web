@@ -2,9 +2,9 @@ import { Pane, PaneSize, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
 import { css } from "utils";
 import Leaderboard from "../components/Leaderboard";
+import withAuth from "../helpers/auth";
 import { Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer } from "../services/Http";
 
 interface LeaderboardPageProps {
   leaderBoard: Profile[];
@@ -23,13 +23,15 @@ const LeaderboardPage = observer(({ leaderBoard }: LeaderboardPageProps) => {
   );
 });
 
-export async function getServerSideProps() {
-  const { data: leaderBoard } = await HttpForServer.getLeaderboard();
-  return {
-    props: {
-      leaderBoard,
-    },
-  };
-}
+export const getServerSideProps = withAuth<LeaderboardPageProps>(
+  async (_, Http) => {
+    const { data: leaderBoard } = await Http.getLeaderboard();
+    return {
+      props: {
+        leaderBoard,
+      },
+    };
+  }
+);
 
 export default LeaderboardPage;

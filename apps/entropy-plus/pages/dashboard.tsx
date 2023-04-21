@@ -161,15 +161,18 @@ const DashboardPage = observer(
   }
 );
 
-export const getServerSideProps = withAuth<any>(async (_, Http) => {
-  const { data: leaderBoard } = await Http.getLeaderboard();
-  const { data: suggestedPhotos } = await Http.getSuggestedPhotos();
-  return {
-    props: {
-      suggestedPhotos,
-      leaderBoard,
-    },
-  };
-});
+export const getServerSideProps = withAuth<DashboardPageProps>(
+  async (_, Http) => {
+    const { data: leaderBoard } = await Http.getLeaderboard();
+    const { data: suggestedPhotos } = await Http.getSuggestedPhotos();
+    return {
+      props: {
+        suggestedPhotos,
+        leaderBoard,
+        userInvitesCount: 0,
+      },
+    };
+  }
+);
 
 export default DashboardPage;

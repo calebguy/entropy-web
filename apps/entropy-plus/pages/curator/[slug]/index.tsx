@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Icon,
   IconName,
   InfiniteScroll,
@@ -32,7 +33,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   const store = useMemo(() => new CuratorPageStore(slug as string), [slug]);
   useEffect(() => {
     store.init();
-  }, []);
+  }, [slug]);
   const hasLinks =
     !!profile.twitter_handle || !!profile.ig_handle || !!profile.website;
   return (
@@ -134,15 +135,43 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               "mt-2"
             )}
           >
-            {store.data.map((photo, index) => (
-              <Link
-                key={`image-preview-${index}`}
-                href={`${slug}/image/${photo.id}`}
-                className={css("w-full", "h-full")}
-              >
-                <LoadingImage photo={photo} />
-              </Link>
-            ))}
+            {store.isLoading &&
+              Array(16)
+                .fill(0)
+                .map(() => (
+                  <AspectRatio
+                    ratio={"1/1"}
+                    className={css(
+                      "border-[1px]",
+                      "border-black",
+                      "border-solid",
+                      "rounded-md",
+                      "h-[218px]"
+                    )}
+                  >
+                    <div
+                      className={css(
+                        "w-full",
+                        "h-full",
+                        "flex",
+                        "justify-center",
+                        "items-center"
+                      )}
+                    >
+                      <Icon name={IconName.GreyLogo} size={25} />
+                    </div>
+                  </AspectRatio>
+                ))}
+            {!store.isLoading &&
+              store.data.map((photo, index) => (
+                <Link
+                  key={`image-preview-${index}`}
+                  href={`${slug}/image/${photo.id}`}
+                  className={css("w-full", "h-full")}
+                >
+                  <LoadingImage photo={photo} />
+                </Link>
+              ))}
           </div>
         </InfiniteScroll>
       </AppLayout>

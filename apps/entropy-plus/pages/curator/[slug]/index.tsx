@@ -138,9 +138,10 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
             {store.isLoading &&
               Array(16)
                 .fill(0)
-                .map(() => (
+                .map((value, index) => (
                   <AspectRatio
                     ratio={"1/1"}
+                    key={`loader-${index}`}
                     className={css(
                       "border-[1px]",
                       "border-black",

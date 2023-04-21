@@ -4,7 +4,6 @@ import env from "../environment";
 import {
   CuratorPhoto,
   LoginDto,
-  Photo,
   PostLoginResponse,
   Profile,
   Sort,
@@ -46,17 +45,22 @@ export class EntropyHttp {
     return this.http.get("/api/ping");
   }
 
-  postImage(image: File, imageSource: string) {
+  postImage(image: File) {
     const formData = new FormData();
-    // get the image file from the input
     formData.append("picture", image);
-
-    formData.append("image_source", imageSource);
-    return this.http.post("/api/upload/image/", formData);
+    return this.http.post("/api/upload/image/", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
 
-  async joinWaitlist(email: string) {
-    return this.http.post("/api/waitlist/", { email });
+  // NOTE: this throws cors error
+  joinWaitlist(email: string) {
+    return axios.post(
+      "https://ennntropy.us13.list-manage.com/subscribe/post?u=5c84115078e1be86656f0e0cc&amp;id=4bb9cd5490&amp;f_id=00c2e0e2f0",
+      { email }
+    );
   }
 
   getSortImage(slug: string) {
@@ -109,55 +113,20 @@ export class EntropyHttp {
     return this.http.get<Array<CuratorPhoto>>(`/api/${curator}/photos/`);
   }
 
+  getSuggestedPhotos() {
+    return this.http.get<Array<CuratorPhoto>>("/api/suggested-photos");
+  }
+
+  getDashboard(slug: string) {
+    return this.http.get(`/api/${slug}/dashboard/`);
+  }
+
   static createForServer() {
     return new _HttpForServer();
   }
 
   static createForClient() {
     return new _HttpForClient();
-  }
-
-  // ############################################################################ //
-
-  async getProfile(slug: string) {
-    const profileUrl = `https://entropy-plus.herokuapp.com/api/profiles/${slug}/`;
-    const profileResponse = await fetch(profileUrl);
-    const profileData = await profileResponse.json();
-    const photoUrl = `https://entropy-plus.herokuapp.com/api/${slug}/photos/`;
-    const photoResponse = await fetch(photoUrl);
-    const photoData = await photoResponse.json();
-
-    const profileImages: Photo[] = [];
-    for (let i = 0; i < 30 && i < photoData.length; i++) {
-      profileImages.push(photoData[i]);
-    }
-
-    const profile = {
-      profile_image: {
-        url: profileData.profile_image,
-        height_field: 100,
-        width_field: 100,
-      },
-      name: profileData.name,
-      bio: profileData.bio,
-      id: profileData.id,
-      handle: profileData.handle,
-      twitter_handle: profileData.twitter_handle,
-      ig_handle: profileData.ig_handle,
-      website: profileData.website,
-      slug: profileData.slug,
-      admin_approved: profileData.admin_approved,
-      profile_views: profileData.profile_views,
-      seen_feed_images: profileData.seen_feed_images,
-      liked_feed_images: profileData.liked_feed_images,
-      entropy_score: profileData.entropy_score,
-      total_feed_impressions: profileData.total_feed_impressions,
-      profile_awards: profileData.profile_awards,
-      wallet_address: profileData.wallet_address,
-    };
-
-    const data = { profile: profile, images: profileImages };
-    return { data: data };
   }
 }
 
@@ -214,23 +183,6 @@ class _HttpForClient extends EntropyHttp {
       }
     );
   }
-}
-
-export async function getSuggestedPhotos() {
-  const entropyHttp = new EntropyHttp(
-    "https://entropy-plus.herokuapp.com/api/"
-  );
-  const suggestedResponse = await fetch(
-    "https://entropy-plus.herokuapp.com/api/suggested-photos/"
-  );
-  const suggestedData = await suggestedResponse.json();
-  const suggestedPhotos: Photo[] = [];
-
-  if (Array.isArray(suggestedData) && suggestedData.length > 0) {
-    suggestedPhotos.push(...suggestedData.slice(0, 10));
-  }
-
-  return { data: suggestedPhotos };
 }
 
 export const HttpForServer = EntropyHttp.createForServer();

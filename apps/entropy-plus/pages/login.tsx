@@ -8,13 +8,13 @@ import {
   TextInput,
 } from "dsl";
 import { observer } from "mobx-react-lite";
-import Router from "next/router";
+import { useMemo } from "react";
 import { css } from "utils";
 import Dev from "../environment/Dev";
-import { LoginDto } from "../interfaces";
-import AppStore from "../store/App.store";
+import LoginStore from "../store/Login.store";
 
 const Login = observer(() => {
+  const store = useMemo(() => new LoginStore(), []);
   return (
     <div
       className={css(
@@ -30,41 +30,38 @@ const Login = observer(() => {
       <Icon name={IconName.Logo} />
       <Form
         className={css("w-full", "flex", "flex-col", "gap-4", "max-w-sm")}
-        onSubmit={({ username, password }: LoginDto) => {
-          return AppStore.auth.login({ username, password }).then(() => {
-            return Router.push("/sort");
-          });
-        }}
+        onSubmit={() => store.login()}
       >
         <TextInput
-          name={"username"}
           block
+          name={"username"}
           placeholder={"username"}
           rules={{ required: true }}
+          value={store.username}
+          onChange={(value) => (store.username = value)}
         />
         <TextInput
+          block
           type={"password"}
           name={"password"}
-          block
           placeholder={"password"}
           rules={{ required: true }}
+          value={store.password}
+          onChange={(value) => (store.password = value)}
         />
         <div className={css("flex", "justify-center")}>
           <Submit intent={ButtonIntent.Secondary}>Login</Submit>
-          <Dev>
-            <Button
-              onClick={() =>
-                AppStore.auth
-                  .login({ username: "gainor", password: "Sf4y6RWV9b*" })
-                  .then(() => {
-                    Router.push("/sort");
-                  })
-              }
-            >
-              login gainor
-            </Button>
-          </Dev>
         </div>
+        <Dev>
+          <div className={css("justify-center", "flex")}>
+            <Button
+              intent={ButtonIntent.Green}
+              onClick={() => store.setGCreds()}
+            >
+              g
+            </Button>
+          </div>
+        </Dev>
       </Form>
     </div>
   );

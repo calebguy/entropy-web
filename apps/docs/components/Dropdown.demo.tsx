@@ -1,4 +1,11 @@
-import { Button, Dropdown, DropdownItem, Text } from "dsl";
+import {
+  Button,
+  ButtonIntent,
+  ButtonSize,
+  Dropdown,
+  DropdownItem,
+  Text,
+} from "dsl";
 import Demo from "./Demo";
 import SubDemo from "./SubDemo";
 
@@ -6,9 +13,18 @@ const DropdownDemo = () => {
   return (
     <Demo title="Dropdown">
       <SubDemo>
-        <Dropdown trigger={<Button>drop-it</Button>}>
+        <Dropdown
+          trigger={
+            <Button size={ButtonSize.Sm} intent={ButtonIntent.Secondary}>
+              click me
+            </Button>
+          }
+        >
           <DropdownItem>
-            <Text>low</Text>
+            <Text>✅ inter</Text>
+          </DropdownItem>
+          <DropdownItem>
+            <Text>✅ connected</Text>
           </DropdownItem>
         </Dropdown>
       </SubDemo>

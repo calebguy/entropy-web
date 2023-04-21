@@ -56,6 +56,7 @@ export const Select = ({
           "py-0.5",
           "px-1",
           "outline-0",
+          "rounded-md",
           {
             "w-full": block,
           },
@@ -79,7 +80,8 @@ export const Select = ({
             "border-black",
             "z-20",
             "bg-white",
-            "outline-0"
+            "outline-0",
+            "rounded-md"
           )}
         >
           <RadixSelect.Viewport className={css("p-2")}>
@@ -91,7 +93,11 @@ export const Select = ({
                   className={css(
                     "relative",
                     "cursor-pointer",
-                    "hover-hover:hover:underline"
+                    "hover-hover:hover:underline",
+                    "outline-0",
+                    "p-1",
+                    "rounded-md",
+                    "hover:scale-110"
                   )}
                 >
                   <RadixSelect.ItemText>

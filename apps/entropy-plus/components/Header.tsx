@@ -1,19 +1,16 @@
 import { Dropdown, DropdownItem, Icon, IconName, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
-import Image from "next/image";
 import Link from "next/link";
 import Router from "next/router";
 import { css } from "utils";
 import Dev from "../environment/Dev";
-import { Profile } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 import AppStore from "../store/App.store";
+import ProfileIcon from "./ProfileIcon";
 
-interface HeaderProps {
-  profile: Profile;
-}
+interface HeaderProps {}
 
-const Header = observer(({ profile }: HeaderProps) => {
+const Header = observer(({}: HeaderProps) => {
   return (
     <div className={css("flex", "justify-between", "items-center")}>
       {AppStore.auth.isLoggedIn && (
@@ -54,19 +51,7 @@ const Header = observer(({ profile }: HeaderProps) => {
               <Icon name={IconName.FourSquare} size={29} />
             </Link>
             {AppStore.auth.profile && (
-              <Link href={`/curator/${AppStore.auth.profile.handle}`}>
-                {AppStore.auth.profile && (
-                  <Image
-                    width={100}
-                    height={100}
-                    src={`https://res.cloudinary.com/dpooqlfdf/${
-                      AppStore.auth.profile.profile_image || ""
-                    }`}
-                    alt={AppStore.auth.profile.handle}
-                    className={css("w-8", "h-8", "rounded-full")}
-                  />
-                )}
-              </Link>
+              <ProfileIcon profile={AppStore.auth.profile} />
             )}
           </div>
         </>
@@ -100,7 +85,7 @@ const Header = observer(({ profile }: HeaderProps) => {
                     target={"_blank"}
                     href={"https://twitter.com/ennntropy"}
                   >
-                    <Text bold>Twitter</Text>
+                    <Text>Twitter</Text>
                   </Link>
                 </DropdownItem>
                 <DropdownItem>
@@ -108,12 +93,12 @@ const Header = observer(({ profile }: HeaderProps) => {
                     target={"_blank"}
                     href={"https://www.instagram.com/ennntropy/"}
                   >
-                    <Text bold>Instagram</Text>
+                    <Text>Instagram</Text>
                   </Link>
                 </DropdownItem>
                 <DropdownItem>
                   <Link href={"/login"}>
-                    <Text bold>Login</Text>
+                    <Text>Login</Text>
                   </Link>
                 </DropdownItem>
               </div>

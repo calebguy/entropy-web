@@ -1,16 +1,13 @@
 import { Button, ButtonIntent, Text, TextSize } from "dsl";
 import Link from "next/link";
 import { css } from "utils";
-import { Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 
-interface FourOhFourProps {
-  profile: Profile;
-}
+interface FourOhFourProps {}
 
-const FourOhFour = ({ profile }: FourOhFourProps) => {
+const FourOhFour = ({}: FourOhFourProps) => {
   return (
-    <AppLayout profile={profile}>
+    <AppLayout>
       <div className={css("flex", "justify-center", "h-full", "items-center")}>
         <div className={css("flex", "flex-col", "items-center", "gap-3")}>
           <Text size={TextSize.Xxl}>errrrrr</Text>

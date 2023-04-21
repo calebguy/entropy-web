@@ -21,38 +21,41 @@ export enum TextIntent {
   Error = "error",
 }
 
-const textStyles = cva("font-sans", {
-  variants: {
-    intent: {
-      [TextIntent.Black]: "text-black",
-      [TextIntent.White]: "text-white",
-      [TextIntent.DeepBlue]: "text-deep-blue",
-      [TextIntent.Gray]: "text-gray-dark",
-      [TextIntent.Outline]: css("text-white", styles["text-stroke"]),
-      [TextIntent.Error]: "text-red-600",
+const textStyles = cva(
+  "font-sans text-ellipsis overflow-hidden whitespace-nowrap",
+  {
+    variants: {
+      intent: {
+        [TextIntent.Black]: "text-black",
+        [TextIntent.White]: "text-white",
+        [TextIntent.DeepBlue]: "text-deep-blue",
+        [TextIntent.Gray]: "text-gray-dark",
+        [TextIntent.Outline]: css("text-white", styles["text-stroke"]),
+        [TextIntent.Error]: "text-red-600",
+      },
+      size: {
+        [TextSize.Xs]: "text-xs",
+        [TextSize.Sm]: "text-sm",
+        [TextSize.Md]: "text-base",
+        [TextSize.Lg]: "text-lg",
+        [TextSize.Xl]: "text-xl",
+        [TextSize.Xxl]: "text-xxl",
+      },
+      bold: {
+        true: "font-bold",
+        false: "font-normal",
+      },
+      block: {
+        true: "block",
+      },
     },
-    size: {
-      [TextSize.Xs]: "text-xs",
-      [TextSize.Sm]: "text-sm",
-      [TextSize.Md]: "text-base",
-      [TextSize.Lg]: "text-lg",
-      [TextSize.Xl]: "text-xl",
-      [TextSize.Xxl]: "text-xxl",
+    defaultVariants: {
+      intent: TextIntent.Black,
+      size: TextSize.Md,
+      bold: false,
     },
-    bold: {
-      true: "font-bold",
-      false: "font-normal",
-    },
-    block: {
-      true: "block",
-    },
-  },
-  defaultVariants: {
-    intent: TextIntent.Black,
-    size: TextSize.Md,
-    bold: false,
-  },
-});
+  }
+);
 
 interface TextProps
   extends PropsWithChildren,

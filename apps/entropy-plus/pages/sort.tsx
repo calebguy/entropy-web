@@ -9,7 +9,6 @@ import UserPreview from "../components/SortPage/UserPreview";
 import withAuth from "../helpers/auth";
 import { Sort, TwitterChannel } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer } from "../services/Http";
 import AppStore from "../store/App.store";
 import SortPageStore from "../store/SortPage.store";
 
@@ -20,6 +19,7 @@ interface SortPageProps {
 
 const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   const store = useMemo(() => new SortPageStore(sort, currentChannel), []);
+  // useEffect(() => store.init(), [])
   const overlayCss = useMemo(
     () =>
       css(
@@ -36,7 +36,7 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
     [store.isLoading]
   );
   return (
-    <AppLayout profile={AppStore.auth.profile!}>
+    <AppLayout>
       <div className={css("flex", "flex-col", "h-full", "gap-4")}>
         <div
           className={css(
@@ -133,12 +133,12 @@ const SortPage = observer(({ sort, currentChannel }: SortPageProps) => {
   );
 });
 
-export const getServerSideProps = withAuth<SortPageProps>(async (context) => {
+export const getServerSideProps = withAuth<SortPageProps>(async (_, Http) => {
   try {
-    const { data: me } = await HttpForServer.getMe();
-    const { data: sorts } = await HttpForServer.getSortImage(me.handle);
+    const { data: me } = await Http.getMe();
+    const { data: sorts } = await Http.getSortImage(me.handle);
     const sort = sorts[0];
-    const { data: currentChannel } = await HttpForServer.getTwitterChannel(
+    const { data: currentChannel } = await Http.getTwitterChannel(
       sort.twitter_channel
     );
     return {

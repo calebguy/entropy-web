@@ -1,28 +1,20 @@
-import {
-  AspectRatio,
-  Button,
-  ButtonIntent,
-  Pane,
-  PaneSize,
-  Text,
-  TextSize,
-} from "dsl";
+import { Button, ButtonIntent, Pane, PaneSize, Text, TextSize } from "dsl";
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useMemo } from "react";
 import { css } from "utils";
 import Leaderboard from "../components/Leaderboard";
+import LoadingImage from "../components/LoadingImage";
 import ProfileIcon from "../components/ProfileIcon";
 import RankEmblem from "../components/RankEmblem";
 import withAuth from "../helpers/auth";
-import { Photo, Profile } from "../interfaces";
+import { CuratorPhoto, Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
-import { HttpForServer, getSuggestedPhotos } from "../services/Http";
 import AppStore from "../store/App.store";
 import DashboardPageStore from "../store/DashboardPage.store";
 
 interface DashboardPageProps {
-  suggestedPhotos: Photo[];
+  suggestedPhotos: CuratorPhoto[];
   userInvitesCount: number;
   leaderBoard: Profile[];
 }
@@ -31,7 +23,7 @@ const DashboardPage = observer(
   ({ suggestedPhotos, userInvitesCount, leaderBoard }: DashboardPageProps) => {
     const store = useMemo(() => new DashboardPageStore(leaderBoard), []);
     return (
-      <AppLayout profile={AppStore.auth.profile!}>
+      <AppLayout>
         <div className={css("flex", "flex-col", "gap-2")}>
           {!!userInvitesCount && (
             <Pane size={PaneSize.Lg} block>
@@ -74,20 +66,6 @@ const DashboardPage = observer(
                   )}
                 </div>
               </Pane>
-              {/* {objectKeys(acheivements).length > 0 && (
-                <div
-                  className={css("flex", "items-center", "gap-2", "flex-wrap")}
-                >
-                  {objectKeys(acheivements)
-                    .filter((key) => !!acheivements[key])
-                    .map((key, index) => (
-                      <AcheivementPill
-                        key={`${key}-${index}`}
-                        acheivement={key}
-                      />
-                    ))}
-                </div>
-              )} */}
             </div>
           </Pane>
           <div className={css("flex", "items-stretch", "gap-2")}>
@@ -120,43 +98,25 @@ const DashboardPage = observer(
               </div>
             </Pane>
           </div>
-          {/* <div className={css("flex", "gap-2")}>
-            <Pane size={PaneSize.Lg} block>
-              <div className={css("text-center")}>
-                <Text>Your upcoming tweets</Text>
-              </div>
-            </Pane>
-            <Pane size={PaneSize.Lg} block>
-              <div className={css("text-center")}>
-                <Text>Queue</Text>
-              </div>
-            </Pane>
-          </div> */}
           <div>
             <div className={css("my-2")}>
               <Text size={TextSize.Lg}>Images you may like...</Text>
             </div>
             <Pane size={PaneSize.Lg} block>
               {suggestedPhotos ? (
-                <div className={css("flex", "flex-wrap", "gap-2")}>
+                <div
+                  className={css(
+                    "grid",
+                    "grid-cols-2",
+                    "sm:grid-cols-4",
+                    "gap-2"
+                  )}
+                >
                   {suggestedPhotos.map((photo, index) => (
-                    // @next -- where should this link to
-                    <Link
-                      key={`${photo.image?.url}-${index}`}
-                      href={`/sort`}
-                      className={css("inline-block", "max-w-[150px]", "w-full")}
-                    >
-                      <AspectRatio
-                        ratio={"1/1"}
-                        className={css(
-                          "bg-cover",
-                          "bg-center",
-                          "bg-no-repeat",
-                          "rounded-md"
-                        )}
-                        style={{ backgroundImage: `url(${photo.url})` }}
-                      />
-                    </Link>
+                    <LoadingImage
+                      photo={photo}
+                      key={`suggested-${index}-${photo.url}`}
+                    />
                   ))}
                 </div>
               ) : (
@@ -201,11 +161,9 @@ const DashboardPage = observer(
   }
 );
 
-export const getServerSideProps = withAuth<any>(async () => {
-  const { data: leaderBoard } = await HttpForServer.getLeaderboard();
-  console.log(leaderBoard[0]);
-  const { data: suggestedPhotos } = await getSuggestedPhotos();
-  console.log(suggestedPhotos);
+export const getServerSideProps = withAuth<any>(async (_, Http) => {
+  const { data: leaderBoard } = await Http.getLeaderboard();
+  const { data: suggestedPhotos } = await Http.getSuggestedPhotos();
   return {
     props: {
       suggestedPhotos,

@@ -1,4 +1,4 @@
-import { Button, InfiniteScroll } from "dsl";
+import { Button, ButtonIntent, ButtonSize, InfiniteScroll } from "dsl";
 import { useState } from "react";
 import { css } from "utils";
 import Demo from "./Demo";
@@ -38,6 +38,8 @@ const InfiniteScrollDemo = () => {
         <SubDemo labels={{ test: "Scroll By Document" }}>
           <div className={css("flex", "justify-center", "mb-4")}>
             <Button
+              size={ButtonSize.Md}
+              intent={ButtonIntent.Secondary}
               onClick={() => {
                 setFullPageHasMoreData(!fullPageHasMoreData);
                 setTimeout(() => {
@@ -46,9 +48,7 @@ const InfiniteScrollDemo = () => {
                 }, 500);
               }}
             >
-              {fullPageHasMoreData
-                ? "stop infinite scroll"
-                : "enable infinite scroll"}
+              {fullPageHasMoreData ? "stop scroll" : "enable scroll"}
             </Button>
           </div>
           <InfiniteScroll
@@ -60,7 +60,6 @@ const InfiniteScrollDemo = () => {
               }, 500);
             }}
             hasMore={fullPageHasMoreData}
-            endDataMessage={"🤗 that's all 🤗"}
           >
             <div
               className={css("border-[1px]", "border-dashed", "border-brand")}

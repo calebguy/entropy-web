@@ -1,5 +1,4 @@
 import {
-  AspectRatio,
   Icon,
   IconName,
   InfiniteScroll,
@@ -10,17 +9,16 @@ import {
   TextSize,
 } from "dsl";
 import { observer } from "mobx-react-lite";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { css, formatWithThousandsSeparators } from "utils";
+import LoadingImage from "../../../components/LoadingImage";
 import ProfileIcon from "../../../components/ProfileIcon";
-import { CuratorPhoto, Profile } from "../../../interfaces";
+import withAuth from "../../../helpers/auth";
+import { Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
-import { HttpForServer } from "../../../services/Http";
 import CuratorPageStore from "../../../store/CuratorPage.store";
 
 interface CuratorPageProps {
@@ -42,7 +40,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
       <Head>
         <title>@{profile.handle}</title>
       </Head>
-      <AppLayout profile={profile}>
+      <AppLayout>
         <div className={css("flex", "flex-col", "md:flex-row", "gap-2")}>
           <div className={css("grow")}>
             <Pane size={PaneSize.Lg} block>
@@ -50,9 +48,6 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
                 <div className={css("flex", "items-center", "justify-between")}>
                   <div className={css("flex", "items-center", "gap-2")}>
                     <ProfileIcon profile={profile} />
-                    {/* <Button intent={ButtonIntent.DeepBlue} round>
-                    Edit Profile
-                  </Button> */}
                   </div>
                   <div className={css("flex", "flex-col", "items-end")}>
                     <Text size={TextSize.Xxl} bold>
@@ -73,20 +68,6 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
                     </div>
                   )}
                 </div>
-                {/* {acheivmentKeys.length > 0 && (
-                <div
-                  className={css("flex", "items-center", "gap-1", "flex-wrap")}
-                >
-                  {objectKeys(acheivements)
-                    .filter((key) => !!acheivements[key])
-                    .map((key, index) => (
-                      <AcheivementPill
-                        key={`profile-acheivement-${key}-${index}`}
-                        acheivement={key}
-                      />
-                    ))}
-                </div>
-              )} */}
               </div>
             </Pane>
           </div>
@@ -142,7 +123,6 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               <Icon name={IconName.GreyLogo} size={14} />
             </div>
           )}
-          // endDataMessage="e+"
         >
           <div
             className={css(
@@ -154,41 +134,15 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               "mt-2"
             )}
           >
-            {store.isLoading &&
-              Array(16)
-                .fill(0)
-                .map(() => (
-                  <AspectRatio
-                    ratio={"1/1"}
-                    className={css(
-                      "border-[1px]",
-                      "border-black",
-                      "border-solid",
-                      "rounded-md",
-                      "h-[218px]"
-                    )}
-                  >
-                    <div
-                      className={css(
-                        "w-full",
-                        "h-full",
-                        "flex",
-                        "justify-center",
-                        "items-center"
-                      )}
-                    >
-                      <Icon name={IconName.Logo} size={25} />
-                    </div>
-                  </AspectRatio>
-                ))}
-            {!store.isLoading &&
-              store.data.map((photo, index) => (
-                <ImagePreview
-                  key={`image-preview-${index}`}
-                  photo={photo}
-                  slug={slug as string}
-                />
-              ))}
+            {store.data.map((photo, index) => (
+              <Link
+                key={`image-preview-${index}`}
+                href={`${slug}/image/${photo.id}`}
+                className={css("w-full", "h-full")}
+              >
+                <LoadingImage photo={photo} />
+              </Link>
+            ))}
           </div>
         </InfiniteScroll>
       </AppLayout>
@@ -196,72 +150,16 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   );
 });
 
-const ImagePreview = ({
-  photo,
-  slug,
-}: {
-  photo: CuratorPhoto;
-  slug: string;
-}) => {
-  const [isLoading, setIsLoading] = useState(true);
-  return (
-    <Link
-      key={`curator-image-${photo.url}`}
-      href={`${slug}/image/${photo.id}`}
-      className={css("w-full", "h-full")}
-    >
-      <div className={css("relative", "h-full", "w-full")}>
-        <AspectRatio ratio={"1/1"} className={css("rounded-md", "relative")}>
-          <Image
-            fill
-            alt={photo.url}
-            src={photo.url}
-            onLoadingComplete={() => setIsLoading(false)}
-            className={css(
-              "w-full",
-              "h-full",
-              "rounded-md",
-              "z-10",
-              "object-cover"
-            )}
-          />
-        </AspectRatio>
-        {isLoading && (
-          <div
-            className={css(
-              "border-[1px]",
-              "border-solid",
-              "border-black",
-              "w-full",
-              "h-full",
-              "rounded-md",
-              "flex",
-              "justify-center",
-              "items-center",
-              "absolute",
-              "inset-0"
-            )}
-          >
-            <Icon name={IconName.Logo} size={25} />
-          </div>
-        )}
-      </div>
-    </Link>
-  );
-};
-
-export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
-  context
-) => {
-  const { slug } = context.query as { slug: string };
-  const { data: profile } = await HttpForServer.getCuratorProfile(slug);
-  console.log("PROFILE", profile);
-  return {
-    props: {
-      profile,
-      // acheivements,
-    },
-  };
-};
+export const getServerSideProps = withAuth<CuratorPageProps>(
+  async (context, Http) => {
+    const { slug } = context.query as { slug: string };
+    const { data: profile } = await Http.getCuratorProfile(slug);
+    return {
+      props: {
+        profile,
+      },
+    };
+  }
+);
 
 export default CuratorPage;

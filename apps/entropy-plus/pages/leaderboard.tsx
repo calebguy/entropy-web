@@ -5,7 +5,6 @@ import Leaderboard from "../components/Leaderboard";
 import { Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import { HttpForServer } from "../services/Http";
-import AppStore from "../store/App.store";
 
 interface LeaderboardPageProps {
   leaderBoard: Profile[];
@@ -13,8 +12,8 @@ interface LeaderboardPageProps {
 
 const LeaderboardPage = observer(({ leaderBoard }: LeaderboardPageProps) => {
   return (
-    <AppLayout profile={AppStore.auth.profile!}>
-      <div className={css("mb-2")}>
+    <AppLayout>
+      <div className={css("mb-2", "text-center")}>
         <Text size={TextSize.Lg}>Leaderboard</Text>
       </div>
       <Pane size={PaneSize.Lg} block>

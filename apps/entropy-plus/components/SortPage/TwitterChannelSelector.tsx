@@ -27,9 +27,13 @@ const TwitterChannelSelector = ({
         { "border-black": show, "border-transparent": !show }
       )}
     >
-      <button onClick={() => setShow(!show)} className={css("hover:scale-105")}>
+      <div
+        // @NEXT -- disabling until we can POST image sort with channel
+        // onClick={() => setShow(!show)}
+        className={css("hover:scale-105")}
+      >
         <TwitterChannelIcon imageUrl={selectedChannel.profile_image_url} />
-      </button>
+      </div>
       {show && (
         <>
           {channels

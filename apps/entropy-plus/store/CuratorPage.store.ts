@@ -5,7 +5,7 @@ import ScrollableDataProviderStore from "./ScrollableDataProvider.store";
 
 export default class CuratorPageStore extends ScrollableDataProviderStore<CuratorPhoto> {
   @observable
-  isLoading = false;
+  isLoading = true;
 
   constructor(private readonly slug: string) {
     super();

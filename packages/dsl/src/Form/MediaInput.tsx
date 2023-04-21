@@ -89,7 +89,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
     "justify-center",
     "items-center"
   );
-  const primaryStyle = { minHeight: 200 };
+  const primaryStyle = { minHeight: 400 };
   const secondaryStyle = { height: 85, width: 85 };
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {

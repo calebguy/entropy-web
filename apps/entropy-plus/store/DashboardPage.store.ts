@@ -7,7 +7,6 @@ export default class DashboardPageStore {
 
   @computed
   get rank() {
-    console.log(this.leaderboard);
     return this.leaderboard.findIndex(
       (profile) => profile.handle === AppStore.auth.profile!.handle
     );

@@ -4,17 +4,12 @@ import { useState } from "react";
 import { css } from "utils";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
-import { Profile } from "../interfaces";
 
+interface AuthedLayoutProps extends React.PropsWithChildren {}
 
-interface AuthedLayoutProps extends React.PropsWithChildren {
-  profile: Profile;
-}
-
-
-export default function Web({ profile }: AuthedLayoutProps) {
+export default function Web({}: AuthedLayoutProps) {
   return (
-    <AppLayout profile={profile}>
+    <AppLayout>
       <div className={css("flex", "items-center", "h-full", "flex-col")}>
         <div className={css("grow", "relative", "w-full")}>
           <Image
@@ -24,9 +19,9 @@ export default function Web({ profile }: AuthedLayoutProps) {
             fill
           />
         </div>
-        <div className={css("w-full")}>
+        {/* <div className={css("w-full")}>
           <JoinWaitlist />
-        </div>
+        </div> */}
       </div>
     </AppLayout>
   );

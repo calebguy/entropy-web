@@ -48,9 +48,7 @@ const InfiniteScrollDemo = () => {
                 }, 500);
               }}
             >
-              {fullPageHasMoreData
-                ? "stop infinite scroll"
-                : "enable infinite scroll"}
+              {fullPageHasMoreData ? "stop scroll" : "enable scroll"}
             </Button>
           </div>
           <InfiniteScroll

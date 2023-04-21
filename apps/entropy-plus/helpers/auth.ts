@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "../constants";
 import { AuthTokens } from "../interfaces";
-import { HttpForServer } from "../services/Http";
+import { EntropyHttp, HttpForServer } from "../services/Http";
 import UnauthenticatedError from "../services/exceptions/Unauthenticated.error";
 import redirectToLogin from "./redirectToLogin";
 const Cookies = require("cookies");
@@ -10,7 +10,7 @@ const Cookies = require("cookies");
 export default function withAuth<T>(
   callback: (
     context: GetServerSidePropsContext,
-    accessToken: string
+    http: EntropyHttp
   ) => Promise<GetServerSidePropsResult<T>>
 ) {
   return async (context: GetServerSidePropsContext) => {
@@ -23,7 +23,7 @@ export default function withAuth<T>(
       }
       HttpForServer.setAccessToken(accessToken);
       HttpForServer.setRefreshToken(refreshToken);
-      return callback(context, accessToken);
+      return callback(context, HttpForServer);
     } catch (e) {
       if (e instanceof UnauthenticatedError) {
         const cookie = new Cookies(context.req, context.res);
@@ -37,7 +37,7 @@ export default function withAuth<T>(
           setCookies({ req: context.req, res: context.res, authData });
           HttpForServer.setAccessToken(authData.access);
           HttpForServer.setRefreshToken(authData.refresh);
-          return callback(context, authData.access);
+          return callback(context, HttpForServer);
         } catch (e) {
           return redirectToLogin();
         }

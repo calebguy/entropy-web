@@ -1,82 +1,66 @@
-import { ButtonIntent, ButtonSize, Form, Submit, TextInput } from "dsl";
+import { ButtonSize, Form, Submit, Text, TextIntent } from "dsl";
 import MediaInput from "dsl/src/Form/MediaInput";
+import { observer } from "mobx-react-lite";
+import Router from "next/router";
+import { useState } from "react";
 import { css } from "utils";
+import withAuth from "../helpers/auth";
 import AppLayout from "../layouts/App.layout";
 import { HttpForClient } from "../services/Http";
-import { observer } from "mobx-react-lite";
-import { Profile } from "../interfaces";
 
+interface UploadPageProps {}
 
-interface UploadPageProps {
-  profile: Profile;
-}
-
-const UploadPage = observer(({ profile }: UploadPageProps) => {
+const UploadPage = observer(({}: UploadPageProps) => {
+  const [showMessage, setShowMessage] = useState(false);
   return (
-    <AppLayout profile={profile}>
-      <div className={css("h-full")}>
+    <AppLayout>
+      <div className={css("h-full", "flex", "items-center")}>
         <Form
-          onSubmit={(vals) => {
-            return HttpForClient.postImage(vals.image, vals.source).then(
-              ({ data }) => {
-                console.log("data", data);
-              }
-            );
+          onSubmit={({ image }) => {
+            setShowMessage(false);
+            return HttpForClient.postImage(image[0])
+              .then(({ data }) => {
+                Router.push("/sort");
+              })
+              .catch(() => {
+                setShowMessage(true);
+              });
           }}
-          className={css(
-            "grid",
-            "grid-cols-1",
-            "md:grid-cols-2",
-            "grid-rows-3",
-            "md:grid-rows-1",
-            "h-full",
-            "gap-x-8"
-          )}
+          className={css("flex", "justify-center", "w-full")}
         >
           <div
             className={css(
+              "max-w-lg",
+              "w-full",
               "flex",
-              "items-stretch",
-              "justify-center",
-              "md:py-44",
-              "row-span-2",
-              "md:row-span-1"
+              "flex-col",
+              "gap-4",
+              "min-h-[500px]"
             )}
           >
-            <MediaInput
-              name={"image"}
-              buttonLabel={"Choose Image from Library"}
-            />
-          </div>
-          <div className={css("flex", "flex-col", "justify-center", "gap-1")}>
-            <TextInput
-              name={"creator"}
-              label={"Curator"}
-              // rules={{ required: true }}
-              block
-            />
-            <TextInput
-              name={"source"}
-              label={"Source"}
-              rules={{ required: true }}
-              block
-            />
-            <TextInput
-              name={"description"}
-              label={"Description"}
-              // rules={{ required: true }}
-              block
-            />
-            <div className={css("mt-2")}>
-              <Submit intent={ButtonIntent.Gray} size={ButtonSize.Lg} block>
-                Confirm
-              </Submit>
+            <div className={css("grow", "flex", "items-stretch")}>
+              <MediaInput
+                name={"image"}
+                buttonLabel={"Choose Image from Library"}
+              />
             </div>
+            {showMessage && (
+              <Text intent={TextIntent.Error}>Error submiting image</Text>
+            )}
+            <Submit size={ButtonSize.Lg} block>
+              Upload
+            </Submit>
           </div>
         </Form>
       </div>
     </AppLayout>
   );
+});
+
+export const getServerSideProps = withAuth<UploadPageProps>(async (context) => {
+  return {
+    props: {},
+  };
 });
 
 export default UploadPage;

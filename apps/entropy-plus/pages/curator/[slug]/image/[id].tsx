@@ -1,13 +1,6 @@
-import {
-  AspectRatio,
-  Button,
-  ButtonIntent,
-  Pane,
-  PaneSize,
-  Text,
-  TextSize,
-} from "dsl";
+import { Button, ButtonIntent, Pane, PaneSize, Text, TextSize } from "dsl";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { css } from "utils";
 import ProfileIcon from "../../../../components/ProfileIcon";
@@ -22,7 +15,7 @@ interface ImageByIdProps {
 
 const ImageById = ({ profile, image }: ImageByIdProps) => {
   return (
-    <AppLayout profile={profile}>
+    <AppLayout>
       <div
         className={css(
           "h-full",
@@ -50,14 +43,21 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
               </div>
             </Pane>
             <div className={css("flex", "items-center", "gap-4")}>
-              <Link href={"/"} className={css("w-full")}>
-                <Pane size={PaneSize.Lg} block>
-                  <div className={css("text-center")}>
-                    <Text>Source</Text>
-                  </div>
-                </Pane>
-              </Link>
-              <Link href={"/"} className={css("w-full")}>
+              {image.image_source && (
+                <Link href={"/"} className={css("w-full")}>
+                  <Pane size={PaneSize.Lg} block>
+                    <div className={css("text-center")}>
+                      <Text>Source</Text>
+                    </div>
+                  </Pane>
+                </Link>
+              )}
+              <Link
+                className={css("w-full")}
+                target={"_blank"}
+                href={`https://www.bing.com/images/search?q=imgurl:${image.url}
+                            &view=detailv2&selectedindex=0&iss=sbi&id=${image.url}&ccid=zUFO%2BkX6&mediaurl=${image.url}&exph=511&expw=498&vt=2&sim=11`}
+              >
                 <Pane size={PaneSize.Lg} block>
                   <div className={css("text-center")}>
                     <Text>More Info</Text>
@@ -67,19 +67,20 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
             </div>
           </div>
         </div>
-        <div className={css("flex", "items-center", "order-1", "md:order-2")}>
-          <AspectRatio
-            ratio={`1/1`}
-            className={css(
-              "bg-contain",
-              "bg-center",
-              "bg-no-repeat",
-              "w-full",
-              "rounded-md",
-              "border-[1px]",
-              "border-black"
-            )}
-            style={{ backgroundImage: `url(${image.url})` }}
+        <div
+          className={css(
+            "flex",
+            "items-center",
+            "order-1",
+            "md:order-2",
+            "relative"
+          )}
+        >
+          <Image
+            alt={image.url}
+            src={image.url}
+            fill
+            className={css("object-contain")}
           />
         </div>
       </div>

@@ -57,7 +57,7 @@ class AuthStore {
       });
   }
 
-  private getProfile() {
+  getProfile() {
     return HttpForClient.getMe().then(({ data }) => {
       this.profile = data;
       return data;

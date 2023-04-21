@@ -1,7 +1,14 @@
-import { Button, ButtonIntent, ButtonSize, Text } from "dsl";
+import {
+  Button,
+  ButtonIntent,
+  ButtonSize,
+  Text,
+  TextIntent,
+  TextSize,
+} from "dsl";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { css, jsonify } from "utils";
+import { css, objectKeys } from "utils";
 import sleep from "utils/sleep";
 import withAuth from "../helpers/auth";
 import { Profile } from "../interfaces";
@@ -20,12 +27,19 @@ const MePage = observer(({ me }: MeProps) => {
   }, []);
   return (
     <AppLayout>
-      <div className={css("break-words")}>
-        <Text>{jsonify(AppStore.auth.profile)}</Text>
-      </div>
-      <div className={css("flex", "flex-col", "h-full", "gap-4", "mt-4")}>
+      <div className={css("flex", "flex-col", "h-full")}>
+        <div className={css("grow", "flex", "flex-col")}>
+          {!isLoading &&
+            objectKeys(AppStore.auth.profile).map((key) => (
+              <div className={css("flex", "gap-1", "items-baseline")}>
+                <Text intent={TextIntent.Gray}>{key}:</Text>
+                <Text size={TextSize.Lg}>{AppStore.auth.profile![key]}</Text>
+              </div>
+            ))}
+        </div>
         <Button
           round
+          block
           size={ButtonSize.Lg}
           intent={ButtonIntent.Secondary}
           onClick={async () => {
@@ -35,7 +49,7 @@ const MePage = observer(({ me }: MeProps) => {
           }}
           loading={isLoading}
         >
-          GET ME
+          🔄
         </Button>
       </div>
     </AppLayout>

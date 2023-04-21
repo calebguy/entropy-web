@@ -1,12 +1,11 @@
 import { Button, ButtonIntent, Pane, PaneSize, Text, TextSize } from "dsl";
-import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { css } from "utils";
 import ProfileIcon from "../../../../components/ProfileIcon";
+import withAuth from "../../../../helpers/auth";
 import { CuratorPhoto, Profile } from "../../../../interfaces";
 import AppLayout from "../../../../layouts/App.layout";
-import { HttpForServer } from "../../../../services/Http";
 
 interface ImageByIdProps {
   profile: Profile;
@@ -88,26 +87,26 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
-  context
-) => {
-  try {
-    const { slug, id } = context.query;
-    const responses = await Promise.all([
-      HttpForServer.getCuratorProfile(slug as string),
-      HttpForServer.getCuratorPhoto(slug as string, id as string),
-    ]);
-    return {
-      props: {
-        profile: responses[0].data,
-        image: responses[1].data,
-      },
-    };
-  } catch (error) {
-    return {
-      notFound: true,
-    };
+export const getServerSideProps = withAuth<ImageByIdProps>(
+  async (context, Http) => {
+    try {
+      const { slug, id } = context.query;
+      const responses = await Promise.all([
+        Http.getCuratorProfile(slug as string),
+        Http.getCuratorPhoto(slug as string, id as string),
+      ]);
+      return {
+        props: {
+          profile: responses[0].data,
+          image: responses[1].data,
+        },
+      };
+    } catch (error) {
+      return {
+        notFound: true,
+      };
+    }
   }
-};
+);
 
 export default ImageById;

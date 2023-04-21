@@ -93,17 +93,14 @@ export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
 ) => {
   try {
     const { slug, id } = context.query;
-    const { data: profile } = await HttpForServer.getCuratorProfile(
-      slug as string
-    );
-    const { data: image } = await HttpForServer.getCuratorPhoto(
-      slug as string,
-      id as string
-    );
+    const responses = await Promise.all([
+      HttpForServer.getCuratorProfile(slug as string),
+      HttpForServer.getCuratorPhoto(slug as string, id as string),
+    ]);
     return {
       props: {
-        profile,
-        image,
+        profile: responses[0].data,
+        image: responses[1].data,
       },
     };
   } catch (error) {

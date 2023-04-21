@@ -38,8 +38,9 @@ const UploadPage = observer(({}: UploadPageProps) => {
               "min-h-[500px]"
             )}
           >
-            <div className={css("grow", "flex", "items-stretch")}>
+            <div>
               <MediaInput
+                required
                 name={"image"}
                 buttonLabel={"Choose Image from Library"}
               />

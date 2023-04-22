@@ -5,12 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { css } from "utils";
 import ProfileIcon from "../../components/ProfileIcon";
-import {
-  DESCRIPTION,
-  NAME,
-  TWITTER_CARD_URL,
-  getBaseUrl,
-} from "../../environment/vars";
+import { DESCRIPTION, NAME, getBaseUrl } from "../../environment/vars";
 import { Photo, Profile } from "../../interfaces";
 import AppLayout from "../../layouts/App.layout";
 import { HttpForServer } from "../../services/Http";
@@ -29,11 +24,11 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
         <meta property="og:site_name" content={NAME} />
         <meta property="og:title" content={NAME} />
         <meta property="og:description" content={DESCRIPTION} />
-        <meta property="og:image" content={TWITTER_CARD_URL} />
+        <meta property="og:image" content={image.url} />
         <meta property="og:url" content={getBaseUrl()} />
         <meta name="twitter:title" content={NAME} />
         <meta name="twitter:description" content={DESCRIPTION} />
-        <meta name="twitter:image" content={TWITTER_CARD_URL} />
+        <meta name="twitter:image" content={image.url} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <AppLayout>

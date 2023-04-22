@@ -4,6 +4,7 @@ import env from "../environment";
 import {
   CuratorPhoto,
   LoginDto,
+  Photo,
   PostLoginResponse,
   Profile,
   Sort,
@@ -102,7 +103,7 @@ export class EntropyHttp {
   }
 
   getCuratorPhoto(curator: string, id: string | number) {
-    return this.http.get<CuratorPhoto>(`/api/${curator}/photos/${id}/`);
+    return this.http.get<Photo>(`/api/${curator}/photos/${id}/`);
   }
 
   getCuratorProfile(curator: string) {
@@ -110,15 +111,19 @@ export class EntropyHttp {
   }
 
   getCuratorPhotos(curator: string) {
-    return this.http.get<Array<CuratorPhoto>>(`/api/${curator}/photos/`);
+    return this.http.get<Array<Photo>>(`/api/${curator}/photos/`);
   }
 
   getSuggestedPhotos() {
-    return this.http.get<Array<CuratorPhoto>>("/api/suggested-photos");
+    return this.http.get<Array<Photo>>("/api/suggested-photos");
   }
 
   getDashboard(slug: string) {
     return this.http.get(`/api/${slug}/dashboard/`);
+  }
+
+  getPhoto(id: number | string) {
+    return this.http.get<CuratorPhoto>(`/api/images/${id}/`);
   }
 
   static createForServer() {

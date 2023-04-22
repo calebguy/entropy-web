@@ -10,6 +10,7 @@ import {
   TextSize,
 } from "dsl";
 import { observer } from "mobx-react-lite";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,9 +18,9 @@ import { useEffect, useMemo } from "react";
 import { css, formatWithThousandsSeparators } from "utils";
 import LoadingImage from "../../../components/LoadingImage";
 import ProfileIcon from "../../../components/ProfileIcon";
-import withAuth from "../../../helpers/auth";
 import { Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
+import { HttpForServer } from "../../../services/Http";
 import CuratorPageStore from "../../../store/CuratorPage.store";
 
 interface CuratorPageProps {
@@ -167,7 +168,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               store.data.map((photo, index) => (
                 <Link
                   key={`image-preview-${index}`}
-                  href={`${slug}/image/${photo.id}`}
+                  href={`/image/${photo.id}`}
                   className={css("w-full", "h-full")}
                 >
                   <LoadingImage photo={photo} />
@@ -180,16 +181,22 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
   );
 });
 
-export const getServerSideProps = withAuth<CuratorPageProps>(
-  async (context, Http) => {
+export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
+  context
+) => {
+  try {
     const { slug } = context.query as { slug: string };
-    const { data: profile } = await Http.getCuratorProfile(slug);
+    const { data: profile } = await HttpForServer.getCuratorProfile(slug);
     return {
       props: {
         profile,
       },
     };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
   }
-);
+};
 
 export default CuratorPage;

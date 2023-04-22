@@ -2,10 +2,10 @@ import { AspectRatio, Icon, IconName } from "dsl";
 import Image from "next/image";
 import { useState } from "react";
 import { css } from "utils";
-import { CuratorPhoto } from "../interfaces";
+import { Photo } from "../interfaces";
 
 interface LoadingImageProps {
-  photo: CuratorPhoto;
+  photo: Photo;
 }
 
 const LoadingImage = ({ photo }: LoadingImageProps) => {

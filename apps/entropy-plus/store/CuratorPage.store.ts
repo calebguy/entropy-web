@@ -1,9 +1,9 @@
 import { makeObservable, observable } from "mobx";
-import { CuratorPhoto } from "../interfaces";
+import { Photo } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 import ScrollableDataProviderStore from "./ScrollableDataProvider.store";
 
-export default class CuratorPageStore extends ScrollableDataProviderStore<CuratorPhoto> {
+export default class CuratorPageStore extends ScrollableDataProviderStore<Photo> {
   @observable
   isLoading = true;
 

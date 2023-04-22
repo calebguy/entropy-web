@@ -1,10 +1,10 @@
 import { makeObservable, observable } from "mobx";
-import { CuratorPhoto } from "../interfaces";
+import { Photo } from "../interfaces";
 import { HttpForClient } from "../services/Http";
 
 export default class CuratorImageStore {
   @observable
-  image?: CuratorPhoto = undefined;
+  image?: Photo = undefined;
 
   constructor(private readonly slug: string, private readonly id: string) {
     makeObservable(this);

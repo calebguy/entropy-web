@@ -168,7 +168,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               store.data.map((photo, index) => (
                 <Link
                   key={`image-preview-${index}`}
-                  href={`${slug}/image/${photo.id}`}
+                  href={`/image/${photo.id}`}
                   className={css("w-full", "h-full")}
                 >
                   <LoadingImage photo={photo} />

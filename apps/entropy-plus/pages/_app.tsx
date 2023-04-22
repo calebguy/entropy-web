@@ -8,6 +8,12 @@ import type { AppProps } from "next/app";
 import Image from "next/image";
 import { useEffect } from "react";
 import { css } from "utils";
+import {
+  DESCRIPTION,
+  NAME,
+  TWITTER_CARD_URL,
+  getBaseUrl,
+} from "../environment/vars";
 import AppStore from "../store/App.store";
 
 // @next can this live in the DSL?
@@ -22,12 +28,6 @@ const helvetica = localFont({
 });
 
 const MyApp = observer(({ Component, pageProps }: AppProps) => {
-  const description = "universal connector";
-  const name = "E+";
-  // @next update
-  const twitterCardUrl =
-    "https://entropy-web-docs.vercel.app/images/twitter-card.png";
-  const url = "https://entropy-web-docs.vercel.app/";
   useEffect(() => {
     AppStore.init();
   }, []);
@@ -39,15 +39,15 @@ const MyApp = observer(({ Component, pageProps }: AppProps) => {
           name="viewport"
           content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, user-scalable=0"
         />
-        <meta name="description" content={description} key="desc" />
-        <meta property="og:site_name" content={name} />
-        <meta property="og:title" content={name} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={twitterCardUrl} />
-        <meta property="og:url" content={url} />
-        <meta name="twitter:title" content={name} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={twitterCardUrl} />
+        <meta name="description" content={DESCRIPTION} key="desc" />
+        <meta property="og:site_name" content={NAME} />
+        <meta property="og:title" content={NAME} />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:image" content={TWITTER_CARD_URL} />
+        <meta property="og:url" content={getBaseUrl()} />
+        <meta name="twitter:title" content={NAME} />
+        <meta name="twitter:description" content={DESCRIPTION} />
+        <meta name="twitter:image" content={TWITTER_CARD_URL} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <main className={css(helvetica.variable, "grow", "flex", "flex-col")}>

@@ -1,5 +1,5 @@
 import { Button, ButtonIntent, Pane, PaneSize, Text, TextSize } from "dsl";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -105,7 +105,9 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
   );
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+export const getServerSideProps: GetServerSideProps<ImageByIdProps> = async (
+  context
+) => {
   try {
     const { id } = context.query;
     const { data } = await HttpForServer.getPhoto(id as string);
@@ -120,6 +122,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       notFound: true,
     };
   }
-}
+};
 
 export default ImageById;

@@ -8,13 +8,13 @@ import LoadingImage from "../components/LoadingImage";
 import ProfileIcon from "../components/ProfileIcon";
 import RankEmblem from "../components/RankEmblem";
 import withAuth from "../helpers/auth";
-import { CuratorPhoto, Profile } from "../interfaces";
+import { Photo, Profile } from "../interfaces";
 import AppLayout from "../layouts/App.layout";
 import AppStore from "../store/App.store";
 import DashboardPageStore from "../store/DashboardPage.store";
 
 interface DashboardPageProps {
-  suggestedPhotos: CuratorPhoto[];
+  suggestedPhotos: Photo[];
   userInvitesCount: number;
   leaderBoard: Profile[];
 }

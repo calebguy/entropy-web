@@ -50,7 +50,10 @@ const SortPage = observer(({}: SortPageProps) => {
           )}
         >
           {store.sort?.curator && <UserPreview profile={store.sort.curator} />}
-          <div className={css("relative", "w-full", `h-[500px]`)}>
+          <div
+            // @next height should be dynamic
+            className={css("relative", "w-full", `h-[300px]`, "md:h-[500px]")}
+          >
             {store.sortStack.map((sort, index) => (
               <Image
                 key={`sort-image-${sort.sort.id}-${index}`}

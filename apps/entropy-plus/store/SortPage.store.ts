@@ -1,4 +1,5 @@
 import { action, computed, makeObservable, observable } from "mobx";
+import sleep from "utils/sleep";
 import { HttpForClient } from "../services/Http";
 import {
   Sort,
@@ -21,16 +22,19 @@ export default class SortPageStore {
   }
 
   async init() {
-    for (let i = 0; i < this.stackDepth; i++) {
-      await this.getSort();
-    }
-    this.isLoading = false;
+    return Promise.all([
+      this.getSort(),
+      sleep(0.1).then(() => this.getSort()),
+      sleep(0.2).then(() => this.getSort()),
+      sleep(0.3).then(() => this.getSort()),
+    ]).then(() => (this.isLoading = false));
   }
 
   @action
   getSort() {
-    return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
-      ({ data }) => {
+    console.log("sort called");
+    return HttpForClient.getSortImage(AppStore.auth.profile!.handle)
+      .then(({ data }) => {
         const sort = data[0];
         const channel = AppStore.twitterChannels.find(
           (channel) => channel.screen_name === sort.twitter_channel
@@ -39,8 +43,8 @@ export default class SortPageStore {
           sort,
           channel,
         });
-      }
-    );
+      })
+      .catch((e) => console.error("error getting sort", e));
   }
 
   @action

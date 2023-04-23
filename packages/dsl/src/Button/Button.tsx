@@ -177,7 +177,7 @@ export const Submit = ({ ...rest }: SubmitProps) => {
   return (
     <Button
       submit
-      loading={state.isSubmitting}
+      loading={state.isSubmitting || rest.loading}
       disabled={hasErrors}
       children={rest.children ? rest.children : "Submit"}
       {...rest}

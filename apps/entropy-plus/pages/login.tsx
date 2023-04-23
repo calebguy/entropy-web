@@ -50,7 +50,9 @@ const Login = observer(() => {
           onChange={(value) => (store.password = value)}
         />
         <div className={css("flex", "justify-center")}>
-          <Submit intent={ButtonIntent.Secondary}>Login</Submit>
+          <Submit intent={ButtonIntent.Secondary} loading={store.isLoading}>
+            Login
+          </Submit>
         </div>
         <Dev>
           <div className={css("justify-center", "flex")}>

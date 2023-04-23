@@ -49,7 +49,7 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
               <div className={css("flex", "flex-col", "gap-2")}>
                 <div className={css("flex", "items-center", "justify-between")}>
                   <div className={css("flex", "items-center", "gap-2")}>
-                    <ProfileIcon profile={profile} />
+                    <ProfileIcon profile={profile} isLink={false} />
                   </div>
                   <div className={css("flex", "flex-col", "items-end")}>
                     <Text size={TextSize.Xxl} bold>

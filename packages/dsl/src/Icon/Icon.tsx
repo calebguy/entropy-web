@@ -10,6 +10,7 @@ import Mouse from "./CustomIcons/Mouse";
 import Plus from "./CustomIcons/Plus";
 import Twitter from "./CustomIcons/Twitter";
 
+import { IoIosInformationCircleOutline } from "react-icons/io";
 export enum IconSize {}
 
 export enum IconName {
@@ -23,6 +24,7 @@ export enum IconName {
   Mouse = "mouse",
   Twitter = "twitter",
   ChevronDown = "chevron-down",
+  Info = "info",
 }
 
 const iconMapToComponentMap = {
@@ -36,6 +38,7 @@ const iconMapToComponentMap = {
   [IconName.Mouse]: Mouse,
   [IconName.Twitter]: Twitter,
   [IconName.ChevronDown]: BsChevronDown,
+  [IconName.Info]: IoIosInformationCircleOutline,
 };
 
 interface IconProps extends PropsWithChildren {

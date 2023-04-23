@@ -9,11 +9,15 @@ export default class LoginStore {
   @observable
   password = "";
 
+  @observable
+  isLoading = false;
+
   constructor() {
     makeObservable(this);
   }
 
   login() {
+    this.isLoading = true;
     return AppStore.auth
       .login({
         username: this.username,

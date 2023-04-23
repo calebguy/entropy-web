@@ -53,6 +53,7 @@ const SortPage = observer(({}: SortPageProps) => {
           <div className={css("relative", "w-full", `h-[500px]`)}>
             {store.sortStack.map((sort, index) => (
               <Image
+                key={`sort-image-${sort.sort.id}-${index}`}
                 alt={"sort image"}
                 src={sort.sort.url}
                 style={{ objectFit: "contain" }}

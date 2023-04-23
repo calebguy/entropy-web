@@ -8,6 +8,8 @@ import {
 import AppStore from "./App.store";
 
 export default class SortPageStore {
+  private stackDepth = 5;
+
   @observable
   sortStack: { sort: Sort; channel: TwitterChannel }[] = [];
 
@@ -18,25 +20,22 @@ export default class SortPageStore {
     makeObservable(this);
   }
 
-  init() {
-    return Promise.all([
-      this.getSort(),
-      this.getSort(),
-      this.getSort(),
-      this.getSort(),
-    ]).finally(() => (this.isLoading = false));
+  async init() {
+    for (let i = 0; i < this.stackDepth; i++) {
+      await this.getSort();
+    }
+    this.isLoading = false;
   }
 
   @action
   getSort() {
-    // can we get the image height && width from the server?
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
       ({ data }) => {
         const sort = data[0];
         const channel = AppStore.twitterChannels.find(
           (channel) => channel.screen_name === sort.twitter_channel
         ) as TwitterChannel;
-        this.sortStack.push({
+        return this.sortStack.push({
           sort,
           channel,
         });

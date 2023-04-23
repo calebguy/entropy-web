@@ -58,9 +58,9 @@ const Header = observer(({}: HeaderProps) => {
       )}
       {!AppStore.auth.isLoggedIn && (
         <>
-          <div>
+          <Link href={"/"}>
             <Text size={TextSize.Md}>entropy+</Text>
-          </div>
+          </Link>
           <div>
             <Dropdown
               trigger={

@@ -27,7 +27,7 @@ const Web = observer(() => {
         <div className={css("grow", "relative", "w-full")}>
           {!AppStore.auth.isLoggedIn && (
             <Image
-              className={css("object-contain")}
+              className={css("object-contain", "-ml-6")}
               src={"/images/rotating-logo.gif"}
               alt={"logo-rotation-magic"}
               fill

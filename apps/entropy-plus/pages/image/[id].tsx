@@ -36,13 +36,22 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
           className={css(
             "h-full",
             "w-full",
-            "grid",
-            "grid-cols-1",
-            "md:grid-cols-2",
-            "gap-x-6"
+            "flex",
+            "flex-col",
+            "md:flex-row",
+            "gap-6"
           )}
         >
-          <div className={css("flex", "items-center", "order-2", "md:order-1")}>
+          <div
+            className={css(
+              "flex",
+              "items-center",
+              "order-2",
+              "md:order-1",
+              "md:grow-1",
+              "w-full"
+            )}
+          >
             <div className={css("grow", "flex", "flex-col", "gap-3")}>
               <Text>Curated by</Text>
               <Pane size={PaneSize.Lg}>
@@ -85,11 +94,12 @@ const ImageById = ({ profile, image }: ImageByIdProps) => {
           </div>
           <div
             className={css(
-              "flex",
-              "items-center",
               "order-1",
               "md:order-2",
-              "relative"
+              "relative",
+              "grow-1",
+              "w-full",
+              "h-full"
             )}
           >
             <Image

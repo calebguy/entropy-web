@@ -50,28 +50,19 @@ const SortPage = observer(({}: SortPageProps) => {
           )}
         >
           {store.sort?.curator && <UserPreview profile={store.sort.curator} />}
-          <div
-            className={css(
-              "relative",
-              "w-full",
-              `h-[500px]`
-              // "border-[1px]",
-              // "border-solid",
-              // "border-black"
-            )}
-          >
-            {/* TODO: IF WE CAN'T GET IMAGE HEIGHT AND WIDTH FROM SERVER WE NEED TO CALCULATE LOCALLY AND SET THE HEIGHT BASED ON THE ASPECT RATIO OF THE NATURAL IMAGE AND THE WIDTH OF THE CONTAINER */}
-            {store.sort?.url && (
+          <div className={css("relative", "w-full", `h-[500px]`)}>
+            {store.sortStack.map((sort, index) => (
               <Image
                 alt={"sort image"}
-                src={store.sort.url}
+                src={sort.sort.url}
                 style={{ objectFit: "contain" }}
                 onLoadingComplete={() => store.onLoadingComplete()}
                 sizes="100vw"
                 priority
                 fill
+                className={css({ hidden: index !== 0 })}
               />
-            )}
+            ))}
             <div className={css(overlayCss)} />
             <div
               className={css(

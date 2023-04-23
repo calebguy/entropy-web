@@ -23,6 +23,7 @@ export default class SortPageStore {
       this.getSort(),
       this.getSort(),
       this.getSort(),
+      this.getSort(),
     ]).finally(() => (this.isLoading = false));
   }
 

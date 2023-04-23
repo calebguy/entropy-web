@@ -118,7 +118,7 @@ export const Button = ({
         buttonStyles({ intent, round, size, block }),
         sizeToRadius[size],
         {
-          "hover:scale-105 focus:scale-95":
+          "hover:scale-105 active:scale-95":
             interactive && !disabled && !loading,
         }
       )}

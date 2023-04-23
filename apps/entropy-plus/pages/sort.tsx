@@ -114,7 +114,9 @@ const SortPage = observer(({}: SortPageProps) => {
             block
             interactive
             loading={store.isLoading}
-            onClick={() => store.handleReject()}
+            onClick={() => {
+              store.handleReject();
+            }}
             size={ButtonSize.Lg}
             spinner={false}
           >
@@ -125,7 +127,9 @@ const SortPage = observer(({}: SortPageProps) => {
             block
             interactive
             loading={store.isLoading}
-            onClick={() => store.handleApprove()}
+            onClick={() => {
+              store.handleApprove();
+            }}
             size={ButtonSize.Lg}
             spinner={false}
           >

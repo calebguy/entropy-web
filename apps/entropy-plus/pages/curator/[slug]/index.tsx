@@ -20,7 +20,7 @@ import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { css, formatWithThousandsSeparators } from "utils";
-import LoadingImage from "../../../components/LoadingImage";
+import LoadingImage, { LoaderForImage } from "../../../components/LoadingImage";
 import ProfileIcon from "../../../components/ProfileIcon";
 import { Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
@@ -162,29 +162,13 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
             {store.isLoading &&
               Array(16)
                 .fill(0)
-                .map((value, index) => (
+                .map((_, index) => (
                   <AspectRatio
                     ratio={"1/1"}
                     key={`loader-${index}`}
-                    className={css(
-                      "border-[1px]",
-                      "border-black",
-                      "border-solid",
-                      "rounded-md",
-                      "h-[218px]"
-                    )}
+                    className={css("h-[218px]")}
                   >
-                    <div
-                      className={css(
-                        "w-full",
-                        "h-full",
-                        "flex",
-                        "justify-center",
-                        "items-center"
-                      )}
-                    >
-                      <Icon name={IconName.GreyLogo} size={25} />
-                    </div>
+                    <LoaderForImage />
                   </AspectRatio>
                 ))}
             {!store.isLoading &&

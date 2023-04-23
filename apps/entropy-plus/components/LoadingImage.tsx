@@ -28,25 +28,27 @@ const LoadingImage = ({ photo }: LoadingImageProps) => {
           )}
         />
       </AspectRatio>
-      {isLoading && (
-        <div
-          className={css(
-            "border-[1px]",
-            "border-solid",
-            "border-black",
-            "w-full",
-            "h-full",
-            "rounded-md",
-            "flex",
-            "justify-center",
-            "items-center",
-            "absolute",
-            "inset-0"
-          )}
-        >
-          <Icon name={IconName.GreyLogo} size={25} />
-        </div>
+      {isLoading && <LoaderForImage />}
+    </div>
+  );
+};
+
+export const LoaderForImage = () => {
+  return (
+    <div
+      className={css(
+        "bg-gray-100",
+        "w-full",
+        "h-full",
+        "rounded-md",
+        "flex",
+        "justify-center",
+        "items-center",
+        "absolute",
+        "inset-0"
       )}
+    >
+      <Icon name={IconName.GreyLogo} size={25} />
     </div>
   );
 };

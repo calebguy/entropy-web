@@ -8,10 +8,12 @@ enum AppEnv {
 
 interface Vars {
   AppEnv: AppEnv;
+  SentryDSN: string;
 }
 
 export const vars: Vars = {
   AppEnv: process.env.NEXT_PUBLIC_APP_ENV as AppEnv,
+  SentryDSN: process.env.NEXT_PUBLIC_SENTRY_DSN as string,
 };
 
 const assertVars = () => {

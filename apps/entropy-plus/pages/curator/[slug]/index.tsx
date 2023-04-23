@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import {
   AspectRatio,
   Icon,
@@ -193,6 +194,8 @@ export const getServerSideProps: GetServerSideProps<CuratorPageProps> = async (
       },
     };
   } catch (error) {
+    console.error(`error getting profile: ${error}`);
+    Sentry.captureException(error);
     return {
       notFound: true,
     };

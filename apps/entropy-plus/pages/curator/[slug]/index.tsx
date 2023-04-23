@@ -1,6 +1,9 @@
 import * as Sentry from "@sentry/nextjs";
 import {
   AspectRatio,
+  Button,
+  ButtonIntent,
+  ButtonSize,
   Icon,
   IconName,
   InfiniteScroll,
@@ -14,14 +17,15 @@ import { observer } from "mobx-react-lite";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
 import { css, formatWithThousandsSeparators } from "utils";
 import LoadingImage from "../../../components/LoadingImage";
 import ProfileIcon from "../../../components/ProfileIcon";
 import { Profile } from "../../../interfaces";
 import AppLayout from "../../../layouts/App.layout";
-import { HttpForServer } from "../../../services/Http";
+import { HttpForClient, HttpForServer } from "../../../services/Http";
+import AppStore from "../../../store/App.store";
 import CuratorPageStore from "../../../store/CuratorPage.store";
 
 interface CuratorPageProps {
@@ -61,15 +65,33 @@ const CuratorPage = observer(({ profile }: CuratorPageProps) => {
                     <Text>entropy score</Text>
                   </div>
                 </div>
-                <div
-                  className={css("flex", "gap-1", "flex-col", "sm:flex-row")}
-                >
-                  <Text size={TextSize.Lg}>@{profile.handle}</Text>
-                  {profile.bio && (
-                    <div className={css("break-words")}>
-                      <Text intent={TextIntent.Gray}>{profile.bio}</Text>
-                    </div>
-                  )}
+                <div className={css("flex", "justify-between", "items-center")}>
+                  <div
+                    className={css("flex", "gap-1", "flex-col", "sm:flex-row")}
+                  >
+                    <Text size={TextSize.Lg}>@{profile.handle}</Text>
+                    {profile.bio && (
+                      <div className={css("break-words")}>
+                        <Text intent={TextIntent.Gray}>{profile.bio}</Text>
+                      </div>
+                    )}
+                  </div>
+                  {AppStore.auth?.profile?.handle === "gainor" &&
+                    profile?.handle === "gainor" && (
+                      <Button
+                        onClick={() => {
+                          HttpForClient.logout().then(() => {
+                            AppStore.auth.init();
+                            Router.push("/");
+                          });
+                        }}
+                        round
+                        size={ButtonSize.Sm}
+                        intent={ButtonIntent.Orange}
+                      >
+                        logout
+                      </Button>
+                    )}
                 </div>
               </div>
             </Pane>

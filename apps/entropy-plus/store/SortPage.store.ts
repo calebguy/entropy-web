@@ -9,12 +9,8 @@ import AppStore from "./App.store";
 
 export default class SortPageStore {
   @observable
-  sort?: Sort = undefined;
+  sortStack: { sort: Sort; channel: TwitterChannel }[] = [];
 
-  @observable
-  selectedTwitterChannel?: TwitterChannel = undefined;
-
-  // @next -- we should pull in 3 or 4 sort images to have to render directly after button clicks to avoid loaders all together
   @observable
   isLoading = true;
 
@@ -23,51 +19,60 @@ export default class SortPageStore {
   }
 
   init() {
-    return this.getSort();
+    return Promise.all([
+      this.getSort(),
+      this.getSort(),
+      this.getSort(),
+    ]).finally(() => (this.isLoading = false));
   }
 
+  @action
   getSort() {
     // can we get the image height && width from the server?
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle).then(
       ({ data }) => {
-        this.sort = data[0];
-        this.selectedTwitterChannel = AppStore.twitterChannels.find(
-          (channel) => channel.screen_name === this.sort!.twitter_channel
-        );
+        const sort = data[0];
+        const channel = AppStore.twitterChannels.find(
+          (channel) => channel.screen_name === sort.twitter_channel
+        ) as TwitterChannel;
+        this.sortStack.push({
+          sort,
+          channel,
+        });
       }
     );
   }
 
+  @action
   handleApprove() {
-    this.isLoading = true;
+    this.sortStack.shift();
     HttpForClient.approveImage(
       this.sort!.id,
       AppStore.auth.profile!.handle,
       this.selectedTwitterChannel!.screen_name
-    ).then(() => this.getSort());
+    ).then(() => this.afterSort());
   }
 
+  @action
   handleReject() {
-    this.isLoading = true;
+    this.sortStack.shift();
     HttpForClient.rejectImage(
       this.sort!.id,
       AppStore.auth.profile!.handle,
       this.selectedTwitterChannel!.screen_name
-    ).then(() => this.getSort());
+    ).then(() => this.afterSort());
+  }
+
+  private afterSort() {
+    this.getSort();
   }
 
   @action
-  setSelectedTwitterChannel(twitterChannel: TwitterChannel) {
-    this.selectedTwitterChannel = twitterChannel;
-  }
+  setSelectedTwitterChannel(twitterChannel: TwitterChannel) {}
 
   @action
   onLoadingComplete() {
     this.isLoading = false;
-    // we wait to update the twitter channel here to keep the UI in sync
-    this.selectedTwitterChannel = AppStore.twitterChannels.find(
-      (channel) => channel.screen_name === this.sort!.twitter_channel
-    );
   }
 
   @computed
@@ -76,5 +81,15 @@ export default class SortPageStore {
     return AppStore.twitterChannels.find(
       (channel) => channel.screen_name === channelName
     );
+  }
+
+  @computed
+  get sort() {
+    return this.sortStack[0]?.sort;
+  }
+
+  @computed
+  get selectedTwitterChannel() {
+    return this.sortStack[0]?.channel;
   }
 }

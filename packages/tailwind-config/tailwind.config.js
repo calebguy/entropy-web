@@ -1,6 +1,9 @@
 const { fontFamily, screens } = require("tailwindcss/defaultTheme");
 
 module.exports = {
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   content: [
     // @next could make this better by using src directories in each package / app
     "../../packages/dsl/src/**/*.{js,ts,jsx,tsx}",

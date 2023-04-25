@@ -32,7 +32,6 @@ export default class SortPageStore {
 
   @action
   getSort() {
-    console.log("sort called");
     return HttpForClient.getSortImage(AppStore.auth.profile!.handle)
       .then(({ data }) => {
         const sort = data[0];

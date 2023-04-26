@@ -96,15 +96,7 @@ const SortPage = observer(({}: SortPageProps) => {
             <div className={css(overlayCss)} />
           </div>
         </div>
-        <div
-          className={css(
-            "flex",
-            "justify-around",
-            "gap-4",
-            "md:gap-24",
-            "mb-4"
-          )}
-        >
+        <div className={css("flex", "justify-around", "gap-4", "md:gap-24")}>
           <Button
             block
             interactive

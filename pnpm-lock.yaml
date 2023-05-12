@@ -78,6 +78,7 @@ importers:
       postcss: ^8.4.21
       react: 18.2.0
       react-dom: 18.2.0
+      react-zoom-pan-pinch: ^3.0.7
       tailwind-config: workspace:*
       tailwindcss: ^3.2.6
       tsconfig: workspace:*
@@ -95,6 +96,7 @@ importers:
       next: 13.1.6_pjwopsidmaokadturxaafygjp4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-zoom-pan-pinch: 3.0.7_biqbaboplfbrettd7655fr4n2y
       utils: link:../../packages/utils
     devDependencies:
       '@babel/core': 7.20.12
@@ -4370,6 +4372,17 @@ packages:
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /react-zoom-pan-pinch/3.0.7_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-UJkk1Z7BMPIgfY+Qu4jGTlj+UyZQhrpJeCuK1gg31x57i3p8h4ZXfYWu3dFIiR+uRgfoe/koziwgCjA//T1rKA==}
+    engines: {node: '>=8', npm: '>=5'}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react/18.2.0:

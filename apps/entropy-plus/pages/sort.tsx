@@ -3,6 +3,7 @@ import Logo from "dsl/src/Icon/CustomIcons/Logo";
 import { observer } from "mobx-react-lite";
 import Image from "next/image";
 import { useEffect, useMemo } from "react";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import { css } from "utils";
 import TwitterChannelSelector from "../components/SortPage/TwitterChannelSelector";
 import UserPreview from "../components/SortPage/UserPreview";
@@ -50,39 +51,51 @@ const SortPage = observer(({}: SortPageProps) => {
           )}
         >
           {store.sort?.curator && <UserPreview profile={store.sort.curator} />}
-          <div
-            // @next height should be dynamic
-            className={css("relative", "w-full", `h-[300px]`, "md:h-[500px]")}
-          >
-            {store.sortStack.map((sort, index) => (
-              <Image
-                key={`sort-image-${sort.sort.id}-${index}`}
-                alt={"sort image"}
-                src={sort.sort.url}
-                style={{ objectFit: "contain" }}
-                onLoadingComplete={() => store.onLoadingComplete()}
-                sizes="100vw"
-                priority
-                fill
-                className={css({ hidden: index !== 0 })}
-              />
-            ))}
-            <div className={css(overlayCss)} />
-            <div
-              className={css(
-                "absolute",
-                "inset-0",
-                "w-full",
-                "h-full",
-                "justify-center",
-                "items-center",
-                "animate-spin",
-                { hidden: !store.isLoading, flex: store.isLoading }
-              )}
-            >
-              <Logo size={32} />
-            </div>
-          </div>
+          <TransformWrapper>
+            <TransformComponent>
+              <div
+                // @next height should be dynamic
+                className={css(
+                  "relative",
+                  // "w-full",
+                  // `h-[300px]`,
+                  // "md:h-[500px]"
+                  "w-[500px]",
+                  "h-[500px]"
+                )}
+              >
+                {store.sortStack.map((sort, index) => (
+                  <Image
+                    key={`sort-image-${sort.sort.id}-${index}`}
+                    alt={"sort image"}
+                    src={sort.sort.url}
+                    style={{ objectFit: "contain" }}
+                    onLoadingComplete={() => store.onLoadingComplete(index)}
+                    sizes="100vw"
+                    priority
+                    fill
+                    className={css({ hidden: index !== 0 })}
+                  />
+                ))}
+
+                <div className={css(overlayCss)} />
+                <div
+                  className={css(
+                    "absolute",
+                    "inset-0",
+                    "w-full",
+                    "h-full",
+                    "justify-center",
+                    "items-center",
+                    "animate-spin",
+                    { hidden: !store.isLoading, flex: store.isLoading }
+                  )}
+                >
+                  <Logo size={32} />
+                </div>
+              </div>
+            </TransformComponent>
+          </TransformWrapper>
           <div className={css("self-start", "-my-1", "relative")}>
             <TwitterChannelSelector
               channels={AppStore.twitterChannels}

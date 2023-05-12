@@ -74,8 +74,10 @@ export default class SortPageStore {
   setSelectedTwitterChannel(twitterChannel: TwitterChannel) {}
 
   @action
-  onLoadingComplete() {
-    this.isLoading = false;
+  onLoadingComplete(index: number) {
+    if (index === 0) {
+      this.isLoading = false;
+    }
   }
 
   @computed
